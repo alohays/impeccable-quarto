@@ -1,0 +1,47 @@
+project:
+  type: default
+  output-dir: _output
+
+format:
+  revealjs:
+    theme: themes/impeccable.scss
+    # Slide behavior
+    slide-number: c/t
+    hash: true
+    hash-type: number
+    history: true
+    controls: true
+    controls-layout: bottom-right
+    progress: true
+    center: false
+    # Sizing
+    width: 1920
+    height: 1080
+    margin: 0.05
+    min-scale: 0.2
+    max-scale: 2.0
+    # Transitions
+    transition: fade
+    transition-speed: default
+    background-transition: fade
+    # Navigation
+    navigation-mode: linear
+    touch: true
+    keyboard: true
+    # Appearance
+    auto-animate: true
+    auto-animate-easing: ease
+    auto-animate-duration: 0.6
+    code-line-numbers: false
+    highlight-style: github-dark
+    fig-align: center
+    embed-resources: true
+    # PDF export
+    pdf-separate-fragments: false
+
+# Include custom fonts via Google Fonts
+include-in-header:
+  text: |
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
