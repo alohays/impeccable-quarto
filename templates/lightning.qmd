@@ -1,0 +1,212 @@
+---
+title: "Ship Faster, Break Less"
+subtitle: "5 Practices That Changed How We Deploy"
+author: "Your Name"
+date: today
+format:
+  revealjs:
+    theme: ../themes/impeccable-lightning.scss
+    slide-number: c/t
+    hash: true
+    controls: true
+    progress: true
+    center: false
+    width: 1920
+    height: 1080
+    transition: fade
+    transition-speed: fast
+    auto-animate: true
+    code-line-numbers: false
+    highlight-style: github-dark
+    include-in-header:
+      text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+---
+
+## The Problem
+
+::: {.impact}
+::: {.impact-number}
+47min
+:::
+::: {.impact-label}
+Average time from commit to production
+:::
+:::
+
+::: {.notes}
+Hit them with the number immediately. No warm-up in a lightning talk.
+47 minutes is slow. Everyone in the audience knows it.
+:::
+
+---
+
+## We Got It Down To This
+
+::: {.impact}
+::: {.impact-number}
+4min
+:::
+::: {.impact-label}
+Same codebase. Same team. Five changes.
+:::
+:::
+
+---
+
+## Practice 1
+
+### Trunk-Based Development
+
+::: {.keybox}
+**One rule:** No branch lives longer than 24 hours.
+
+Small changes, merged fast, deployed continuously.
+:::
+
+- Feature flags replace long-lived branches
+- PRs are [**< 200 lines**]{.hi}, always
+- Review turnaround target: [**< 2 hours**]{.hi-gold}
+
+::: {.notes}
+This is the hardest habit change. Engineers love their feature branches.
+The key insight: small PRs get reviewed faster, merged faster, and break less.
+:::
+
+---
+
+## Practice 2
+
+### Parallel Testing
+
+:::: {.comparison}
+::: {.compare-left}
+### Before
+
+Tests run sequentially
+
+**18 minutes** to get results
+
+Team waits, context-switches
+:::
+
+::: {.compare-right}
+### After
+
+Tests run in parallel shards
+
+**3 minutes** to get results
+
+Flow state preserved
+:::
+::::
+
+---
+
+## Practice 3
+
+### Progressive Rollouts
+
+```yaml
+# deploy.yml — every deploy goes through gates
+rollout:
+  - stage: canary
+    percent: 1
+    duration: 5m
+    gates: [error_rate < 0.1%, latency_p99 < 200ms]
+  - stage: regional
+    percent: 25
+    duration: 10m
+    gates: [error_rate < 0.5%, latency_p99 < 300ms]
+  - stage: global
+    percent: 100
+```
+
+::: {.tipbox}
+**Result:** Zero customer-impacting incidents from deployments in 6 months.
+:::
+
+---
+
+## Practice 4
+
+### Automated Rollback
+
+::: {.impact}
+::: {.impact-statement}
+If metrics breach thresholds,
+[rollback happens automatically]{.hi}
+in under 90 seconds.
+:::
+:::
+
+::: {.notes}
+Humans are too slow to detect and respond to production issues.
+Automated rollback removed the fear from deploying.
+:::
+
+---
+
+## Practice 5
+
+### Deploy on Friday
+
+::: {.warningbox}
+**Controversial Take**
+
+If you're afraid to deploy on Friday, your deployment process is broken — not your schedule.
+:::
+
+When you have:
+
+- [Trunk-based development]{.hi}
+- [Fast parallel tests]{.hi-gold}
+- [Progressive rollouts]{.hi-green}
+- [Automated rollback]{.hi}
+
+...every day is a good day to deploy.
+
+---
+
+## The Results
+
+:::: {.two-col}
+::: {.div}
+### Deploy Speed
+
+- **47min → 4min** deploy time
+- **3x/day → 25x/day** frequency
+- **0** deployment-caused incidents (6mo)
+:::
+
+::: {.div}
+### Team Impact
+
+- **60% less** time in CI queues
+- **No more** deployment freezes
+- Engineers deploy [**their own code**]{.hi}
+:::
+::::
+
+---
+
+## One Slide Summary
+
+::: {.keybox}
+**Five Practices**
+
+1. **Trunk-based:** No branch > 24 hours
+2. **Parallel tests:** 18min → 3min
+3. **Progressive rollout:** Canary → Regional → Global
+4. **Auto rollback:** < 90 seconds, no humans
+5. **Deploy fearlessly:** Every day, including Friday
+:::
+
+[Thank you!]{.larger}
+
+::: {.notes}
+Lightning talk — no Q&A time. Point people to your blog/repo for details.
+End right on the 5-minute mark. Respect the format.
+:::

@@ -1,0 +1,276 @@
+---
+title: "Your Research Title Here"
+subtitle: "A Concise Subtitle Describing the Contribution"
+author:
+  - name: "First Author"
+    affiliation: "University / Institute"
+  - name: "Second Author"
+    affiliation: "University / Institute"
+date: today
+format:
+  revealjs:
+    theme: ../themes/impeccable-academic.scss
+    slide-number: c/t
+    hash: true
+    controls: true
+    progress: true
+    center: false
+    width: 1920
+    height: 1080
+    transition: fade
+    transition-speed: default
+    code-line-numbers: false
+    highlight-style: github-dark
+    include-in-header:
+      text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+bibliography: references.bib
+---
+
+## Motivation & Background {.section-header}
+
+::: {.notes}
+Start with the problem space. Why should the audience care?
+Establish the gap in existing knowledge or the practical need.
+:::
+
+---
+
+## Research Question
+
+:::: {.two-col}
+::: {.div}
+### The Problem
+
+Current approaches to **[problem domain]** face significant limitations:
+
+- Limitation one: scalability under real-world conditions
+- Limitation two: lack of generalizability across populations
+- Limitation three: computational overhead in practical deployment
+
+[This is a known challenge in the field.]{.subtle}
+:::
+
+::: {.keybox}
+**Research Question**
+
+*How can we [achieve specific goal] while maintaining [key constraint] across [target context]?*
+
+This question addresses the gap between theoretical advances and practical deployment.
+:::
+::::
+
+::: {.notes}
+Frame the research question clearly. The audience should understand exactly
+what you set out to answer and why it matters.
+:::
+
+---
+
+## Literature Context
+
+:::: {.two-col}
+::: {.div}
+### Prior Work
+
+- **Smith et al. (2023)** — First to demonstrate [X] in [context]
+- **Lee & Kim (2024)** — Extended the approach to [Y], but limited by [Z]
+- **Johnson (2024)** — Proposed [method], achieving state-of-the-art on [benchmark]
+
+::: {.citation}
+See @smith2023 for a comprehensive review of the field.
+:::
+:::
+
+::: {.div}
+### Our Contribution
+
+::: {.tipbox}
+**Novel Contributions**
+
+1. We introduce [method name], a new approach to [problem]
+2. We provide theoretical guarantees for [property]
+3. We validate on [N] real-world datasets across [K] domains
+:::
+:::
+::::
+
+---
+
+## Methodology {.section-header}
+
+::: {.notes}
+Walk through the methodology step by step. Keep each step
+to one or two sentences on the slide — detail goes in speaker notes.
+:::
+
+---
+
+## Proposed Framework
+
+::: {.methodbox}
+**Method Overview**
+
+Our approach consists of three stages:
+
+1. **Data preprocessing** — Normalize and partition input data using [technique]
+2. **Model architecture** — [Architecture type] with [key modification]
+3. **Training procedure** — [Optimization method] with [regularization strategy]
+:::
+
+[Formal definitions follow on the next slide.]{.subtle}
+
+::: {.notes}
+Give a high-level overview first, then dive into each component.
+The audience needs the big picture before the details.
+:::
+
+---
+
+## Formal Definition
+
+### Stage 1: Representation Learning
+
+Given input $\mathbf{x} \in \mathcal{X}$, we learn a mapping $f_\theta: \mathcal{X} \rightarrow \mathcal{Z}$ such that:
+
+$$
+\mathcal{L}(\theta) = \mathbb{E}_{x \sim p(\mathbf{x})} \left[ \ell(f_\theta(\mathbf{x}), y) + \lambda \cdot \Omega(\theta) \right]
+$$
+
+where $\Omega(\theta)$ is the regularization term controlling model complexity.
+
+::: {.warningbox}
+**Assumption**
+
+We assume the data distribution is stationary during training. Non-stationary settings require the extension described in Appendix B.
+:::
+
+---
+
+## Experimental Setup
+
+| Component | Configuration |
+|-----------|--------------|
+| Dataset | [Name], N = 50,000 samples |
+| Architecture | [Type] with [layers/params] |
+| Optimizer | AdamW, lr = 3e-4, weight decay = 0.01 |
+| Training | 100 epochs, batch size 256 |
+| Hardware | 4× NVIDIA A100 (80GB) |
+| Evaluation | 5-fold cross-validation |
+
+::: {.footnote}
+Code and data available at: [repository-url]
+:::
+
+---
+
+## Results {.section-header}
+
+---
+
+## Main Results
+
+:::: {.two-col}
+::: {.div}
+### Quantitative Performance
+
+| Method | Accuracy | F1 | AUC |
+|--------|----------|-----|-----|
+| Baseline A | 82.3 | 0.81 | 0.89 |
+| Baseline B | 85.1 | 0.84 | 0.91 |
+| **Ours** | **89.7** | **0.89** | **0.95** |
+
+[All metrics averaged over 5 runs ± std.]{.smaller}
+:::
+
+::: {.keybox}
+**Key Finding**
+
+Our method achieves a [**+4.6%**]{.hi} improvement in accuracy over the strongest baseline, with consistent gains across all metrics.
+
+The improvement is statistically significant (p < 0.001, paired t-test).
+:::
+::::
+
+::: {.notes}
+Lead with the headline number. Then provide context for why the
+improvement is meaningful in this domain.
+:::
+
+---
+
+## Comparison Analysis
+
+:::: {.comparison}
+::: {.compare-left}
+### Previous SOTA
+
+- Accuracy: 85.1%
+- Requires 3× more compute
+- Limited to single-domain data
+- No theoretical guarantees
+:::
+
+::: {.compare-right}
+### Our Approach
+
+- Accuracy: [**89.7%**]{.hi-green}
+- 2× faster training time
+- Cross-domain generalization
+- Convergence guarantees (Theorem 1)
+:::
+::::
+
+---
+
+## Discussion & Limitations
+
+::: {.tipbox}
+**Strengths**
+
+- Consistent improvement across all evaluation metrics and domains
+- Theoretical grounding provides interpretability guarantees
+- Practical deployment requires modest computational resources
+:::
+
+::: {.warningbox}
+**Limitations**
+
+- Performance on [edge case] degrades when [condition]
+- Requires [minimum data size] for reliable convergence
+- Not yet tested in [specific real-world scenario]
+:::
+
+---
+
+## Conclusion
+
+### Summary of Contributions
+
+1. **[Method Name]** — a novel approach achieving state-of-the-art performance
+2. **Theoretical analysis** — convergence and generalization bounds
+3. **Comprehensive evaluation** — validated across [N] datasets and [K] domains
+
+::: {.keybox}
+**Takeaway**
+
+[One sentence that captures the essential insight of this work — what should the audience remember a week from now?]
+:::
+
+::: {.notes}
+End with the one thing you want the audience to remember.
+If they forget everything else, what should stick?
+:::
+
+---
+
+## References {.smaller}
+
+::: {.references}
+Include your BibTeX references in `references.bib` alongside this file.
+Quarto will automatically format citations used with `@key` syntax.
+:::
+
+[Thank you — Questions?]{.larger}

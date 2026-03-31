@@ -1,0 +1,340 @@
+---
+title: "Product Strategy 2025"
+subtitle: "Accelerating Growth Through Platform Innovation"
+author: "Strategy Team"
+date: today
+format:
+  revealjs:
+    theme: ../themes/impeccable-corporate.scss
+    slide-number: c/t
+    hash: true
+    controls: true
+    progress: true
+    center: false
+    width: 1920
+    height: 1080
+    transition: fade
+    transition-speed: default
+    code-line-numbers: false
+    highlight-style: github-dark
+    include-in-header:
+      text: |
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+---
+
+## Executive Summary {.section-header}
+
+::: {.notes}
+Open with the strategic context. What decisions need to be made?
+Keep the executive summary to 3 key points max.
+:::
+
+---
+
+## Business Context
+
+:::: {.two-col}
+::: {.div}
+### Market Position
+
+The market is shifting toward **platform-first** strategies. Key dynamics:
+
+- Industry consolidation accelerating — 3 major acquisitions in Q4
+- Customer expectations moving from products to [**ecosystems**]{.hi}
+- Margin pressure on standalone offerings increasing year over year
+
+::: {.quotebox}
+"The next decade belongs to platforms, not products."
+
+[— Industry Analyst Report, 2025]{.attribution}
+:::
+:::
+
+::: {.div}
+### Our Opportunity
+
+::: {.keybox}
+**Strategic Window**
+
+We have an [**18-month window**]{.hi} to establish platform leadership before competitor entry. Our existing customer base (2.3M users) provides the distribution advantage.
+:::
+
+Current market share: **23%** → Target: **35%** by Q4 2026
+:::
+::::
+
+---
+
+## Key Metrics — Current State
+
+:::: {.three-col}
+::: {.kpi-card}
+[**$47.2M**]{.kpi-value}
+
+[Annual Recurring Revenue]{.kpi-label}
+
+[+18% YoY]{.kpi-delta .positive}
+:::
+
+::: {.kpi-card}
+[**2.3M**]{.kpi-value}
+
+[Active Users]{.kpi-label}
+
+[+32% YoY]{.kpi-delta .positive}
+:::
+
+::: {.kpi-card}
+[**4.2%**]{.kpi-value}
+
+[Monthly Churn]{.kpi-label}
+
+[-0.8pp YoY]{.kpi-delta .positive}
+:::
+::::
+
+::: {.tipbox}
+**Positive Signal**
+
+All core metrics trending favorably. The challenge is converting growth momentum into platform defensibility before the market window closes.
+:::
+
+::: {.notes}
+Lead with the numbers. These KPIs establish credibility before
+you propose strategy changes.
+:::
+
+---
+
+## Strategic Priorities {.section-header}
+
+---
+
+## Three Pillars of Growth
+
+:::: {.three-col}
+::: {.methodbox}
+**Pillar 1: Platform Foundation**
+
+Build the technical infrastructure for third-party integrations and marketplace capabilities.
+
+- API Gateway launch
+- Developer portal
+- Partner SDK
+
+**Timeline:** Q1–Q2 2025
+:::
+
+::: {.methodbox}
+**Pillar 2: Ecosystem Expansion**
+
+Grow the partner network and establish the integration marketplace.
+
+- 50+ launch partners
+- Revenue sharing model
+- Certification program
+
+**Timeline:** Q2–Q3 2025
+:::
+
+::: {.methodbox}
+**Pillar 3: Enterprise Tier**
+
+Capture the enterprise segment with advanced features and dedicated support.
+
+- SSO & compliance
+- Custom SLAs
+- Dedicated CSM
+
+**Timeline:** Q3–Q4 2025
+:::
+::::
+
+---
+
+## Financial Projections
+
+:::: {.two-col}
+::: {.div}
+### Revenue Forecast
+
+| Quarter | Revenue | Growth |
+|---------|---------|--------|
+| Q1 2025 | $12.8M | +15% |
+| Q2 2025 | $14.2M | +11% |
+| Q3 2025 | $16.5M | +16% |
+| Q4 2025 | $19.1M | +16% |
+| **FY 2025** | **$62.6M** | **+33%** |
+
+[Assumes platform revenue begins contributing in Q3.]{.smaller}
+:::
+
+::: {.div}
+### Investment Required
+
+::: {.warningbox}
+**Capital Requirements**
+
+- **Engineering:** $4.2M (12 additional headcount)
+- **Partnerships:** $1.8M (BD team + launch incentives)
+- **Infrastructure:** $2.1M (scaling + security audit)
+- **Total:** $8.1M additional investment
+:::
+
+::: {.keybox}
+**ROI Projection**
+
+Expected payback period: [**14 months**]{.hi}
+
+NPV at 3-year horizon: **$28.4M**
+:::
+:::
+::::
+
+---
+
+## Competitive Landscape
+
+:::: {.comparison}
+::: {.compare-left}
+### Risk: Status Quo
+
+- Margin erosion of 2-3% annually
+- Competitor platform launches in 12-18 months
+- Customer concentration risk increases
+- No ecosystem moat
+:::
+
+::: {.compare-right}
+### Opportunity: Platform Pivot
+
+- Platform fee revenue (20-30% margins)
+- Network effects compound over time
+- Partner ecosystem creates switching costs
+- First-mover advantage in segment
+:::
+::::
+
+::: {.notes}
+Frame this as a risk comparison, not just an opportunity pitch.
+Decision-makers respond to loss aversion.
+:::
+
+---
+
+## Implementation Roadmap
+
+:::: {.sidebar-right}
+::: {.div}
+### Phase 1: Foundation (Q1–Q2)
+
+- Core API development and documentation
+- Partner onboarding pipeline design
+- Security and compliance audit
+- Internal dogfooding period
+
+### Phase 2: Launch (Q3)
+
+- Public beta with 50+ partners
+- Developer conference announcement
+- Marketplace soft launch
+- Customer migration tooling
+
+### Phase 3: Scale (Q4+)
+
+- Full marketplace launch
+- Enterprise tier GA
+- International expansion planning
+:::
+
+::: {.div}
+::: {.tipbox}
+**Quick Wins**
+
+Three initiatives that can begin immediately with existing resources:
+
+1. API documentation sprint
+2. Partner interest survey
+3. Internal integration prototype
+:::
+
+::: {.warningbox}
+**Dependencies**
+
+- Legal review of revenue sharing model (2-week lead)
+- Compliance certification for enterprise tier
+- Infrastructure capacity planning approval
+:::
+:::
+::::
+
+---
+
+## Team & Resources
+
+| Role | Current | Needed | Gap |
+|------|---------|--------|-----|
+| Backend Engineers | 8 | 14 | +6 |
+| Frontend Engineers | 5 | 7 | +2 |
+| DevRel / Partnerships | 1 | 4 | +3 |
+| Product Manager | 2 | 3 | +1 |
+
+::: {.methodbox}
+**Hiring Strategy**
+
+Priority hires: 2 senior backend engineers (API expertise) and 1 Head of Partnerships. Remaining roles can phase in through Q2.
+
+Estimated time-to-fill: 6-8 weeks for senior roles, 4-6 weeks for mid-level.
+:::
+
+---
+
+## Risk Mitigation
+
+:::: {.two-col}
+::: {.warningbox}
+**Key Risks**
+
+1. **Technical:** API stability under partner load
+2. **Market:** Competitor accelerates timeline
+3. **Execution:** Hiring delays in tight market
+4. **Financial:** Revenue ramp slower than projected
+:::
+
+::: {.tipbox}
+**Mitigation Plan**
+
+1. Phased rollout with load testing gates
+2. Accelerate MVP scope, defer non-critical features
+3. Engage recruiting firm + referral bonus program
+4. Conservative base case maintains current trajectory
+:::
+::::
+
+---
+
+## Decision Required
+
+::: {.keybox}
+**Recommendation**
+
+Approve $8.1M platform investment to execute the three-pillar strategy over FY 2025.
+
+**Expected outcome:** 33% revenue growth, platform moat established, 14-month payback.
+:::
+
+### Next Steps
+
+1. **Board approval** — Present at April board meeting
+2. **Hiring kickoff** — Begin senior engineering search immediately
+3. **Partner outreach** — Soft-launch interest survey within 2 weeks
+4. **Technical planning** — Architecture review sprint in Week 1
+
+[Questions & Discussion]{.larger}
+
+::: {.notes}
+End with a clear ask and specific next steps.
+Make it easy for decision-makers to say yes.
+:::

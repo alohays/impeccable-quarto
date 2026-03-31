@@ -1,0 +1,545 @@
+/*-- scss:defaults --*/
+
+// ============================================================================
+// IMPECCABLE LIGHTNING — High-Impact, Minimal Text
+// Maximum visual impact · Large type · Sparse content
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// OKLCH Color Palette — High contrast, punchy
+// ---------------------------------------------------------------------------
+$primary:        oklch(0.42 0.20 255);   // Bold blue
+$primary-light:  oklch(0.62 0.14 255);
+$primary-lighter: oklch(0.90 0.05 255);
+$primary-dark:   oklch(0.28 0.16 255);
+
+$secondary:       oklch(0.55 0.14 320);  // Magenta accent
+$secondary-light: oklch(0.75 0.08 320);
+
+$accent:       oklch(0.75 0.20 75);      // Bright gold
+$accent-light: oklch(0.90 0.08 75);
+
+$color-success:  oklch(0.60 0.16 150);
+$color-warning:  oklch(0.75 0.18 75);
+$color-danger:   oklch(0.55 0.20 20);
+$color-info:     oklch(0.55 0.14 250);
+
+// Tinted neutrals — cool dramatic (hue 255)
+$neutral-950: oklch(0.10 0.015 255);
+$neutral-900: oklch(0.15 0.015 255);
+$neutral-800: oklch(0.22 0.012 255);
+$neutral-700: oklch(0.33 0.010 255);
+$neutral-600: oklch(0.44 0.008 255);
+$neutral-500: oklch(0.55 0.008 255);
+$neutral-400: oklch(0.66 0.006 255);
+$neutral-300: oklch(0.77 0.006 255);
+$neutral-200: oklch(0.86 0.008 255);
+$neutral-100: oklch(0.93 0.008 255);
+$neutral-50:  oklch(0.97 0.006 255);
+
+// Typography — Maximum impact
+$font-family-display: "Outfit", "Plus Jakarta Sans", sans-serif;
+$font-family-body:    "Source Sans 3", "Source Sans Pro", sans-serif;
+$font-family-code:    "JetBrains Mono", "Fira Code", monospace;
+
+$base-size: 32px;          // Larger base for lightning talks
+$scale-ratio: 1.414;       // Augmented Fourth — very dramatic
+
+// Reveal.js overrides
+$backgroundColor:    $neutral-50;
+$mainColor:          $neutral-800;
+$headingColor:       $neutral-950;
+$linkColor:          $primary;
+$linkColorHover:     $primary-light;
+$selectionBackgroundColor: $primary-lighter;
+
+$mainFont:           $font-family-body;
+$headingFont:        $font-family-display;
+$codeFont:           $font-family-code;
+
+$mainFontSize:       $base-size;
+$heading1Size:       3.5em;
+$heading2Size:       2.5em;
+$heading3Size:       1.8em;
+$heading4Size:       1.3em;
+
+$headingMargin:      0 0 0.4em 0;
+$headingLineHeight:  1.0;
+$headingLetterSpacing: -0.04em;
+$headingTextTransform: none;
+$headingFontWeight:  900;
+
+$blockMargin:        1em 0;
+$codeFontSize:       0.68em;
+
+$slide-padding: 50px 60px;
+
+
+/*-- scss:rules --*/
+
+// ============================================================================
+// BASE — Impact-first
+// ============================================================================
+
+.reveal {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  padding: $slide-padding;
+  box-sizing: border-box;
+}
+
+// ============================================================================
+// TYPOGRAPHY — Giant headings, minimal body
+// ============================================================================
+
+.reveal h1 {
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.reveal h2 {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+}
+
+.reveal h3,
+.reveal h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.reveal p,
+.reveal li {
+  line-height: 1.5;
+  color: $neutral-700;
+  font-size: 0.95em;
+}
+
+.reveal strong {
+  color: $primary;
+  font-weight: 700;
+}
+
+.reveal a {
+  text-decoration: none;
+  color: $primary;
+  transition: color 0.15s ease;
+}
+
+.reveal a:hover {
+  color: $primary-light;
+}
+
+.reveal blockquote {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 1em 0;
+  font-size: 1.4em;
+  font-weight: 600;
+  font-style: italic;
+  color: $neutral-600;
+  line-height: 1.3;
+  text-align: center;
+  width: auto;
+  box-shadow: none;
+}
+
+.reveal ul,
+.reveal ol {
+  margin-left: 0;
+}
+
+.reveal li {
+  margin-bottom: 0.5em;
+}
+
+.reveal ul li::marker { color: $primary; }
+.reveal ol li::marker { color: $primary; font-weight: 700; }
+
+// ============================================================================
+// CODE — Compact for lightning context
+// ============================================================================
+
+.reveal code {
+  font-family: $font-family-code;
+  font-size: $codeFontSize;
+  background: $neutral-100;
+  padding: 0.12em 0.35em;
+  border-radius: 5px;
+  color: $primary-dark;
+}
+
+.reveal pre {
+  background: $neutral-950;
+  border-radius: 14px;
+  padding: 1em 1.3em;
+  box-shadow: 0 6px 24px oklch(0.10 0.01 255 / 0.18);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reveal pre code {
+  background: transparent;
+  color: $neutral-200;
+  padding: 0;
+  font-size: 0.65em;
+  line-height: 1.5;
+}
+
+// ============================================================================
+// TITLE SLIDE — Maximum impact
+// ============================================================================
+
+#title-slide,
+.reveal section.title-slide {
+  text-align: left;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+
+  h1, .title {
+    font-size: 3.5em;
+    font-weight: 900;
+    color: $primary-dark;
+    line-height: 0.95;
+    margin-bottom: 0.25em;
+    letter-spacing: -0.05em;
+  }
+
+  .subtitle {
+    font-size: 1.4em;
+    color: $neutral-500;
+    font-weight: 400;
+    margin-bottom: 1.5em;
+  }
+
+  .author {
+    font-size: 1.0em;
+    color: $neutral-600;
+    font-weight: 600;
+  }
+
+  .date {
+    font-size: 0.82em;
+    color: $neutral-400;
+  }
+}
+
+// ============================================================================
+// SECTION HEADERS — Bold dividers
+// ============================================================================
+
+section.section-header {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  h2 {
+    font-size: 2.5em;
+    font-weight: 900;
+    color: $primary;
+    letter-spacing: -0.04em;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 80px;
+      height: 6px;
+      background: $accent;
+      border-radius: 3px;
+    }
+  }
+}
+
+// ============================================================================
+// IMPACT SLIDE — Single statement + visual
+// ============================================================================
+
+.reveal .impact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 60vh;
+
+  .impact-number {
+    font-family: $font-family-display;
+    font-size: 5em;
+    font-weight: 900;
+    color: $primary;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .impact-label {
+    font-size: 1.2em;
+    color: $neutral-500;
+    margin-top: 0.3em;
+    font-weight: 500;
+  }
+
+  .impact-statement {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: $neutral-950;
+    line-height: 1.15;
+    max-width: 80%;
+  }
+}
+
+// ============================================================================
+// SEMANTIC BOXES — Minimal for lightning
+// ============================================================================
+
+@mixin lightning-box($border-color, $bg-color) {
+  border-left: 6px solid $border-color;
+  background: $bg-color;
+  padding: 0.8em 1.2em;
+  margin: 0.6em 0;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.88em;
+
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+}
+
+.reveal .keybox {
+  @include lightning-box($accent, oklch(0.96 0.04 75));
+  strong:first-child {
+    color: oklch(0.48 0.14 75);
+    font-weight: 800;
+    display: block;
+    margin-bottom: 0.2em;
+  }
+}
+
+.reveal .methodbox {
+  @include lightning-box($primary, $primary-lighter);
+  strong:first-child {
+    color: $primary-dark;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 0.2em;
+  }
+}
+
+.reveal .warningbox {
+  @include lightning-box($color-danger, oklch(0.96 0.04 20));
+  strong:first-child {
+    color: oklch(0.42 0.16 20);
+    font-weight: 800;
+    display: block;
+    margin-bottom: 0.2em;
+  }
+}
+
+.reveal .tipbox {
+  @include lightning-box($color-success, oklch(0.96 0.04 150));
+  strong:first-child {
+    color: oklch(0.40 0.14 150);
+    font-weight: 800;
+    display: block;
+    margin-bottom: 0.2em;
+  }
+}
+
+.reveal .quotebox {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 1em 0;
+  font-size: 1.4em;
+  font-weight: 600;
+  font-style: italic;
+  color: $neutral-600;
+  text-align: center;
+  line-height: 1.4;
+
+  .attribution {
+    display: block;
+    font-style: normal;
+    font-size: 0.6em;
+    color: $neutral-400;
+    margin-top: 0.5em;
+  }
+}
+
+// ============================================================================
+// COLUMN LAYOUTS
+// ============================================================================
+
+.reveal .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+.reveal .three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+.reveal .sidebar-left {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2.5em;
+}
+
+.reveal .sidebar-right {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2.5em;
+}
+
+.reveal .comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+
+  .compare-left,
+  .compare-right {
+    padding: 1em;
+    border-radius: 12px;
+  }
+
+  .compare-left {
+    background: oklch(0.96 0.03 20);
+    border-top: 4px solid $color-danger;
+  }
+
+  .compare-right {
+    background: oklch(0.96 0.03 150);
+    border-top: 4px solid $color-success;
+  }
+}
+
+// ============================================================================
+// EMPHASIS
+// ============================================================================
+
+.reveal .hi       { color: $primary; font-weight: 700; }
+.reveal .hi-gold  { color: oklch(0.55 0.16 75); font-weight: 700; }
+.reveal .hi-green { color: oklch(0.48 0.15 150); font-weight: 700; }
+.reveal .hi-red   { color: oklch(0.48 0.18 20); font-weight: 700; }
+.reveal .subtle   { color: $neutral-500; font-weight: 400; }
+
+.reveal .smaller  { font-size: 0.82em; }
+.reveal .smallest { font-size: 0.68em; }
+.reveal .larger   { font-size: 1.3em; }
+
+// ============================================================================
+// FRAGMENTS — Quick, snappy
+// ============================================================================
+
+.reveal .slides section .fragment {
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  &.visible { opacity: 1; }
+}
+
+.reveal .slides section .fragment.slide-up {
+  transform: translateY(30px);
+  opacity: 0;
+  &.visible { transform: translateY(0); opacity: 1; }
+}
+
+.reveal .slides section .fragment.scale-in {
+  transform: scale(0.85);
+  opacity: 0;
+  &.visible { transform: scale(1); opacity: 1; }
+}
+
+// ============================================================================
+// TABLES, IMAGES, CONTROLS
+// ============================================================================
+
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.82em;
+  margin: 0.8em 0;
+}
+
+.reveal table thead th {
+  background: $primary;
+  color: $neutral-50;
+  padding: 0.6em 0.9em;
+  font-weight: 700;
+  font-family: $font-family-display;
+  border: none;
+}
+
+.reveal table tbody td {
+  padding: 0.5em 0.9em;
+  border-bottom: 1px solid $neutral-200;
+}
+
+.reveal table tbody tr:nth-child(even) {
+  background: $neutral-100;
+}
+
+.reveal img {
+  border-radius: 12px;
+  max-width: 100%;
+}
+
+.reveal figcaption {
+  font-size: 0.72em;
+  color: $neutral-400;
+  margin-top: 0.3em;
+}
+
+.reveal .progress {
+  color: $primary;
+  height: 5px;
+}
+
+.reveal .controls { color: $primary; }
+
+.reveal .slide-number {
+  font-family: $font-family-display;
+  font-size: 15px;
+  font-weight: 600;
+  color: $neutral-400;
+  background: transparent;
+}
+
+// ============================================================================
+// PRINT & ACCESSIBILITY
+// ============================================================================
+
+@media print {
+  .reveal {
+    background: white !important;
+    .slides section { page-break-inside: avoid; }
+    pre { box-shadow: none; border: 1px solid $neutral-300; }
+    .fragment { opacity: 1 !important; transform: none !important; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .slides section .fragment {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -1,0 +1,548 @@
+/*-- scss:defaults --*/
+
+// ============================================================================
+// IMPECCABLE ACADEMIC — Formal, Scholarly Variant
+// Serif display · Muted palette · Citation-ready
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// OKLCH Color Palette — Muted, scholarly tones
+// ---------------------------------------------------------------------------
+$primary:        oklch(0.35 0.10 250);   // Deep muted navy
+$primary-light:  oklch(0.55 0.08 250);
+$primary-lighter: oklch(0.88 0.04 250);
+$primary-dark:   oklch(0.22 0.08 250);
+
+$secondary:       oklch(0.50 0.06 180);  // Sage teal
+$secondary-light: oklch(0.75 0.04 180);
+
+$accent:       oklch(0.58 0.10 45);      // Warm sienna
+$accent-light: oklch(0.82 0.06 45);
+
+$color-success:  oklch(0.50 0.10 150);
+$color-warning:  oklch(0.62 0.12 70);
+$color-danger:   oklch(0.48 0.12 20);
+$color-info:     oklch(0.50 0.08 240);
+
+// Tinted neutrals — warm academic tone (hue 45 for parchment quality)
+$neutral-950: oklch(0.13 0.012 45);
+$neutral-900: oklch(0.19 0.012 45);
+$neutral-800: oklch(0.27 0.010 45);
+$neutral-700: oklch(0.37 0.008 45);
+$neutral-600: oklch(0.47 0.008 45);
+$neutral-500: oklch(0.57 0.006 45);
+$neutral-400: oklch(0.67 0.006 45);
+$neutral-300: oklch(0.77 0.008 45);
+$neutral-200: oklch(0.86 0.008 45);
+$neutral-100: oklch(0.93 0.010 45);
+$neutral-50:  oklch(0.97 0.010 45);     // Warm paper white
+
+// Typography — Serif display for formality
+$font-family-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+$font-family-body:    "Source Sans 3", "Source Sans Pro", sans-serif;
+$font-family-code:    "JetBrains Mono", "Fira Code", monospace;
+
+$base-size: 26px;
+$scale-ratio: 1.25;
+
+// Reveal.js overrides
+$backgroundColor:    $neutral-50;
+$mainColor:          $neutral-800;
+$headingColor:       $neutral-950;
+$linkColor:          $primary;
+$linkColorHover:     $primary-light;
+$selectionBackgroundColor: $primary-lighter;
+$selectionColor:     $neutral-950;
+
+$mainFont:           $font-family-body;
+$headingFont:        $font-family-display;
+$codeFont:           $font-family-code;
+
+$mainFontSize:       $base-size;
+$heading1Size:       2.6em;
+$heading2Size:       2.0em;
+$heading3Size:       1.5em;
+$heading4Size:       1.2em;
+
+$headingMargin:      0 0 0.6em 0;
+$headingLineHeight:  1.2;
+$headingLetterSpacing: 0em;
+$headingTextTransform: none;
+$headingFontWeight:  600;
+
+$blockMargin:        1.2em 0;
+$codeFontSize:       0.72em;
+
+$slide-padding: 45px 65px;
+
+
+/*-- scss:rules --*/
+
+// ============================================================================
+// BASE ACADEMIC STYLES
+// ============================================================================
+
+.reveal {
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  padding: $slide-padding;
+  box-sizing: border-box;
+}
+
+// ============================================================================
+// HEADING REFINEMENTS — Scholarly feel
+// ============================================================================
+
+.reveal h1,
+.reveal h2 {
+  font-family: $font-family-display;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.reveal h1 {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.reveal h3,
+.reveal h4 {
+  font-family: $font-family-display;
+  font-weight: 600;
+}
+
+.reveal p,
+.reveal li {
+  line-height: 1.6;
+  color: $neutral-700;
+}
+
+.reveal strong {
+  color: $neutral-950;
+  font-weight: 650;
+}
+
+.reveal a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+  transition: color 0.2s ease;
+}
+
+// Academic blockquote — distinguished
+.reveal blockquote {
+  border-left: 3px solid $primary;
+  background: $neutral-100;
+  padding: 1em 1.5em;
+  margin: 1.2em 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  font-family: $font-family-display;
+  font-size: 1.05em;
+  color: $neutral-600;
+  width: auto;
+  box-shadow: none;
+}
+
+// Lists
+.reveal ul,
+.reveal ol {
+  margin-left: 0.5em;
+}
+
+.reveal li {
+  margin-bottom: 0.4em;
+}
+
+.reveal ul li::marker {
+  color: $primary;
+}
+
+.reveal ol li::marker {
+  color: $primary;
+  font-weight: 600;
+}
+
+// ============================================================================
+// CODE — Subtle for academic context
+// ============================================================================
+
+.reveal code {
+  font-family: $font-family-code;
+  font-size: $codeFontSize;
+  background: $neutral-100;
+  padding: 0.12em 0.35em;
+  border-radius: 3px;
+  color: $primary-dark;
+}
+
+.reveal pre {
+  background: $neutral-900;
+  border-radius: 8px;
+  padding: 1.1em 1.4em;
+  box-shadow: 0 2px 12px oklch(0.13 0.01 45 / 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reveal pre code {
+  background: transparent;
+  color: $neutral-100;
+  padding: 0;
+  font-size: 0.68em;
+  line-height: 1.55;
+}
+
+// ============================================================================
+// TITLE SLIDE — Formal academic
+// ============================================================================
+
+#title-slide,
+.reveal section.title-slide {
+  text-align: left;
+
+  h1, .title {
+    font-family: $font-family-display;
+    font-size: 2.6em;
+    font-weight: 700;
+    color: $primary-dark;
+    line-height: 1.1;
+    margin-bottom: 0.4em;
+  }
+
+  .subtitle {
+    font-size: 1.2em;
+    color: $neutral-500;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 1.2em;
+  }
+
+  .author {
+    font-size: 1.0em;
+    color: $neutral-700;
+    font-weight: 500;
+  }
+
+  .institute, .affiliation {
+    font-size: 0.85em;
+    color: $neutral-500;
+    font-style: italic;
+    margin-top: 0.3em;
+  }
+
+  .date {
+    font-size: 0.85em;
+    color: $neutral-500;
+    margin-top: 0.5em;
+  }
+}
+
+// ============================================================================
+// SECTION HEADERS
+// ============================================================================
+
+section.section-header {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+
+  h2 {
+    font-size: 2.0em;
+    color: $primary;
+    border-bottom: 2px solid $accent;
+    padding-bottom: 0.3em;
+    display: inline-block;
+  }
+}
+
+// ============================================================================
+// SEMANTIC BOXES — Academic styling
+// ============================================================================
+
+@mixin academic-box($border-color, $bg-color) {
+  border-left: 4px solid $border-color;
+  background: $bg-color;
+  padding: 1em 1.4em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9em;
+
+  > :first-child { margin-top: 0; }
+  > :last-child { margin-bottom: 0; }
+}
+
+.reveal .keybox {
+  @include academic-box($accent, oklch(0.96 0.03 45));
+  strong:first-child {
+    color: oklch(0.40 0.10 45);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+}
+
+.reveal .methodbox {
+  @include academic-box($primary, $primary-lighter);
+  strong:first-child {
+    color: $primary-dark;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+}
+
+.reveal .warningbox {
+  @include academic-box($color-danger, oklch(0.96 0.03 20));
+  strong:first-child {
+    color: oklch(0.40 0.12 20);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+}
+
+.reveal .tipbox {
+  @include academic-box($color-success, oklch(0.96 0.03 150));
+  strong:first-child {
+    color: oklch(0.38 0.10 150);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+}
+
+.reveal .quotebox {
+  border-left: 3px solid $neutral-400;
+  background: $neutral-100;
+  padding: 1.2em 1.6em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-family: $font-family-display;
+  font-style: italic;
+  font-size: 1.05em;
+  color: $neutral-600;
+  line-height: 1.65;
+
+  .attribution {
+    display: block;
+    font-style: normal;
+    font-family: $font-family-body;
+    font-size: 0.78em;
+    color: $neutral-500;
+    margin-top: 0.6em;
+    text-align: right;
+  }
+}
+
+// ============================================================================
+// CITATION STYLES — Academic-specific
+// ============================================================================
+
+.reveal .citation {
+  font-size: 0.72em;
+  color: $neutral-500;
+  font-style: italic;
+}
+
+.reveal .footnote {
+  font-size: 0.68em;
+  color: $neutral-500;
+  border-top: 1px solid $neutral-200;
+  padding-top: 0.5em;
+  margin-top: 1.5em;
+}
+
+.reveal .references {
+  font-size: 0.65em;
+  line-height: 1.5;
+  color: $neutral-600;
+
+  p {
+    margin-bottom: 0.4em;
+    padding-left: 2em;
+    text-indent: -2em;
+  }
+}
+
+// ============================================================================
+// COLUMN LAYOUTS
+// ============================================================================
+
+.reveal .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+.reveal .three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+.reveal .sidebar-left {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+.reveal .sidebar-right {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+.reveal .comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+
+  .compare-left,
+  .compare-right {
+    padding: 1em;
+    border-radius: 6px;
+  }
+
+  .compare-left {
+    background: oklch(0.96 0.02 20);
+    border-top: 3px solid $color-danger;
+  }
+
+  .compare-right {
+    background: oklch(0.96 0.02 150);
+    border-top: 3px solid $color-success;
+  }
+}
+
+// ============================================================================
+// EMPHASIS CLASSES
+// ============================================================================
+
+.reveal .hi       { color: $primary; font-weight: 650; }
+.reveal .hi-gold  { color: oklch(0.45 0.10 45); font-weight: 650; }
+.reveal .hi-green { color: oklch(0.42 0.10 150); font-weight: 650; }
+.reveal .hi-red   { color: oklch(0.42 0.12 20); font-weight: 650; }
+.reveal .subtle   { color: $neutral-500; font-weight: 400; }
+
+// ============================================================================
+// SIZE UTILITIES
+// ============================================================================
+
+.reveal .smaller  { font-size: 0.82em; }
+.reveal .smallest { font-size: 0.68em; }
+.reveal .larger   { font-size: 1.25em; }
+
+// ============================================================================
+// FRAGMENTS — Subtle academic transitions
+// ============================================================================
+
+.reveal .slides section .fragment {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  &.visible { opacity: 1; }
+}
+
+.reveal .slides section .fragment.slide-up {
+  transform: translateY(15px);
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  &.visible { transform: translateY(0); opacity: 1; }
+}
+
+// ============================================================================
+// TABLE — Clean academic
+// ============================================================================
+
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85em;
+  margin: 1em 0;
+}
+
+.reveal table thead th {
+  background: $primary;
+  color: $neutral-50;
+  padding: 0.6em 0.9em;
+  text-align: left;
+  font-weight: 600;
+  border: none;
+}
+
+.reveal table tbody td {
+  padding: 0.55em 0.9em;
+  border-bottom: 1px solid $neutral-200;
+}
+
+.reveal table tbody tr:nth-child(even) {
+  background: $neutral-100;
+}
+
+// ============================================================================
+// IMAGES & FIGURES
+// ============================================================================
+
+.reveal img {
+  border-radius: 4px;
+  max-width: 100%;
+}
+
+.reveal figcaption {
+  font-size: 0.75em;
+  color: $neutral-500;
+  margin-top: 0.4em;
+  font-style: italic;
+}
+
+// ============================================================================
+// PROGRESS & CONTROLS
+// ============================================================================
+
+.reveal .progress {
+  color: $primary;
+  height: 3px;
+}
+
+.reveal .controls {
+  color: $primary;
+}
+
+.reveal .slide-number {
+  font-family: $font-family-body;
+  font-size: 13px;
+  color: $neutral-500;
+  background: transparent;
+}
+
+// ============================================================================
+// PRINT
+// ============================================================================
+
+@media print {
+  .reveal {
+    background: white !important;
+    .slides section { page-break-inside: avoid; }
+    pre { box-shadow: none; border: 1px solid $neutral-300; }
+    .fragment { opacity: 1 !important; transform: none !important; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .slides section .fragment {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

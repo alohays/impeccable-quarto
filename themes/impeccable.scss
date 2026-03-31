@@ -1,0 +1,791 @@
+/*-- scss:defaults --*/
+
+// ============================================================================
+// IMPECCABLE — Master Quarto RevealJS Theme
+// OKLCH Color Space · Tinted Neutrals · Typography-First Design
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// OKLCH Color Palette
+// ---------------------------------------------------------------------------
+// Primary: Deep Indigo — authority, trust
+$primary:        oklch(0.45 0.18 265);
+$primary-light:  oklch(0.65 0.12 265);
+$primary-lighter: oklch(0.85 0.06 265);
+$primary-dark:   oklch(0.30 0.15 265);
+
+// Secondary: Warm Teal — clarity, balance
+$secondary:       oklch(0.55 0.12 195);
+$secondary-light: oklch(0.75 0.08 195);
+
+// Accent: Marigold — attention, energy
+$accent:       oklch(0.72 0.16 85);
+$accent-light: oklch(0.88 0.10 85);
+
+// Semantic colors
+$color-success:  oklch(0.60 0.15 145);
+$color-warning:  oklch(0.72 0.16 85);
+$color-danger:   oklch(0.55 0.18 25);
+$color-info:     oklch(0.55 0.12 240);
+
+// ---------------------------------------------------------------------------
+// Tinted Neutrals (never pure black/white — 0.015 chroma hint at hue 265)
+// ---------------------------------------------------------------------------
+$neutral-950: oklch(0.12 0.015 265);   // near-black
+$neutral-900: oklch(0.18 0.015 265);
+$neutral-800: oklch(0.25 0.015 265);
+$neutral-700: oklch(0.35 0.012 265);
+$neutral-600: oklch(0.45 0.010 265);
+$neutral-500: oklch(0.55 0.008 265);
+$neutral-400: oklch(0.65 0.008 265);
+$neutral-300: oklch(0.75 0.008 265);
+$neutral-200: oklch(0.85 0.010 265);
+$neutral-100: oklch(0.92 0.012 265);
+$neutral-50:  oklch(0.96 0.012 265);   // near-white
+
+// ---------------------------------------------------------------------------
+// Typography — Distinctive Font Stack
+// ---------------------------------------------------------------------------
+// Display: Plus Jakarta Sans — modern geometric with personality
+// Body: Source Sans 3 — superb readability at all sizes
+// Code: JetBrains Mono — ligatures, wide characters
+
+$font-family-display: "Plus Jakarta Sans", "Outfit", sans-serif;
+$font-family-body:    "Source Sans 3", "Source Sans Pro", sans-serif;
+$font-family-code:    "JetBrains Mono", "Fira Code", monospace;
+
+// Modular type scale: 1.25 (Major Third)
+$scale-ratio: 1.25;
+$base-size:   28px;  // Minimum readable at projection distance
+
+$size-xs:     calc(#{$base-size} / #{$scale-ratio} / #{$scale-ratio});  // ~18px
+$size-sm:     calc(#{$base-size} / #{$scale-ratio});                     // ~22px
+$size-base:   $base-size;                                                // 28px
+$size-lg:     calc(#{$base-size} * #{$scale-ratio});                     // ~35px
+$size-xl:     calc(#{$base-size} * #{$scale-ratio} * #{$scale-ratio});   // ~44px
+$size-2xl:    calc(#{$base-size} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio}); // ~55px
+$size-3xl:    calc(#{$base-size} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio} * #{$scale-ratio}); // ~68px
+
+// ---------------------------------------------------------------------------
+// Reveal.js Variable Overrides
+// ---------------------------------------------------------------------------
+$backgroundColor:    $neutral-50;
+$mainColor:          $neutral-900;
+$headingColor:       $neutral-950;
+$linkColor:          $primary;
+$linkColorHover:     $primary-light;
+$selectionBackgroundColor: $primary-lighter;
+$selectionColor:     $neutral-950;
+
+$mainFont:           $font-family-body;
+$headingFont:        $font-family-display;
+$codeFont:           $font-family-code;
+
+$mainFontSize:       $base-size;
+$heading1Size:       $size-3xl;
+$heading2Size:       $size-2xl;
+$heading3Size:       $size-xl;
+$heading4Size:       $size-lg;
+
+$headingMargin:      0 0 0.6em 0;
+$headingLineHeight:  1.15;
+$headingLetterSpacing: -0.02em;
+$headingTextTransform: none;
+$headingFontWeight:  700;
+
+$blockMargin:        1.2em 0;
+$codeFontSize:       0.75em;
+
+// Spacing
+$slide-padding: 40px 60px;
+
+// Transitions
+$transitionSpeed: default;
+
+
+/*-- scss:rules --*/
+
+// ============================================================================
+// BASE STYLES
+// ============================================================================
+
+.reveal {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides section {
+  padding: $slide-padding;
+  box-sizing: border-box;
+}
+
+// ============================================================================
+// TYPOGRAPHY REFINEMENTS
+// ============================================================================
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  font-family: $font-family-display;
+  font-weight: 700;
+  letter-spacing: $headingLetterSpacing;
+  line-height: $headingLineHeight;
+  color: $headingColor;
+}
+
+.reveal h1 {
+  font-weight: 800;
+}
+
+.reveal p,
+.reveal li {
+  line-height: 1.55;
+  color: $neutral-800;
+}
+
+.reveal strong {
+  color: $neutral-950;
+  font-weight: 650;
+}
+
+.reveal em {
+  color: $neutral-700;
+}
+
+.reveal a {
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.15em;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.reveal a:hover {
+  text-decoration-color: $primary-light;
+}
+
+// Blockquotes
+.reveal blockquote {
+  border-left: 4px solid $primary;
+  background: $neutral-100;
+  padding: 1em 1.5em;
+  margin: 1.2em 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: $neutral-700;
+  width: auto;
+  box-shadow: none;
+}
+
+// Lists
+.reveal ul,
+.reveal ol {
+  margin-left: 0.5em;
+}
+
+.reveal li {
+  margin-bottom: 0.4em;
+}
+
+.reveal ul li::marker {
+  color: $primary;
+}
+
+.reveal ol li::marker {
+  color: $primary;
+  font-weight: 600;
+}
+
+// ============================================================================
+// CODE BLOCKS
+// ============================================================================
+
+.reveal code {
+  font-family: $font-family-code;
+  font-size: $codeFontSize;
+  background: $neutral-100;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  color: $primary-dark;
+}
+
+.reveal pre {
+  background: $neutral-900;
+  border-radius: 12px;
+  padding: 1.2em 1.5em;
+  box-shadow: 0 4px 20px oklch(0.12 0.015 265 / 0.15);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reveal pre code {
+  background: transparent;
+  color: $neutral-100;
+  padding: 0;
+  font-size: 0.7em;
+  line-height: 1.6;
+}
+
+// ============================================================================
+// TITLE SLIDE
+// ============================================================================
+
+.reveal .slide.title-slide,
+.reveal section.title-slide,
+#title-slide {
+  text-align: left;
+
+  h1, .title {
+    font-size: $size-3xl;
+    font-weight: 800;
+    color: $primary-dark;
+    line-height: 1.05;
+    margin-bottom: 0.3em;
+  }
+
+  .subtitle {
+    font-size: $size-lg;
+    color: $neutral-600;
+    font-weight: 400;
+    margin-bottom: 1em;
+  }
+
+  .author {
+    font-size: $size-base;
+    color: $neutral-700;
+    font-weight: 500;
+  }
+
+  .date {
+    font-size: $size-sm;
+    color: $neutral-500;
+  }
+
+  .institute, .affiliation {
+    font-size: $size-sm;
+    color: $neutral-500;
+    font-style: italic;
+  }
+}
+
+// ============================================================================
+// SECTION HEADER SLIDES
+// ============================================================================
+
+.reveal section.section-header,
+.reveal .slide-background.section-header {
+  h2 {
+    font-size: $size-2xl;
+    color: $primary;
+    border-bottom: 3px solid $accent;
+    padding-bottom: 0.3em;
+    display: inline-block;
+  }
+}
+
+section.section-header {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+// ============================================================================
+// SEMANTIC BOX CLASSES
+// ============================================================================
+
+@mixin semantic-box($border-color, $bg-color) {
+  border-left: 5px solid $border-color;
+  background: $bg-color;
+  padding: 1em 1.5em;
+  margin: 1em 0;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.92em;
+
+  &:first-child { margin-top: 0; }
+
+  > :first-child {
+    margin-top: 0;
+  }
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Key finding / takeaway — gold border
+.reveal .keybox {
+  @include semantic-box($accent, oklch(0.95 0.04 85));
+
+  strong:first-child,
+  .box-title {
+    color: oklch(0.45 0.12 85);
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+  }
+}
+
+// Methodology / process — primary blue border
+.reveal .methodbox {
+  @include semantic-box($primary, $primary-lighter);
+
+  strong:first-child,
+  .box-title {
+    color: $primary-dark;
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+  }
+}
+
+// Warning — red border
+.reveal .warningbox {
+  @include semantic-box($color-danger, oklch(0.95 0.04 25));
+
+  strong:first-child,
+  .box-title {
+    color: oklch(0.42 0.15 25);
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+  }
+}
+
+// Tip / best practice — green border
+.reveal .tipbox {
+  @include semantic-box($color-success, oklch(0.95 0.04 145));
+
+  strong:first-child,
+  .box-title {
+    color: oklch(0.38 0.12 145);
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+  }
+}
+
+// Quote box — elegant italic
+.reveal .quotebox {
+  border-left: 4px solid $neutral-400;
+  background: $neutral-100;
+  padding: 1.2em 1.8em;
+  margin: 1em 0;
+  border-radius: 0 10px 10px 0;
+  font-style: italic;
+  font-size: 1.05em;
+  color: $neutral-700;
+  line-height: 1.65;
+  position: relative;
+
+  .attribution {
+    display: block;
+    font-style: normal;
+    font-size: 0.8em;
+    color: $neutral-500;
+    margin-top: 0.6em;
+    text-align: right;
+  }
+}
+
+// Info box — blue/info
+.reveal .infobox {
+  @include semantic-box($color-info, oklch(0.95 0.03 240));
+
+  strong:first-child,
+  .box-title {
+    color: oklch(0.38 0.10 240);
+    display: block;
+    margin-bottom: 0.3em;
+    font-weight: 700;
+  }
+}
+
+// ============================================================================
+// COLUMN LAYOUTS
+// ============================================================================
+
+.reveal .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+.reveal .three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+}
+
+.reveal .sidebar-left {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+.reveal .sidebar-right {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2.5em;
+  align-items: start;
+}
+
+// Comparison layout
+.reveal .comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  align-items: start;
+
+  .compare-left,
+  .compare-right {
+    padding: 1.2em;
+    border-radius: 10px;
+  }
+
+  .compare-left {
+    background: oklch(0.95 0.03 25);
+    border-top: 3px solid $color-danger;
+  }
+
+  .compare-right {
+    background: oklch(0.95 0.03 145);
+    border-top: 3px solid $color-success;
+  }
+}
+
+// ============================================================================
+// EMPHASIS / HIGHLIGHT CLASSES
+// ============================================================================
+
+.reveal .hi {
+  color: $primary;
+  font-weight: 650;
+}
+
+.reveal .hi-gold {
+  color: oklch(0.50 0.14 85);
+  font-weight: 650;
+}
+
+.reveal .hi-green {
+  color: oklch(0.45 0.14 145);
+  font-weight: 650;
+}
+
+.reveal .hi-red {
+  color: oklch(0.48 0.16 25);
+  font-weight: 650;
+}
+
+.reveal .subtle {
+  color: $neutral-500;
+  font-weight: 400;
+}
+
+// ============================================================================
+// SIZE UTILITY CLASSES
+// ============================================================================
+
+.reveal .smaller {
+  font-size: 0.82em;
+}
+
+.reveal .smallest {
+  font-size: 0.68em;
+}
+
+.reveal .larger {
+  font-size: 1.25em;
+}
+
+// ============================================================================
+// FRAGMENT ANIMATIONS
+// ============================================================================
+
+// Smooth fade-in (override default)
+.reveal .slides section .fragment {
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+// Slide-up fragment
+.reveal .slides section .fragment.slide-up {
+  transform: translateY(20px);
+  opacity: 0;
+
+  &.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Fade-in fragment (explicit)
+.reveal .slides section .fragment.fade-in-smooth {
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+// Scale-in fragment
+.reveal .slides section .fragment.scale-in {
+  transform: scale(0.92);
+  opacity: 0;
+
+  &.visible {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ============================================================================
+// TABLE STYLES
+// ============================================================================
+
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.88em;
+  margin: 1em 0;
+}
+
+.reveal table thead th {
+  background: $primary;
+  color: $neutral-50;
+  padding: 0.7em 1em;
+  text-align: left;
+  font-weight: 600;
+  font-family: $font-family-display;
+  border: none;
+}
+
+.reveal table tbody td {
+  padding: 0.6em 1em;
+  border-bottom: 1px solid $neutral-200;
+  color: $neutral-800;
+}
+
+.reveal table tbody tr:nth-child(even) {
+  background: $neutral-100;
+}
+
+.reveal table tbody tr:hover {
+  background: $primary-lighter;
+}
+
+// ============================================================================
+// IMAGE HANDLING
+// ============================================================================
+
+.reveal img {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+.reveal figure {
+  margin: 1em 0;
+}
+
+.reveal figcaption {
+  font-size: 0.78em;
+  color: $neutral-500;
+  margin-top: 0.5em;
+  font-style: italic;
+}
+
+// ============================================================================
+// SPEAKER NOTES
+// ============================================================================
+
+.reveal .speaker-notes {
+  font-family: $font-family-body;
+  font-size: 16px;
+  line-height: 1.6;
+  color: $neutral-800;
+}
+
+// ============================================================================
+// PROGRESS BAR & CONTROLS
+// ============================================================================
+
+.reveal .progress {
+  color: $primary;
+  height: 4px;
+}
+
+.reveal .controls {
+  color: $primary;
+}
+
+.reveal .slide-number {
+  font-family: $font-family-display;
+  font-size: 14px;
+  color: $neutral-500;
+  background: transparent;
+}
+
+// ============================================================================
+// DARK MODE
+// ============================================================================
+
+.reveal.dark-mode,
+[data-theme="dark"] .reveal {
+  background-color: $neutral-900;
+
+  .slides {
+    color: $neutral-200;
+  }
+
+  h1, h2, h3, h4 {
+    color: $neutral-50;
+  }
+
+  p, li {
+    color: $neutral-300;
+  }
+
+  strong {
+    color: $neutral-100;
+  }
+
+  a {
+    color: $primary-light;
+  }
+
+  blockquote {
+    background: $neutral-800;
+    color: $neutral-300;
+    border-left-color: $primary-light;
+  }
+
+  code {
+    background: $neutral-800;
+    color: $primary-light;
+  }
+
+  pre {
+    background: $neutral-950;
+    box-shadow: 0 4px 20px oklch(0 0 0 / 0.3);
+  }
+
+  table thead th {
+    background: $primary-dark;
+  }
+
+  table tbody td {
+    border-bottom-color: $neutral-700;
+    color: $neutral-300;
+  }
+
+  table tbody tr:nth-child(even) {
+    background: $neutral-800;
+  }
+
+  table tbody tr:hover {
+    background: oklch(0.25 0.02 265);
+  }
+
+  .keybox {
+    background: oklch(0.22 0.03 85);
+    strong:first-child { color: $accent-light; }
+  }
+
+  .methodbox {
+    background: oklch(0.22 0.03 265);
+    strong:first-child { color: $primary-light; }
+  }
+
+  .warningbox {
+    background: oklch(0.22 0.03 25);
+    strong:first-child { color: oklch(0.70 0.12 25); }
+  }
+
+  .tipbox {
+    background: oklch(0.22 0.03 145);
+    strong:first-child { color: oklch(0.70 0.12 145); }
+  }
+
+  .quotebox {
+    background: $neutral-800;
+    border-left-color: $neutral-600;
+    color: $neutral-400;
+  }
+
+  .comparison .compare-left {
+    background: oklch(0.22 0.03 25);
+  }
+
+  .comparison .compare-right {
+    background: oklch(0.22 0.03 145);
+  }
+
+  .slide-number {
+    color: $neutral-500;
+  }
+
+  .hi       { color: $primary-light; }
+  .hi-gold  { color: $accent-light; }
+  .hi-green { color: oklch(0.70 0.12 145); }
+  .hi-red   { color: oklch(0.68 0.14 25); }
+  .subtle   { color: $neutral-500; }
+}
+
+// ============================================================================
+// PRINT STYLES
+// ============================================================================
+
+@media print {
+  .reveal {
+    background: white !important;
+
+    .slides section {
+      page-break-inside: avoid;
+      page-break-after: always;
+    }
+
+    pre {
+      box-shadow: none;
+      border: 1px solid $neutral-300;
+    }
+
+    a {
+      color: $neutral-800;
+      text-decoration: underline;
+    }
+
+    .fragment {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+// ============================================================================
+// REDUCED MOTION
+// ============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .slides section .fragment {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal .slide-transition {
+    transition: none;
+  }
+}
