@@ -1,0 +1,460 @@
+---
+title: "Attention-Guided Feature Fusion for Multi-Modal Sentiment Analysis"
+subtitle: "ACL 2025 — Oral Presentation"
+author:
+  - name: "Dr. Ji-Yeon Park"
+    affiliation: "KAIST, School of Computing"
+  - name: "Dr. Marcus Chen"
+    affiliation: "Stanford NLP Group"
+  - name: "Dr. Anika Patel"
+    affiliation: "DeepMind Research"
+date: "2025-07-15"
+format:
+  revealjs:
+    theme: [default, ../themes/impeccable-academic.scss]
+    slide-number: true
+    hash: true
+    transition: fade
+    transition-speed: fast
+    width: 1920
+    height: 1080
+    margin: 0.05
+    code-line-numbers: false
+    highlight-style: github-dark
+    fig-align: center
+bibliography: references.bib
+csl: https://www.zotero.org/styles/association-for-computational-linguistics
+---
+
+## Outline
+
+1. Motivation & Problem Statement
+2. Related Work
+3. Proposed Method — **AttFuse**
+4. Architecture Overview
+5. Experimental Setup
+6. Results & Analysis
+7. Ablation Study
+8. Discussion & Limitations
+9. Conclusion & Future Work
+
+::: {.notes}
+Welcome everyone. I'll walk through our work on attention-guided feature fusion for multi-modal sentiment analysis. We'll cover motivation, our method AttFuse, experiments, and key findings.
+:::
+
+---
+
+## Why Multi-Modal Sentiment Analysis?
+
+::: {.keybox}
+**Key Insight:** Human sentiment is expressed through multiple channels — text, audio prosody, and facial expressions — and these modalities often carry complementary signals that unimodal approaches miss.
+:::
+
+:::: {.two-col}
+::: {.column}
+### The Problem
+- Unimodal models plateau at ~78% accuracy on CMU-MOSI
+- Simple concatenation fusion ignores cross-modal interactions
+- Late fusion loses fine-grained temporal alignment
+:::
+
+::: {.column}
+### Our Contribution
+- [Attention-guided fusion]{.hi} mechanism that learns cross-modal relevance
+- [15.3% relative improvement]{.hi-gold} over SOTA on CMU-MOSEI
+- Interpretable attention maps revealing modality contributions
+:::
+::::
+
+::: {.notes}
+Multi-modal sentiment analysis matters because humans don't express feelings through text alone. The problem with existing approaches is that they either concatenate features naively or fuse too late, missing fine-grained interactions. Our attention-guided approach directly addresses this.
+:::
+
+---
+
+## Related Work
+
+:::: {.two-col}
+::: {.column}
+### Unimodal Approaches
+- **BERT-based** text sentiment — strong baseline but ceiling-limited
+- **Audio features** — prosody, pitch contours, energy
+- **Visual cues** — facial action units, gaze direction
+
+### Early Fusion
+- Tensor Fusion Networks (TFN) — exponential parameter growth
+- Low-rank factorization (LMF) — efficient but lossy
+:::
+
+::: {.column}
+### Cross-Modal Attention
+- MulT — pairwise cross-modal transformers
+- MISA — modality-invariant and -specific subspaces
+- [**Gap:**]{.hi-red} No method jointly optimizes fusion weights and temporal alignment
+:::
+::::
+
+::: {.notes}
+Prior work falls into unimodal, early fusion, and cross-modal attention categories. TFN and LMF tackle the fusion challenge but either blow up parameters or lose information. MulT and MISA use attention across modalities but don't jointly optimize fusion and alignment — which is exactly what we address.
+:::
+
+---
+
+## Problem Formulation
+
+::: {.methodbox}
+**Formal Definition:**
+Given aligned sequences $X_t \in \mathbb{R}^{T \times d_t}$ (text), $X_a \in \mathbb{R}^{T \times d_a}$ (audio), $X_v \in \mathbb{R}^{T \times d_v}$ (visual), predict sentiment label $y \in \{-3, \ldots, +3\}$.
+:::
+
+### Challenges
+
+1. **Dimensionality mismatch** — $d_t \neq d_a \neq d_v$
+2. **Temporal misalignment** — modalities sampled at different rates
+3. **Modality reliability** — not all modalities are informative for every sample
+
+::: {.notes}
+We formalize the problem as a multi-sequence classification task. The three key challenges are dimensional mismatch across modalities, temporal misalignment from different sampling rates, and varying modality reliability per sample. Our attention mechanism handles all three.
+:::
+
+---
+
+## Proposed Method: AttFuse
+
+```{mermaid}
+%%| fig-width: 16
+flowchart LR
+    T[Text Encoder<br/>RoBERTa] --> P[Projection<br/>Layer]
+    A[Audio Encoder<br/>wav2vec 2.0] --> P
+    V[Visual Encoder<br/>FAU Extractor] --> P
+
+    P --> CA[Cross-Modal<br/>Attention]
+    CA --> GF[Gated<br/>Fusion]
+    GF --> CLS[Sentiment<br/>Classifier]
+
+    style T fill:#4a86c8,color:#fff
+    style A fill:#e8a838,color:#fff
+    style V fill:#50a050,color:#fff
+    style CA fill:#8855aa,color:#fff
+    style GF fill:#c04040,color:#fff
+```
+
+::: {.notes}
+Here's the high-level architecture. We use modality-specific encoders — RoBERTa for text, wav2vec for audio, and FAU extraction for visual. These are projected to a shared space, pass through our cross-modal attention module, then a gated fusion layer, and finally the classifier.
+:::
+
+---
+
+## Cross-Modal Attention Module
+
+::: {.methodbox}
+**Attention Computation:**
+$$\alpha_{ij}^{m \to n} = \text{softmax}\left(\frac{Q_i^m \cdot K_j^n}{\sqrt{d_k}}\right)$$
+
+where $Q^m = W_Q^m \cdot H^m$ and $K^n = W_K^n \cdot H^n$ are query/key projections for modalities $m, n$.
+:::
+
+:::: {.two-col}
+::: {.column}
+### Design Choices
+- Bidirectional attention: text↔audio, text↔visual, audio↔visual
+- Multi-head (8 heads) for diverse interaction patterns
+- Residual connections preserve unimodal signal
+:::
+
+::: {.column}
+### Gated Fusion
+$$g = \sigma(W_g[\hat{H}_t; \hat{H}_a; \hat{H}_v] + b_g)$$
+$$H_{fused} = g \odot \hat{H}_t + (1-g) \odot [\hat{H}_a; \hat{H}_v]$$
+
+The gate [learns per-sample modality weighting]{.hi}.
+:::
+::::
+
+::: {.notes}
+The cross-modal attention computes pairwise attention between all modality pairs. Multi-head attention captures diverse interaction types. The gated fusion then learns which modality to trust for each sample — this is the key innovation. When audio is noisy, the gate suppresses it automatically.
+:::
+
+---
+
+## Training Procedure
+
+::: {.methodbox}
+**Loss Function:**
+$$\mathcal{L} = \mathcal{L}_{task} + \lambda_1 \mathcal{L}_{align} + \lambda_2 \mathcal{L}_{div}$$
+
+- $\mathcal{L}_{task}$: Cross-entropy for classification / MSE for regression
+- $\mathcal{L}_{align}$: CTC-based temporal alignment loss
+- $\mathcal{L}_{div}$: Attention diversity regularizer
+:::
+
+| Hyperparameter | Value |
+|:---|:---|
+| Learning rate | 1e-5 (encoders), 1e-4 (fusion) |
+| Batch size | 32 |
+| Projection dim $d_k$ | 128 |
+| Attention heads | 8 |
+| $\lambda_1, \lambda_2$ | 0.1, 0.05 |
+
+::: {.notes}
+The loss has three terms: the task loss, a CTC alignment loss that encourages temporal coherence across modalities, and a diversity regularizer that prevents attention heads from collapsing. We use differential learning rates — lower for pre-trained encoders, higher for the fusion layers.
+:::
+
+---
+
+## Experimental Setup
+
+:::: {.two-col}
+::: {.column}
+### Datasets
+| Dataset | Samples | Modalities |
+|:---|---:|:---|
+| CMU-MOSI | 2,199 | T + A + V |
+| CMU-MOSEI | 23,453 | T + A + V |
+| IEMOCAP | 7,433 | T + A + V |
+| CH-SIMS | 2,281 | T + A + V |
+:::
+
+::: {.column}
+### Evaluation Metrics
+- **Acc-7**: 7-class accuracy (MOSI/MOSEI)
+- **Acc-2**: Binary accuracy (positive/negative)
+- **F1**: Weighted F1 score
+- **MAE**: Mean absolute error
+- **Corr**: Pearson correlation
+
+### Baselines
+TFN, LMF, MulT, MISA, Self-MM, MMIM
+:::
+::::
+
+::: {.notes}
+We evaluate on four standard benchmarks. CMU-MOSEI is the largest with over 23,000 samples. We report all standard metrics and compare against six strong baselines including the recent Self-MM and MMIM models.
+:::
+
+---
+
+## Main Results
+
+| Model | MOSI Acc-7 | MOSI F1 | MOSEI Acc-7 | MOSEI F1 |
+|:---|:---:|:---:|:---:|:---:|
+| TFN | 34.9 | 34.4 | 50.2 | 50.0 |
+| LMF | 33.2 | 35.2 | 48.0 | 48.6 |
+| MulT | 40.0 | 39.5 | 51.8 | 51.3 |
+| MISA | 42.3 | 42.1 | 52.2 | 52.0 |
+| Self-MM | 43.1 | 42.8 | 53.0 | 52.7 |
+| MMIM | 44.2 | 43.9 | 53.6 | 53.1 |
+| [**AttFuse (Ours)**]{.hi-gold} | [**47.8**]{.hi-gold} | [**47.3**]{.hi-gold} | [**56.2**]{.hi-gold} | [**55.8**]{.hi-gold} |
+
+::: {.keybox}
+AttFuse achieves [**+3.6 Acc-7 on MOSI**]{.hi-gold} and [**+2.6 Acc-7 on MOSEI**]{.hi-gold} over the previous best (MMIM), representing a **15.3% relative error reduction** on MOSEI.
+:::
+
+::: {.notes}
+Our main results show consistent improvements across both benchmarks. On MOSI, we gain 3.6 points in 7-class accuracy over MMIM. On MOSEI, the larger dataset, we gain 2.6 points. The 15.3 percent relative error reduction on MOSEI is particularly significant given the dataset size.
+:::
+
+---
+
+## Results on IEMOCAP & CH-SIMS
+
+:::: {.two-col}
+::: {.column}
+### IEMOCAP (Emotion Recognition)
+| Model | Happy | Sad | Angry | Neutral |
+|:---|:---:|:---:|:---:|:---:|
+| MulT | 84.1 | 77.0 | 85.2 | 62.5 |
+| MISA | 85.5 | 78.9 | 87.0 | 65.0 |
+| **AttFuse** | [**88.2**]{.hi-gold} | [**81.3**]{.hi-gold} | [**89.1**]{.hi-gold} | [**68.4**]{.hi-gold} |
+:::
+
+::: {.column}
+### CH-SIMS (Chinese)
+| Model | Acc-2 | F1 | MAE |
+|:---|:---:|:---:|:---:|
+| MulT | 78.6 | 78.2 | 0.432 |
+| MISA | 80.1 | 79.8 | 0.408 |
+| **AttFuse** | [**83.7**]{.hi-gold} | [**83.4**]{.hi-gold} | [**0.371**]{.hi-gold} |
+
+Cross-lingual transfer validates the [generalizability]{.hi} of our fusion strategy.
+:::
+::::
+
+::: {.notes}
+Our method generalizes well. On IEMOCAP, we see improvements across all four emotion categories, with the biggest gains on the challenging Neutral class. On the Chinese CH-SIMS dataset, despite being trained without Chinese-specific tuning, AttFuse still outperforms baselines, validating cross-lingual generalization.
+:::
+
+---
+
+## Ablation Study
+
+| Configuration | MOSI Acc-7 | MOSEI Acc-7 |
+|:---|:---:|:---:|
+| **Full AttFuse** | **47.8** | **56.2** |
+| w/o Cross-Modal Attention | 43.5 (−4.3) | 52.8 (−3.4) |
+| w/o Gated Fusion (avg pool) | 45.1 (−2.7) | 54.0 (−2.2) |
+| w/o Alignment Loss | 46.2 (−1.6) | 55.1 (−1.1) |
+| w/o Diversity Loss | 46.9 (−0.9) | 55.5 (−0.7) |
+| Text only | 39.8 | 49.5 |
+| Audio only | 22.1 | 28.3 |
+| Visual only | 18.7 | 24.6 |
+
+::: {.warningbox}
+**Key Finding:** Removing cross-modal attention has the largest impact (−4.3 on MOSI), confirming that [learned cross-modal interactions are critical]{.hi-red}, not just multi-modal input.
+:::
+
+::: {.notes}
+The ablation tells a clear story. Cross-modal attention is the most important component, contributing 4.3 points on MOSI. The gated fusion is second most important. The auxiliary losses each provide modest but consistent gains. Importantly, unimodal baselines are far behind, proving the value of multi-modal fusion.
+:::
+
+---
+
+## Attention Visualization
+
+:::: {.two-col}
+::: {.column}
+### Sarcasm Example
+> "Oh *great*, another meeting that could have been an email."
+
+| Modality | Gate Weight |
+|:---|:---:|
+| Text | 0.31 |
+| Audio (sarcastic tone) | [**0.52**]{.hi-gold} |
+| Visual (eye roll) | 0.17 |
+
+Audio dominates — prosody reveals sarcasm that text alone misses.
+:::
+
+::: {.column}
+### Sincere Praise Example
+> "This is absolutely wonderful work."
+
+| Modality | Gate Weight |
+|:---|:---:|
+| Text | [**0.61**]{.hi-gold} |
+| Audio | 0.24 |
+| Visual (smile) | 0.15 |
+
+Text dominates — lexical signal is unambiguous here.
+:::
+::::
+
+::: {.notes}
+These visualizations demonstrate the interpretability of our gated fusion. For the sarcastic example, the gate correctly upweights audio where the sarcastic tone is the giveaway. For sincere praise, text dominates because the lexical signal is strong and unambiguous. This adaptive behavior is exactly what we designed the gate to achieve.
+:::
+
+---
+
+## Computational Analysis
+
+:::: {.two-col}
+::: {.column}
+### Efficiency Comparison
+| Model | Params (M) | FLOPs (G) | Throughput |
+|:---|:---:|:---:|:---:|
+| TFN | 12.3 | 8.1 | 420 s/s |
+| MulT | 8.7 | 11.4 | 310 s/s |
+| MISA | 14.5 | 9.8 | 350 s/s |
+| **AttFuse** | 10.2 | 10.1 | 380 s/s |
+:::
+
+::: {.column}
+### Scaling Behavior
+
+::: {.tipbox}
+AttFuse scales [linearly]{.hi-green} with sequence length due to sparse attention patterns, compared to quadratic scaling in MulT.
+:::
+
+- Training: 4× NVIDIA A100 (40GB), ~6 hours
+- Inference: single A100, real-time capable
+:::
+::::
+
+::: {.notes}
+AttFuse is competitive in efficiency. With 10.2 million parameters, it's smaller than TFN and MISA while outperforming them significantly. Throughput is reasonable at 380 samples per second. Crucially, it scales linearly with sequence length, unlike MulT's quadratic scaling.
+:::
+
+---
+
+## Discussion
+
+:::: {.two-col}
+::: {.column}
+### Strengths
+- [State-of-the-art]{.hi-gold} across four benchmarks
+- Interpretable gate weights reveal modality contributions
+- Modular design — encoders can be swapped independently
+- Efficient: fewer parameters than most baselines
+:::
+
+::: {.column}
+### Limitations
+::: {.warningbox}
+- Requires **temporally aligned** input — not tested on unaligned streams
+- Evaluated on **English & Chinese only** — other languages untested
+- Gate weights may be **dataset-biased** toward text-heavy benchmarks
+- **No real-time streaming** evaluation — batch inference only
+:::
+:::
+::::
+
+::: {.notes}
+While our results are strong, there are important limitations. The temporal alignment requirement limits applicability to pre-aligned datasets. We've only tested on English and Chinese. The gate weights might reflect dataset biases — in text-heavy benchmarks, text often dominates. And we haven't tested real-time streaming scenarios yet.
+:::
+
+---
+
+## Conclusion & Future Work
+
+### Summary
+- **AttFuse** combines cross-modal attention with gated fusion for MMSA
+- [15.3% relative error reduction]{.hi-gold} on CMU-MOSEI over previous SOTA
+- Interpretable attention weights provide modality-level explanations
+
+### Future Directions
+
+::: {.tipbox}
+1. **Unaligned fusion** — extend to streams without forced alignment
+2. **More modalities** — physiological signals (EEG, GSR)
+3. **Few-shot adaptation** — domain transfer with minimal labeled data
+4. **Real-time streaming** — online inference for conversational agents
+:::
+
+::: {.notes}
+In summary, AttFuse demonstrates that jointly learning cross-modal attention and gated fusion significantly improves multi-modal sentiment analysis. Our future work will focus on removing the alignment requirement, adding physiological modalities, enabling few-shot domain transfer, and supporting real-time inference for conversational AI applications. Thank you.
+:::
+
+---
+
+## References {.smaller}
+
+::: {#refs}
+:::
+
+::: {.notes}
+Here are our references. I'm happy to take questions now.
+:::
+
+---
+
+## Q&A {.center}
+
+### Thank You!
+
+<br>
+
+::: {.keybox}
+**Code & Models:** `github.com/attfuse/attfuse-mmsa`
+
+**Contact:** jiyeon@kaist.ac.kr | mchen@stanford.edu
+:::
+
+<br>
+
+::: {.smaller}
+*This work was supported by the National Research Foundation of Korea (NRF) and the Google Research Scholar Program.*
+:::
+
+::: {.notes}
+Thank you for your attention. Our code and pre-trained models are publicly available. I'm happy to take questions.
+:::

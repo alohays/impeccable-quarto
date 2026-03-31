@@ -1,0 +1,360 @@
+---
+title: "Introducing **Velox**"
+subtitle: "Ship Faster. Scale Smarter. Sleep Better."
+author: "Velox Engineering"
+date: "2025-09-10"
+format:
+  revealjs:
+    theme: [default, ../themes/impeccable-corporate.scss]
+    slide-number: true
+    hash: true
+    transition: fade
+    transition-speed: fast
+    width: 1920
+    height: 1080
+    margin: 0.05
+    highlight-style: github-dark
+    fig-align: center
+---
+
+## The Deployment Problem
+
+:::: {.two-col}
+::: {.column}
+### What Teams Tell Us
+
+- "Our deploys take **45 minutes** on a good day"
+- "We had **3 rollback incidents** last quarter"
+- "Nobody wants to deploy on Friday"
+- "CI/CD pipelines are our bottleneck"
+:::
+
+::: {.column}
+### The Numbers
+
+| Metric | Industry Avg |
+|:---|---:|
+| Deploy frequency | 1× / week |
+| Lead time | 4.2 days |
+| Change failure rate | 23% |
+| MTTR | 6.1 hours |
+:::
+::::
+
+::: {.keybox}
+**72% of engineering teams** say deployment friction is their #1 productivity blocker.
+:::
+
+::: {.notes}
+Let's start with the problem. We interviewed over 500 engineering teams and heard the same story again and again: deployments are slow, risky, and stressful. The numbers back this up — the average team deploys just once a week, with a 23% failure rate.
+:::
+
+---
+
+## What If Deploys Were... Fun?
+
+<br><br>
+
+::: {.center}
+*Imagine deploying 20 times a day with zero fear.*
+
+*Imagine every rollback taking 3 seconds, not 30 minutes.*
+
+*Imagine your CI/CD pipeline being the fastest part of your workflow.*
+:::
+
+<br><br>
+
+That's **Velox**.
+
+::: {.notes}
+What if we could flip this? What if deploys were the easiest, fastest, most reliable part of your day? That's the vision behind Velox. Let me show you how we get there.
+:::
+
+---
+
+## Meet Velox
+
+::: {.keybox}
+**Velox** is a deployment platform that combines instant rollbacks, progressive delivery, and intelligent canary analysis — all in a single CLI command.
+:::
+
+```bash
+$ velox deploy --canary 5% --promote-after 10m
+🚀 Deploying v2.4.1 to production...
+✓ Canary at 5% — all metrics green
+✓ Auto-promoted to 25% at +10m
+✓ Auto-promoted to 100% at +20m
+✅ Deploy complete in 22 minutes. Zero errors.
+```
+
+::: {.notes}
+Velox is a deployment platform that makes progressive delivery the default. One CLI command gets you canary deployments with automatic promotion based on real metrics. If anything goes wrong, rollback is instant. Let's look at the core features.
+:::
+
+---
+
+## Core Features
+
+:::: {.three-col}
+::: {.column}
+### ⚡ Instant Rollback
+
+Roll back any deployment in **under 3 seconds** — no redeployment needed.
+
+Velox keeps the previous version warm and traffic-ready at all times.
+:::
+
+::: {.column}
+### 📊 Smart Canary
+
+Automatic canary analysis compares error rates, latency, and custom metrics between old and new versions.
+
+[Auto-promotes or auto-rolls-back]{.hi} based on real data.
+:::
+
+::: {.column}
+### 🔒 Deploy Locks
+
+Prevent concurrent deploys with team-aware locking.
+
+Integrates with Slack, PagerDuty, and your on-call schedule.
+:::
+::::
+
+::: {.notes}
+Three core capabilities. First, instant rollback — under 3 seconds because we keep the previous version warm. Second, smart canary — we analyze real metrics and auto-promote or auto-rollback. Third, deploy locks to prevent concurrent deploys, integrated with your existing tools.
+:::
+
+---
+
+## How It Works
+
+```{mermaid}
+%%| fig-width: 16
+flowchart LR
+    DEV[Developer<br/>velox deploy] --> BUILD[Build &<br/>Package]
+    BUILD --> CANARY[Canary<br/>5%]
+    CANARY --> ANALYZE{Metrics<br/>OK?}
+    ANALYZE -->|Yes| PROMOTE[Progressive<br/>Promote]
+    ANALYZE -->|No| ROLLBACK[Instant<br/>Rollback]
+    PROMOTE --> FULL[Full<br/>Rollout]
+
+    style DEV fill:#4a86c8,color:#fff
+    style CANARY fill:#e8a838,color:#fff
+    style ANALYZE fill:#8855aa,color:#fff
+    style ROLLBACK fill:#c04040,color:#fff
+    style FULL fill:#50a050,color:#fff
+```
+
+::: {.tipbox}
+Every step is **observable and reversible**. The Velox dashboard shows real-time metrics at each stage.
+:::
+
+::: {.notes}
+The flow is simple. Developer runs velox deploy, we build and package, send 5% of traffic to the canary, analyze metrics, and either promote progressively or roll back instantly. Every step is visible in the dashboard and reversible with one command.
+:::
+
+---
+
+## Dashboard & Observability
+
+:::: {.two-col}
+::: {.column}
+### Real-Time Deploy View
+<!-- Screenshot placeholder -->
+![Velox dashboard showing canary metrics](images/dashboard-placeholder.png){fig-alt="Velox deployment dashboard showing canary traffic percentage, error rate comparison, and latency distribution between current and new versions"}
+:::
+
+::: {.column}
+### What You See
+- Live traffic split between versions
+- Error rate comparison (old vs new)
+- Latency percentiles (p50, p95, p99)
+- Custom business metric tracking
+- Automated anomaly detection alerts
+
+::: {.tipbox}
+Connects to **Datadog, Grafana, New Relic, CloudWatch** — or use our built-in metrics.
+:::
+:::
+::::
+
+::: {.notes}
+The dashboard gives you full visibility into every deploy. You see the live traffic split, error rates compared between versions, latency percentiles, and custom metrics. We integrate with all major observability platforms, or you can use our built-in metrics.
+:::
+
+---
+
+## Before & After Velox
+
+| Metric | Before | After Velox | Improvement |
+|:---|:---:|:---:|:---:|
+| Deploy frequency | 1× / week | 8× / day | [**56× faster**]{.hi-gold} |
+| Lead time | 4.2 days | 2.1 hours | [**48× faster**]{.hi-gold} |
+| Change failure rate | 23% | 1.8% | [**92% reduction**]{.hi-gold} |
+| MTTR | 6.1 hours | 12 seconds | [**99.9% reduction**]{.hi-gold} |
+| Friday deploys | 0 | Yes! | [**∞ improvement**]{.hi-gold} |
+
+::: {.notes}
+Here's what our beta customers are seeing. Deploy frequency goes from weekly to multiple times daily. Lead time drops from days to hours. Failure rate drops from 23% to under 2%. And MTTR — the time to recover from a failure — drops from 6 hours to 12 seconds. Yes, people deploy on Fridays now.
+:::
+
+---
+
+## Customer Stories
+
+::: {.quotebox}
+"We went from dreading deploys to deploying 12 times a day. Velox paid for itself in the first week."
+
+— **Sarah Kim, VP Engineering** at DataStream (Series C, 200 engineers)
+:::
+
+<br>
+
+::: {.quotebox}
+"The instant rollback alone is worth it. We had a bad deploy at 2am and recovered in 3 seconds. No pages, no panic."
+
+— **Marcus Torres, SRE Lead** at FinScale (Public, 800 engineers)
+:::
+
+::: {.notes}
+Let me share two customer stories. Sarah at DataStream — 200 engineers — says Velox paid for itself in the first week. Marcus at FinScale had a 2am incident that was resolved in 3 seconds with instant rollback. No pager escalation, no war room.
+:::
+
+---
+
+## Pricing
+
+:::: {.three-col}
+::: {.column}
+### Starter
+**Free**
+
+- Up to 5 services
+- 100 deploys / month
+- Community support
+- Basic canary analysis
+- 7-day metric retention
+
+*Perfect for small teams getting started*
+:::
+
+::: {.column}
+### Pro
+**$499 / month**
+
+- Unlimited services
+- Unlimited deploys
+- Email + Slack support
+- Advanced canary with custom metrics
+- 90-day retention
+- [SSO & RBAC]{.hi}
+
+*For growing engineering teams*
+:::
+
+::: {.column}
+### Enterprise
+**Custom**
+
+- Everything in Pro
+- Dedicated support engineer
+- SLA guarantees (99.99%)
+- On-premise deployment option
+- Custom integrations
+- [SOC 2 Type II]{.hi-gold}
+
+*For regulated industries and large orgs*
+:::
+::::
+
+::: {.notes}
+Simple pricing. Starter is free for small teams — up to 5 services, 100 deploys per month. Pro at $499/month removes all limits and adds SSO, RBAC, and advanced canary analysis. Enterprise is custom pricing with SLA guarantees, on-prem options, and SOC 2 compliance.
+:::
+
+---
+
+## Roadmap
+
+| Quarter | Milestone |
+|:---|:---|
+| **Q4 2025** | GA launch, GitHub Actions & GitLab CI integrations |
+| **Q1 2026** | Multi-cloud support (AWS, GCP, Azure), Terraform provider |
+| **Q2 2026** | Feature flags integration, A/B testing built-in |
+| **Q3 2026** | AI-powered deploy risk scoring, auto-scheduling |
+
+::: {.tipbox}
+**Coming Soon:** Velox AI will analyze your codebase changes and predict deploy risk *before* you push the button.
+:::
+
+::: {.notes}
+Here's where we're headed. GA launch this quarter with CI/CD integrations. Multi-cloud and Terraform in Q1 next year. Feature flags and A/B testing in Q2. And our most exciting feature — AI-powered risk scoring that tells you how risky a deploy is before you hit the button. It analyzes the code diff, historical failure patterns, and current system health.
+:::
+
+---
+
+## Get Started Today
+
+:::: {.two-col}
+::: {.column}
+### 3 Steps to Your First Deploy
+
+```bash
+# 1. Install
+curl -sSL https://get.velox.dev | sh
+
+# 2. Connect your repo
+velox init
+
+# 3. Deploy
+velox deploy
+```
+
+::: {.keybox}
+**Free tier available.** No credit card required. Set up in under 5 minutes.
+:::
+:::
+
+::: {.column}
+### Resources
+
+- **Docs:** docs.velox.dev
+- **GitHub:** github.com/velox-dev
+- **Slack Community:** velox.dev/slack
+- **Live Demo:** velox.dev/demo
+
+### Talk to Us
+Schedule a demo: **velox.dev/contact**
+
+Sales: **sales@velox.dev**
+:::
+::::
+
+::: {.notes}
+Getting started takes three commands and under 5 minutes. The free tier requires no credit card. We have full documentation, an active Slack community, and a live sandbox demo you can try right now. If you'd like a personalized demo or want to discuss Enterprise, reach out to our sales team. Thank you!
+:::
+
+---
+
+## Thank You {.center}
+
+<br>
+
+### Ship Faster. Scale Smarter. Sleep Better.
+
+<br>
+
+::: {.keybox}
+**velox.dev** | **@velox_dev** | **sales@velox.dev**
+:::
+
+<br>
+
+::: {.subtle}
+Questions?
+:::
+
+::: {.notes}
+Thank you for your time. We're excited to help your team deploy with confidence. Let's open it up for questions.
+:::

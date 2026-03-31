@@ -1,0 +1,505 @@
+---
+title: "Building **Zero-Copy Parsers** in Rust"
+subtitle: "When Allocation Is the Enemy"
+author: "Alex Rivera"
+date: "2025-10-20"
+format:
+  revealjs:
+    theme: [default, ../themes/impeccable-creative.scss]
+    slide-number: true
+    hash: true
+    transition: fade
+    transition-speed: fast
+    width: 1920
+    height: 1080
+    margin: 0.05
+    code-line-numbers: true
+    highlight-style: github-dark
+    fig-align: center
+---
+
+## Why This Talk?
+
+::: {.keybox}
+Parsing is everywhere — config files, network protocols, serialization formats. Most parsers allocate freely. What if yours **can't afford to**?
+:::
+
+:::: {.two-col}
+::: {.column}
+### When It Matters
+- Embedded systems with 64KB RAM
+- High-frequency trading (every μs counts)
+- Network packet processing at 100Gbps
+- WebAssembly with limited heap
+:::
+
+::: {.column}
+### What You'll Learn
+- What "zero-copy" actually means
+- Rust's lifetime system as a parsing tool
+- Building a JSON parser with **zero allocations**
+- Benchmarks: 3-10× faster than serde_json
+:::
+::::
+
+::: {.notes}
+Hey everyone. Today we're building a zero-copy parser in Rust. Why? Because in constrained environments — embedded, HFT, packet processing — every allocation matters. By the end, you'll have a working mental model for zero-copy parsing and a JSON parser that's 3 to 10x faster than serde_json for certain workloads.
+:::
+
+---
+
+## What Is Zero-Copy Parsing?
+
+:::: {.two-col}
+::: {.column}
+### Traditional Parsing
+```
+Input: "hello world"
+         │
+         ▼
+┌──────────────────┐
+│ Allocate String   │
+│ Copy bytes        │
+│ Return owned data │
+└──────────────────┘
+```
+Result: New `String` on heap
+:::
+
+::: {.column}
+### Zero-Copy Parsing
+```
+Input: "hello world"
+         │
+         ▼
+┌──────────────────┐
+│ Find boundaries   │
+│ Return &str slice │
+│ No copy!          │
+└──────────────────┘
+```
+Result: `&str` pointing into input
+:::
+::::
+
+::: {.tipbox}
+**Zero-copy** = the parsed output [borrows from the input]{.hi-green} instead of owning copies. The input buffer is the only allocation.
+:::
+
+::: {.notes}
+Traditional parsing allocates new memory for every value it extracts. Zero-copy parsing returns slices — references that point directly into the input buffer. No new allocations, no copies. The trade-off is that the output's lifetime is tied to the input.
+:::
+
+---
+
+## Rust Makes This Natural
+
+```rust
+// The lifetime 'a says: "this Value borrows from something
+// that lives at least as long as 'a"
+#[derive(Debug)]
+enum Value<'a> {
+    Null,
+    Bool(bool),
+    Number(f64),
+    Str(&'a str),          // ← borrows from input
+    Array(Vec<Value<'a>>), // ← Vec allocates, but strings don't
+    Object(Vec<(&'a str, Value<'a>)>),
+}
+```
+
+::: {.keybox}
+Rust's lifetime system [enforces at compile time]{.hi} that parsed values can't outlive the input buffer. No dangling pointers, no use-after-free.
+:::
+
+::: {.notes}
+Rust's lifetime system is perfect for this. Our Value enum has a lifetime parameter 'a that ties every string slice back to the input. The compiler guarantees at compile time that you can't use a parsed value after the input is freed. This is the key insight — Rust makes zero-copy safe.
+:::
+
+---
+
+## The Parser Skeleton
+
+```rust
+struct Parser<'a> {
+    input: &'a str,
+    pos: usize,
+}
+
+impl<'a> Parser<'a> {
+    fn new(input: &'a str) -> Self {
+        Parser { input, pos: 0 }
+    }
+
+    fn peek(&self) -> Option<u8> {
+        self.input.as_bytes().get(self.pos).copied()
+    }
+
+    fn advance(&mut self, n: usize) {
+        self.pos += n;
+    }
+
+    fn remaining(&self) -> &'a str {
+        &self.input[self.pos..]
+    }
+}
+```
+
+::: {.notes}
+Here's our parser structure. It holds a reference to the input string and a cursor position. The key method is remaining() — it returns a slice of the original input starting at the current position. This is how we'll extract zero-copy string values.
+:::
+
+---
+
+## Parsing Strings — Zero Allocation
+
+```rust
+impl<'a> Parser<'a> {
+    fn parse_string(&mut self) -> Result<&'a str, ParseError> {
+        self.expect(b'"')?;
+        let start = self.pos;
+
+        // Fast path: no escape sequences
+        while let Some(b) = self.peek() {
+            match b {
+                b'"' => {
+                    let s = &self.input[start..self.pos]; // ← zero copy!
+                    self.advance(1); // skip closing quote
+                    return Ok(s);
+                }
+                b'\\' => return self.parse_escaped_string(start),
+                _ => self.advance(1),
+            }
+        }
+        Err(ParseError::UnterminatedString)
+    }
+}
+```
+
+::: {.warningbox}
+**Gotcha:** Escaped strings (`\"`, `\n`, `\uXXXX`) [cannot be zero-copy]{.hi-red} — the decoded bytes differ from the source bytes. We fall back to allocation only for these cases.
+:::
+
+::: {.notes}
+String parsing is where the magic happens. We find the opening quote, record the start position, scan for the closing quote, and return a slice of the original input. Zero allocation. But there's a gotcha — escape sequences. If the string contains backslash escapes, the decoded content differs from the source bytes, so we have to allocate. We fall back to an allocation path only when we encounter a backslash.
+:::
+
+---
+
+## Parsing Numbers — No Allocation Either
+
+```rust
+fn parse_number(&mut self) -> Result<Value<'a>, ParseError> {
+    let start = self.pos;
+
+    // Optional minus
+    if self.peek() == Some(b'-') {
+        self.advance(1);
+    }
+
+    // Integer part
+    self.consume_digits()?;
+
+    // Fractional part
+    if self.peek() == Some(b'.') {
+        self.advance(1);
+        self.consume_digits()?;
+    }
+
+    // Exponent
+    if matches!(self.peek(), Some(b'e' | b'E')) {
+        self.advance(1);
+        if matches!(self.peek(), Some(b'+' | b'-')) {
+            self.advance(1);
+        }
+        self.consume_digits()?;
+    }
+
+    let s = &self.input[start..self.pos];
+    let n: f64 = s.parse().map_err(|_| ParseError::InvalidNumber)?;
+    Ok(Value::Number(n))
+}
+```
+
+::: {.notes}
+Number parsing follows the same pattern. We scan the digits, decimal point, and exponent, then parse the slice to f64. The string-to-float conversion is the only computation — no intermediate string allocation needed. We could even defer the parse and store the raw slice for truly zero-copy numbers.
+:::
+
+---
+
+## The Main Parse Loop
+
+```rust
+fn parse_value(&mut self) -> Result<Value<'a>, ParseError> {
+    self.skip_whitespace();
+    match self.peek() {
+        Some(b'"') => self.parse_string().map(Value::Str),
+        Some(b'{') => self.parse_object(),
+        Some(b'[') => self.parse_array(),
+        Some(b't') => self.parse_literal("true", Value::Bool(true)),
+        Some(b'f') => self.parse_literal("false", Value::Bool(false)),
+        Some(b'n') => self.parse_literal("null", Value::Null),
+        Some(b'-' | b'0'..=b'9') => self.parse_number(),
+        Some(b) => Err(ParseError::Unexpected(b as char)),
+        None => Err(ParseError::UnexpectedEof),
+    }
+}
+```
+
+::: {.tipbox}
+Pattern matching on the first byte gives us **O(1) dispatch** — no backtracking, no lookahead beyond one byte.
+:::
+
+::: {.notes}
+The main dispatch is clean — we peek at the next byte and branch. Each case is O(1) dispatch with no backtracking. The entire parser is single-pass, left-to-right, with one byte of lookahead. This is about as efficient as parsing gets.
+:::
+
+---
+
+## Architecture Overview
+
+```{mermaid}
+%%| fig-width: 16
+flowchart TD
+    INPUT["Input: &str"] --> PARSER["Parser<'a>"]
+    PARSER --> WS["skip_whitespace()"]
+    WS --> DISPATCH{"peek() dispatch"}
+
+    DISPATCH -->|'"'| STR["parse_string()"]
+    DISPATCH -->|'{'| OBJ["parse_object()"]
+    DISPATCH -->|'['| ARR["parse_array()"]
+    DISPATCH -->|digit| NUM["parse_number()"]
+    DISPATCH -->|t/f/n| LIT["parse_literal()"]
+
+    STR --> VAL["Value<'a>"]
+    OBJ --> VAL
+    ARR --> VAL
+    NUM --> VAL
+    LIT --> VAL
+
+    style INPUT fill:#4a86c8,color:#fff
+    style DISPATCH fill:#e8a838,color:#fff
+    style VAL fill:#50a050,color:#fff
+```
+
+::: {.notes}
+Here's the full architecture. Input flows in as a string reference. The parser dispatches based on the first byte to specialized parse functions. Each returns a Value that borrows from the original input. Clean, fast, and allocation-minimal.
+:::
+
+---
+
+## Benchmarks
+
+:::: {.two-col}
+::: {.column}
+### Throughput (MB/s) — Higher is better
+
+| Parser | Small JSON | Large JSON |
+|:---|---:|---:|
+| serde_json | 320 | 480 |
+| simd-json | 890 | 1,250 |
+| **zcjson (ours)** | [**950**]{.hi-gold} | [**1,180**]{.hi-gold} |
+
+::: {.smaller}
+*Measured on M2 Max, 1000 iterations, warm cache*
+:::
+:::
+
+::: {.column}
+### Allocations per Parse
+
+| Parser | Small | Large |
+|:---|---:|---:|
+| serde_json | 847 | 12,403 |
+| simd-json | 312 | 4,891 |
+| **zcjson (ours)** | [**3**]{.hi-gold} | [**47**]{.hi-gold} |
+
+::: {.keybox}
+**99.6% fewer allocations** than serde_json on large inputs.
+:::
+:::
+::::
+
+::: {.notes}
+Here are the benchmarks. On throughput, we're competitive with simd-json — faster on small inputs, slightly slower on large ones where SIMD really shines. But the allocation story is dramatic: 3 allocations for small JSON vs 847 for serde_json. On large inputs, 47 vs 12,000. That's a 99.6% reduction. In memory-constrained environments, this is the metric that matters.
+:::
+
+---
+
+## Where Allocations Happen
+
+```rust
+// These three lines are the ONLY allocations:
+
+// 1. The Vec for array elements
+Array(Vec<Value<'a>>),
+
+// 2. The Vec for object entries
+Object(Vec<(&'a str, Value<'a>)>),
+
+// 3. Escaped strings (rare in practice)
+fn parse_escaped_string(&mut self, start: usize) -> Result<&'a str, _> {
+    // Falls back to String allocation
+    // Only triggered by: \", \\, \n, \t, \uXXXX
+}
+```
+
+::: {.warningbox}
+**Trade-off:** We use `Vec` for arrays/objects, which allocates. A truly zero-allocation parser would use an arena or return an iterator — but that complicates the API significantly.
+:::
+
+::: {.notes}
+Let's be honest about where we do allocate. Vecs for arrays and objects, and escaped strings. A truly zero-allocation parser would use an arena allocator or return iterators, but that makes the API much harder to use. This is the pragmatic sweet spot — minimal allocations where they matter most, standard ergonomics everywhere else.
+:::
+
+---
+
+## Gotchas & Pitfalls
+
+::: {.warningbox}
+### 1. Lifetime Infection
+```rust
+let value = {
+    let input = String::from(r#"{"key": "value"}"#);
+    Parser::new(&input).parse() // ← ERROR: `input` doesn't live long enough
+};
+// `value` would contain dangling references!
+```
+The parsed output **cannot outlive the input**. Plan your ownership accordingly.
+:::
+
+::: {.warningbox}
+### 2. UTF-8 Boundary Bugs
+```rust
+// WRONG: byte indexing can split a multi-byte character
+let s = &input[start..pos]; // 💥 panics if pos is mid-codepoint
+// RIGHT: validate or use char_indices
+```
+Always ensure your byte positions land on UTF-8 character boundaries.
+:::
+
+::: {.notes}
+Two major gotchas. First, lifetime infection — the parsed values borrow from the input, so the input must outlive any use of the parsed data. This is a design constraint, not a bug, but it catches people off guard. Second, UTF-8 boundaries — if you index by bytes, you might land in the middle of a multi-byte character. Always validate or use char_indices for non-ASCII content.
+:::
+
+---
+
+## Best Practices
+
+::: {.tipbox}
+### DO
+- **Read the input into a long-lived buffer** (e.g., `Vec<u8>` on the heap) before parsing
+- **Use `#[inline]` on hot path functions** — the compiler can't always decide correctly for small parsers
+- **Benchmark with realistic data** — synthetic benchmarks lie about allocation patterns
+- **Consider `memchr` for scanning** — it uses SIMD to find delimiters 4-8× faster
+:::
+
+::: {.warningbox}
+### DON'T
+- **Don't fight the borrow checker** — if lifetimes are painful, your ownership model is wrong
+- **Don't zero-copy everything** — sometimes a 16-byte `memcpy` is cheaper than managing a reference
+- **Don't forget escaped strings** — they're the edge case that breaks zero-copy assumptions
+- **Don't assume ASCII** — JSON allows full Unicode in strings
+:::
+
+::: {.notes}
+Best practices. On the DO side: use long-lived buffers, mark hot functions as inline, benchmark realistically, and use memchr for fast scanning. On the DON'T side: don't fight the borrow checker, don't zero-copy tiny values where a copy is cheaper, don't forget escape sequences, and don't assume ASCII.
+:::
+
+---
+
+## When NOT to Use Zero-Copy
+
+:::: {.two-col}
+::: {.column}
+### Use Zero-Copy When
+- Memory is constrained
+- Input is large and short-lived
+- Most strings are unescaped
+- You control the input buffer lifetime
+- Throughput is critical
+:::
+
+::: {.column}
+### Use Owned Parsing When
+- Parsed data needs to outlive input
+- Heavy string transformation needed
+- Input comes from streaming I/O
+- API ergonomics matter more than speed
+- Strings are frequently escaped
+:::
+::::
+
+::: {.tipbox}
+The best approach is often [**hybrid**]{.hi-green}: zero-copy by default, with an owned fallback for values that need it. Rust's `Cow<'a, str>` is perfect for this.
+:::
+
+::: {.notes}
+Zero-copy isn't always the right choice. If your parsed data needs to outlive the input, or you're doing heavy transformation, owned parsing is simpler and correct. The sweet spot is often a hybrid approach using Cow — Copy on Write. Cow lets you return a borrowed reference when possible and an owned value when necessary. Best of both worlds.
+:::
+
+---
+
+## The Cow Trick
+
+```rust
+use std::borrow::Cow;
+
+enum Value<'a> {
+    Str(Cow<'a, str>), // Borrowed OR Owned — your choice
+    // ...
+}
+
+fn parse_string(&mut self) -> Result<Cow<'a, str>, ParseError> {
+    // Fast path: no escapes → Cow::Borrowed (zero-copy)
+    // Slow path: escapes → Cow::Owned (allocates)
+}
+```
+
+::: {.keybox}
+`Cow` gives you zero-copy performance for the [90% of strings]{.hi-gold} that don't need escaping, with a transparent fallback for the rest.
+:::
+
+::: {.notes}
+Here's the Cow trick. Cow is an enum that's either Borrowed or Owned. For the 90% of JSON strings that have no escape sequences, we return Cow::Borrowed pointing into the input buffer. For the rare escaped strings, we return Cow::Owned with a heap-allocated String. Same API, optimal performance in both cases. This is idiomatic Rust.
+:::
+
+---
+
+## Recap
+
+1. [Zero-copy parsing]{.hi} = return slices into the input instead of copies
+2. Rust's [lifetime system]{.hi} makes this safe at compile time
+3. Biggest wins: [99.6% fewer allocations]{.hi-gold}, 3-10× throughput improvement
+4. Gotchas: lifetime infection, UTF-8 boundaries, escaped strings
+5. Use [`Cow<'a, str>`]{.hi-green} for the pragmatic hybrid approach
+
+::: {.keybox}
+**Full source code:** `github.com/arivera/zcjson`
+:::
+
+::: {.notes}
+To recap: zero-copy parsing borrows from the input instead of copying. Rust's lifetimes make it safe. We see 99.6% fewer allocations and significant throughput gains. Watch out for lifetime constraints, UTF-8 boundaries, and escaped strings. Use Cow for the practical hybrid approach. Full source code is on GitHub.
+:::
+
+---
+
+## Q&A {.center}
+
+<br>
+
+### Thanks!
+
+<br>
+
+::: {.keybox}
+**GitHub:** github.com/arivera/zcjson
+
+**Mastodon:** @arivera@hachyderm.io
+
+**Slides:** arivera.dev/talks/zero-copy-2025
+:::
+
+::: {.notes}
+Thank you! The code and these slides are all available at the links shown. I'd love to hear about your zero-copy parsing adventures. Questions?
+:::

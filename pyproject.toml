@@ -1,0 +1,29 @@
+[project]
+name = "impeccable-quarto"
+version = "0.1.0"
+description = "A Quarto RevealJS slides design quality system with curated themes and quality scoring"
+authors = [
+    { name = "impeccable-quarto contributors" }
+]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
