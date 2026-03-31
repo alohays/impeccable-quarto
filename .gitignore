@@ -1,0 +1,63 @@
+# Quarto output
+_site/
+_freeze/
+_book/
+_manuscript/
+.quarto/
+*.self_contained/
+
+# Rendered outputs (keep originals)
+*_files/
+*.html
+!templates/**/*.html
+*.pdf
+*.pptx
+*.docx
+
+# Node
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.eggs/
+
+# R
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+._*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Speaker notes backups
+*-speaker-notes-backup*
+*.notes.bak
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Temp files
+*.tmp
+*.log
+*.cache
