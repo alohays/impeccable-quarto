@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>impeccable-quarto — Presentation Design Quality System</title>
+  <meta
+    name="description"
+    content="A Quarto RevealJS design quality system with curated themes, objective scoring, and adversarial review built around OKLCH colors and typography-first slides."
+  >
+  <meta property="og:title" content="impeccable-quarto — Presentation Design Quality System">
+  <meta
+    property="og:description"
+    content="Curated themes, objective scoring, and adversarial review for beautiful Quarto RevealJS presentations."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Plus+Jakarta+Sans:wght@600;700;800&family=Source+Sans+3:wght@400;600&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-shell">
+    <nav class="top-nav" aria-label="Primary">
+      <a class="brand" href="#top">impeccable-quarto</a>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+      <div class="nav-links">
+        <a href="#anti-patterns">Anti-Patterns</a>
+        <a href="#design-system">Design System</a>
+        <a href="#themes">Themes</a>
+        <a href="#quality">Quality</a>
+        <a href="#get-started">Get Started</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-panel fade-in" data-delay="100">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow">Quarto RevealJS Quality System</span>
+              <h1 id="hero-title">
+                Presentations that are
+                <span class="typing-text"><span class="visually-hidden">Typography-First</span></span>
+              </h1>
+              <p class="hero-subtitle">
+                A Quarto RevealJS design quality system. Curated themes, objective scoring,
+                adversarial review — not left to LLM design bias defaults.
+              </p>
+              <div class="hero-actions">
+                <a class="button" href="#get-started">Start Building</a>
+                <a class="text-link" href="https://github.com/alohays/impeccable-quarto" target="_blank" rel="noreferrer">View on GitHub</a>
+              </div>
+            </div>
+            <div class="hero-metrics">
+              <div class="metric-card fade-in" data-delay="200">
+                <strong>95+ by design</strong>
+                <span>Quality gates expose weak decks before they reach the room.</span>
+              </div>
+              <div class="metric-card fade-in" data-delay="300">
+                <strong>OKLCH + tinted neutrals</strong>
+                <span>Intentional color systems with projection-safe contrast and restrained palettes.</span>
+              </div>
+              <div class="metric-card fade-in" data-delay="400">
+                <strong>Semantics over sludge</strong>
+                <span>Speaker notes, semantic boxes, and theme discipline replace generic slide defaults.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="anti-patterns" aria-labelledby="anti-patterns-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">01</span>
+              <h2 id="anti-patterns-title">The Problem with Default Slides</h2>
+            </div>
+            <p>Most decks fail for repeatable reasons. impeccable-quarto treats them as detectable anti-patterns, not vague matters of taste.</p>
+          </div>
+          <div class="card-grid">
+            <article class="anti-card fade-in" data-delay="100">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">🧱</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Bullet Wall</h3>
+              <p>Dense stacked bullets flatten hierarchy and force the audience to read instead of listen.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="200">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">📦</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Content Dump</h3>
+              <p>Whole paragraphs and raw notes land on one slide with no narrative filtering or visual structure.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="300">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">🎨</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Generic Theme</h3>
+              <p>Default templates create sameness, weak contrast choices, and no fit for the presentation context.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="400">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">⚫</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Pure Black/White</h3>
+              <p>Untinted extremes feel harsh on projection and ignore the nuance available in modern color spaces.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="500">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">🔎</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Tiny Text</h3>
+              <p>Slides break at room distance when type drops below practical readability thresholds.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="600">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">📝</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Missing Notes</h3>
+              <p>Without speaker notes, key context stays trapped in the presenter’s head instead of the deck system.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="design-system" aria-labelledby="design-system-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">02</span>
+              <h2 id="design-system-title">A Complete Design System</h2>
+            </div>
+            <p>Theme tokens, typography hierarchy, and semantic slide primitives give every deck structure before content even arrives.</p>
+          </div>
+
+          <div class="palette-grid">
+            <div class="palette-card fade-in" data-delay="100">
+              <div class="swatch" style="background: oklch(0.45 0.18 265);"></div>
+              <strong>Primary</strong>
+              <div><code>oklch(0.45 0.18 265)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="160">
+              <div class="swatch" style="background: oklch(0.55 0.12 195);"></div>
+              <strong>Secondary</strong>
+              <div><code>oklch(0.55 0.12 195)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="220">
+              <div class="swatch" style="background: oklch(0.72 0.16 85);"></div>
+              <strong>Accent</strong>
+              <div><code>oklch(0.72 0.16 85)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="280">
+              <div class="swatch" style="background: oklch(0.68 0.16 150);"></div>
+              <strong>Success</strong>
+              <div><code>oklch(0.68 0.16 150)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="340">
+              <div class="swatch" style="background: oklch(0.8 0.17 78);"></div>
+              <strong>Warning</strong>
+              <div><code>oklch(0.8 0.17 78)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="400">
+              <div class="swatch" style="background: oklch(0.6 0.19 28);"></div>
+              <strong>Danger</strong>
+              <div><code>oklch(0.6 0.19 28)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="460">
+              <div class="swatch" style="background: oklch(0.65 0.11 230);"></div>
+              <strong>Info</strong>
+              <div><code>oklch(0.65 0.11 230)</code></div>
+            </div>
+          </div>
+
+          <div class="design-columns">
+            <article class="type-card fade-in" data-delay="140">
+              <h3>Typography Showcase</h3>
+              <p>Plus Jakarta Sans for headings, Source Sans 3 for body copy, and JetBrains Mono for command lines and code.</p>
+              <div class="type-showcase">
+                <div class="type-sample-heading">Typography-first hierarchy</div>
+                <div class="type-sample-body">Readable body text with enough line height to hold at projection distance.</div>
+                <div class="type-sample-code">quarto render examples/demo.qmd</div>
+              </div>
+            </article>
+            <article class="scale-card fade-in" data-delay="220">
+              <h3>Type Scale</h3>
+              <p>A disciplined scale keeps RevealJS slides legible and predictable from room to room.</p>
+              <div class="scale-list" aria-label="Type scale">
+                <div class="scale-step"><strong>18px</strong><span>Caption / fine print</span></div>
+                <div class="scale-step"><strong>22px</strong><span>Dense annotation</span></div>
+                <div class="scale-step"><strong>28px</strong><span>Minimum body size</span></div>
+                <div class="scale-step"><strong>35px</strong><span>Body emphasis</span></div>
+                <div class="scale-step"><strong>44px</strong><span>Subhead</span></div>
+                <div class="scale-step"><strong>55px</strong><span>Section title</span></div>
+                <div class="scale-step"><strong>68px</strong><span>Hero display</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="semantic-grid" aria-label="Semantic box preview">
+            <div class="semantic-box keybox fade-in" data-delay="120">
+              <h3>keybox</h3>
+              <p>Use for the single idea the audience should retain after the slide changes.</p>
+            </div>
+            <div class="semantic-box methodbox fade-in" data-delay="180">
+              <h3>methodbox</h3>
+              <p>Explain repeatable process steps without collapsing into a generic bullet list.</p>
+            </div>
+            <div class="semantic-box warningbox fade-in" data-delay="240">
+              <h3>warningbox</h3>
+              <p>Flag risky assumptions, review failures, or slide issues that break the quality gate.</p>
+            </div>
+            <div class="semantic-box tipbox fade-in" data-delay="300">
+              <h3>tipbox</h3>
+              <p>Quick practical guidance for authors who need a stronger deck with less iteration.</p>
+            </div>
+            <div class="semantic-box quotebox fade-in" data-delay="360">
+              <h3>quotebox</h3>
+              <p>Highlight an attributed line or takeaway without losing typographic control.</p>
+            </div>
+            <div class="semantic-box infobox fade-in" data-delay="420">
+              <h3>infobox</h3>
+              <p>Hold secondary context, supporting evidence, or metadata that should still read clearly.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="themes" aria-labelledby="themes-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">03</span>
+              <h2 id="themes-title">Five Curated Themes</h2>
+            </div>
+            <p>Each theme preserves the system rules while shifting tone for the room, the speaker, and the subject matter.</p>
+          </div>
+          <div class="theme-grid">
+            <article class="theme-card fade-in" data-delay="100">
+              <div class="theme-top">
+                <h3>Master</h3>
+                <span><code>impeccable.scss</code></span>
+              </div>
+              <p>The base system theme: balanced contrast, refined neutrals, and the full semantic component set.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.45 0.18 265), oklch(0.55 0.12 195));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="180">
+              <div class="theme-top">
+                <h3>Academic</h3>
+                <span><code>academic.scss</code></span>
+              </div>
+              <p>Calmer chroma, annotation-friendly surfaces, and strong support for dense evidence without visual fatigue.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.42 0.12 260), oklch(0.74 0.08 210));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="260">
+              <div class="theme-top">
+                <h3>Corporate</h3>
+                <span><code>corporate.scss</code></span>
+              </div>
+              <p>Sharper structure and restrained palette choices for executive reviews, roadmap decks, and board updates.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.38 0.08 240), oklch(0.62 0.09 200));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="340">
+              <div class="theme-top">
+                <h3>Creative</h3>
+                <span><code>creative.scss</code></span>
+              </div>
+              <p>Higher accent energy and bolder composition for portfolio talks, launches, and design storytelling.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.54 0.2 330), oklch(0.78 0.16 85));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="420">
+              <div class="theme-top">
+                <h3>Lightning</h3>
+                <span><code>lightning.scss</code></span>
+              </div>
+              <p>Built for fast-paced demos with loud signposting, punchy transitions, and crisp timing cues.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.82 0.18 80), oklch(0.6 0.15 230));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="quality" aria-labelledby="quality-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">04</span>
+              <h2 id="quality-title">Objectively Scored</h2>
+            </div>
+            <p>Instead of hand-wavy taste judgments, impeccable-quarto scores presentations against explicit quality gates and deduction rules.</p>
+          </div>
+          <div class="quality-layout">
+            <article class="score-panel fade-in" data-delay="160">
+              <span class="eyebrow">Target Quality Gate</span>
+              <div class="counter-wrap">
+                <div class="counter" data-target="95">95</div>
+                <div>/100</div>
+              </div>
+              <p>A 95 is not decorative. It means the deck clears review with only minor polish left on the table.</p>
+              <div class="quality-bands">
+                <div class="quality-band"><strong>Failing</strong><span>0-59</span></div>
+                <div class="quality-band"><strong>Needs Work</strong><span>60-79</span></div>
+                <div class="quality-band"><strong>Draft</strong><span>80-84</span></div>
+                <div class="quality-band"><strong>Presentable</strong><span>85-89</span></div>
+                <div class="quality-band"><strong>Excellent</strong><span>90-94</span></div>
+                <div class="quality-band"><strong>Impeccable</strong><span>95-100</span></div>
+              </div>
+            </article>
+            <article class="table-panel fade-in" data-delay="240">
+              <h3>Deduction Examples</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Issue</th>
+                    <th scope="col">Deduction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Compilation failure</td>
+                    <td>-100</td>
+                  </tr>
+                  <tr>
+                    <td>Missing speaker notes</td>
+                    <td>-5</td>
+                  </tr>
+                  <tr>
+                    <td>&gt;5 bullets</td>
+                    <td>-5</td>
+                  </tr>
+                  <tr>
+                    <td>Tiny text</td>
+                    <td>-5</td>
+                  </tr>
+                  <tr>
+                    <td>Pure black/white</td>
+                    <td>-3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="get-started" aria-labelledby="get-started-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">05</span>
+              <h2 id="get-started-title">Get Started</h2>
+            </div>
+            <p>Setup is intentionally lightweight. Clone the repo, render a deck, then preview and iterate against the scoring pipeline.</p>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card fade-in" data-delay="140">
+              <h3>Step 1: Clone the repo</h3>
+              <p>Pull down the source, themes, examples, and review rules in one pass.</p>
+              <div class="code-block"><code>git clone https://github.com/alohays/impeccable-quarto.git</code></div>
+            </article>
+            <article class="step-card fade-in" data-delay="220">
+              <h3>Step 2: Create a deck</h3>
+              <p>Render the demo deck to see the design system and scoring assumptions in action.</p>
+              <div class="code-block"><code>quarto render examples/demo.qmd</code></div>
+            </article>
+            <article class="step-card fade-in" data-delay="300">
+              <h3>Step 3: Preview</h3>
+              <p>Run a live preview while you adjust structure, notes, layout, and theme choices.</p>
+              <div class="code-block"><code>quarto preview your-deck.qmd</code></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" aria-labelledby="faq-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">06</span>
+              <h2 id="faq-title">Frequently Asked Questions</h2>
+            </div>
+            <p>Short answers for the practical questions people ask before replacing default RevealJS slides with a stricter system.</p>
+          </div>
+          <div class="faq-list">
+            <div class="faq-item fade-in" data-delay="100">
+              <button class="faq-question" type="button">What is impeccable-quarto?</button>
+              <div class="faq-answer">
+                <p>A Quarto RevealJS design quality system that combines curated themes, semantic slide structure, and scored review criteria.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="180">
+              <button class="faq-question" type="button">Do I need to install anything?</button>
+              <div class="faq-answer">
+                <p>Just Quarto and the theme files. The landing page and examples assume a standard Quarto workflow rather than a custom app stack.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="260">
+              <button class="faq-question" type="button">How does scoring work?</button>
+              <div class="faq-answer">
+                <p>Start at 100, then apply deductions for concrete issues like compilation failure, tiny text, missing notes, or overloaded slides.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="340">
+              <button class="faq-question" type="button">Can I customize the themes?</button>
+              <div class="faq-answer">
+                <p>Yes. All themes use SCSS variables, so you can adapt color tokens, typography, and component styling without breaking the system rules.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="420">
+              <button class="faq-question" type="button">What makes this different from default Reveal.js?</button>
+              <div class="faq-answer">
+                <p>Typography-first design, OKLCH colors, tinted neutrals, semantic boxes, and explicit quality scoring instead of generic defaults.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="fade-in" data-delay="120">
+      <p><strong>Built with impeccable standards</strong></p>
+      <div class="footer-links">
+        <a href="https://github.com/alohays/impeccable-quarto" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/alohays/impeccable-quarto#readme" target="_blank" rel="noreferrer">Documentation</a>
+        <a href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">Themes</a>
+      </div>
+      <p>Copyright © 2026 impeccable-quarto.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
