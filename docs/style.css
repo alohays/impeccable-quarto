@@ -1,0 +1,902 @@
+/**
+ * impeccable-quarto — landing page styles
+ * OKLCH color space · tinted neutrals · typography-first
+ */
+
+/* ----------------------------------------------------------------
+   Design Tokens
+   ---------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --bg: oklch(0.97 0.01 250);
+  --surface: oklch(0.995 0.008 250);
+  --surface-strong: oklch(0.94 0.015 250);
+  --surface-tint: oklch(0.91 0.03 255);
+  --text: oklch(0.24 0.02 255);
+  --text-soft: oklch(0.4 0.015 250);
+  --line: oklch(0.86 0.015 250);
+  --primary: oklch(0.45 0.18 265);
+  --secondary: oklch(0.55 0.12 195);
+  --accent: oklch(0.72 0.16 85);
+  --success: oklch(0.68 0.16 150);
+  --warning: oklch(0.8 0.17 78);
+  --danger: oklch(0.6 0.19 28);
+  --info: oklch(0.65 0.11 230);
+  --shadow: 0 24px 60px oklch(0.4 0.04 255 / 0.12);
+  --radius: 24px;
+  --radius-sm: 16px;
+  --max: 1180px;
+}
+
+/* ----------------------------------------------------------------
+   Reset & Base
+   ---------------------------------------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Source Sans 3", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, oklch(0.92 0.05 265 / 0.5), transparent 34%),
+    radial-gradient(circle at top right, oklch(0.95 0.05 92 / 0.45), transparent 28%),
+    linear-gradient(180deg, oklch(0.985 0.012 252), oklch(0.95 0.015 246));
+  background-attachment: fixed;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+code {
+  font-family: "JetBrains Mono", monospace;
+}
+
+.page-shell {
+  overflow: clip;
+}
+
+/* ----------------------------------------------------------------
+   Navigation
+   ---------------------------------------------------------------- */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  background: oklch(0.98 0.01 252 / 0.8);
+  border-bottom: 1px solid oklch(0.88 0.015 248 / 0.9);
+  transition: box-shadow 0.3s ease;
+}
+
+.top-nav.scrolled {
+  box-shadow: 0 12px 36px oklch(0.35 0.03 252 / 0.08);
+}
+
+.brand {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+}
+
+.menu-toggle {
+  display: none;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-tint);
+  color: var(--text);
+  padding: 0.75rem 0.95rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: var(--text-soft);
+  font-weight: 600;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-links a.active,
+.nav-links a:hover {
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* ----------------------------------------------------------------
+   Layout
+   ---------------------------------------------------------------- */
+main {
+  display: block;
+}
+
+section {
+  width: min(var(--max), calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 5rem 0;
+}
+
+/* ----------------------------------------------------------------
+   Hero
+   ---------------------------------------------------------------- */
+.hero {
+  min-height: calc(100vh - 78px);
+  display: grid;
+  place-items: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.hero-panel,
+.section-panel {
+  background: oklch(0.99 0.01 250 / 0.88);
+  border: 1px solid oklch(0.86 0.015 250 / 0.95);
+  border-radius: 32px;
+  box-shadow: var(--shadow);
+}
+
+.hero-panel {
+  width: min(100%, 1100px);
+  padding: clamp(2rem, 5vw, 4rem);
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: auto -10% -25% auto;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(circle, oklch(0.88 0.12 88 / 0.45), transparent 65%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.eyebrow,
+.section-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: oklch(0.92 0.03 254);
+  color: var(--primary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+h2,
+h3 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.hero h1 {
+  margin-top: 1rem;
+  font-size: clamp(2.8rem, 7vw, 5.25rem);
+  line-height: 0.95;
+  max-width: 12ch;
+}
+
+.typing-text {
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.cursor {
+  color: var(--accent);
+  margin-left: 0.08em;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hero-subtitle {
+  max-width: 60ch;
+  margin: 1.5rem 0 0;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: var(--text-soft);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr;
+  gap: 2rem;
+  align-items: end;
+}
+
+.hero-metrics {
+  display: grid;
+  gap: 1rem;
+}
+
+.metric-card {
+  padding: 1.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, oklch(0.985 0.01 252), oklch(0.955 0.018 252));
+}
+
+.metric-card strong {
+  display: block;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ----------------------------------------------------------------
+   Buttons & Links
+   ---------------------------------------------------------------- */
+.button,
+.text-link,
+.theme-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.button {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: oklch(0.98 0.01 255);
+  padding: 0.95rem 1.4rem;
+  box-shadow: 0 16px 30px oklch(0.45 0.15 265 / 0.22);
+}
+
+.button:hover {
+  box-shadow: 0 20px 40px oklch(0.45 0.15 265 / 0.3);
+}
+
+.text-link {
+  padding: 0.95rem 1.4rem;
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: oklch(0.99 0.008 250 / 0.85);
+}
+
+.button:hover,
+.text-link:hover,
+.theme-link:hover {
+  transform: translateY(-2px);
+}
+
+/* ----------------------------------------------------------------
+   Section Panels
+   ---------------------------------------------------------------- */
+.section-panel {
+  padding: clamp(1.5rem, 3vw, 2rem);
+}
+
+.section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.section-header p {
+  max-width: 48ch;
+  margin: 0.5rem 0 0;
+  color: var(--text-soft);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1;
+  margin-top: 0.9rem;
+}
+
+/* ----------------------------------------------------------------
+   Card Grids
+   ---------------------------------------------------------------- */
+.card-grid,
+.palette-grid,
+.semantic-grid,
+.theme-grid,
+.steps-grid,
+.footer-links {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.anti-card,
+.semantic-box,
+.theme-card,
+.step-card,
+.faq-item,
+.type-card,
+.scale-step,
+.quality-band {
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ----------------------------------------------------------------
+   Anti-Pattern Cards
+   ---------------------------------------------------------------- */
+.anti-card {
+  padding: 1.35rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.anti-card:hover {
+  border-color: oklch(0.75 0.04 250);
+  box-shadow: 0 8px 24px oklch(0.4 0.03 255 / 0.08);
+}
+
+.anti-card-header,
+.theme-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.anti-icon,
+.swatch {
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+}
+
+.anti-icon {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.4rem;
+  background: oklch(0.93 0.03 252);
+}
+
+.badge {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge-critical {
+  background: oklch(0.93 0.05 28);
+  color: var(--danger);
+}
+
+.badge-major {
+  background: oklch(0.95 0.05 78);
+  color: oklch(0.48 0.12 65);
+}
+
+.badge-minor {
+  background: oklch(0.93 0.03 220);
+  color: var(--info);
+}
+
+/* ----------------------------------------------------------------
+   Design System: Palette
+   ---------------------------------------------------------------- */
+.palette-grid {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  margin-bottom: 2rem;
+}
+
+.palette-card {
+  padding: 1rem;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.swatch {
+  width: 100%;
+  aspect-ratio: 1.25;
+  margin-bottom: 0.8rem;
+  box-shadow: inset 0 0 0 1px oklch(0.24 0.02 255 / 0.08);
+}
+
+/* ----------------------------------------------------------------
+   Design System: Typography
+   ---------------------------------------------------------------- */
+.design-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.type-card,
+.scale-card {
+  padding: 1.5rem;
+}
+
+.type-card p,
+.scale-card p {
+  color: var(--text-soft);
+  margin: 0.5rem 0 1rem;
+}
+
+.type-showcase {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.type-sample-heading {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.type-sample-body {
+  font-size: 1.05rem;
+}
+
+.type-sample-code {
+  font-family: "JetBrains Mono", monospace;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: oklch(0.95 0.012 248);
+  color: var(--info);
+}
+
+.scale-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.scale-step {
+  padding: 1rem;
+}
+
+.scale-step strong {
+  display: block;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.05rem;
+  margin-bottom: 0.2rem;
+}
+
+/* ----------------------------------------------------------------
+   Design System: Semantic Boxes
+   ---------------------------------------------------------------- */
+.semantic-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1.5rem;
+}
+
+.semantic-box {
+  padding: 1.15rem;
+  min-height: 150px;
+}
+
+.semantic-box h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.keybox { background: oklch(0.95 0.03 265); }
+.methodbox { background: oklch(0.96 0.025 205); }
+.warningbox { background: oklch(0.97 0.04 80); }
+.tipbox { background: oklch(0.96 0.03 145); }
+.quotebox { background: oklch(0.96 0.02 310); }
+.infobox { background: oklch(0.96 0.02 230); }
+
+/* ----------------------------------------------------------------
+   Theme Cards
+   ---------------------------------------------------------------- */
+.theme-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.theme-card {
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+  min-height: 280px;
+}
+
+.theme-card.hovered {
+  border-color: oklch(0.75 0.05 250);
+  box-shadow: 0 18px 40px oklch(0.42 0.04 250 / 0.12);
+}
+
+.theme-accent {
+  height: 10px;
+  border-radius: 999px;
+}
+
+.theme-link {
+  padding: 0.8rem 1rem;
+  width: fit-content;
+  border: 1px solid var(--line);
+  background: oklch(0.985 0.008 250);
+  color: var(--primary);
+  margin-top: auto;
+}
+
+/* ----------------------------------------------------------------
+   Quality Scoring
+   ---------------------------------------------------------------- */
+.quality-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.score-panel,
+.table-panel {
+  padding: 1.5rem;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.counter-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 1.25rem 0;
+}
+
+.counter {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(4rem, 12vw, 6rem);
+  line-height: 0.9;
+  color: var(--primary);
+}
+
+.quality-bands {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.25rem;
+}
+
+.quality-band {
+  padding: 0.95rem;
+}
+
+.quality-band strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+th,
+td {
+  padding: 0.95rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+th {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.95rem;
+  background: oklch(0.95 0.02 252);
+}
+
+td:last-child {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+/* ----------------------------------------------------------------
+   Get Started
+   ---------------------------------------------------------------- */
+.steps-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.step-card {
+  padding: 1.35rem;
+}
+
+.step-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.code-block {
+  position: relative;
+  margin-top: 1rem;
+  padding: 1rem 1rem 1rem 1.15rem;
+  border-radius: 18px;
+  background: oklch(0.2 0.02 255);
+  color: oklch(0.93 0.015 250);
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid oklch(0.4 0.02 255);
+  border-radius: 8px;
+  background: oklch(0.28 0.02 255);
+  color: oklch(0.8 0.01 250);
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.15s ease;
+}
+
+.code-block:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  background: oklch(0.35 0.02 255);
+}
+
+/* ----------------------------------------------------------------
+   FAQ
+   ---------------------------------------------------------------- */
+.faq-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.faq-item {
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  padding: 1.2rem 1.3rem;
+  text-align: left;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  transition: color 0.15s ease;
+}
+
+.faq-question:hover {
+  color: var(--primary);
+}
+
+.faq-question::after {
+  content: "+";
+  color: var(--primary);
+  font-size: 1.35rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.faq-item.active .faq-question::after {
+  content: "\2212";
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  display: none;
+  padding: 0 1.3rem 1.2rem;
+  color: var(--text-soft);
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+/* ----------------------------------------------------------------
+   Footer
+   ---------------------------------------------------------------- */
+footer {
+  width: min(var(--max), calc(100% - 2rem));
+  margin: 0 auto 3rem;
+  padding: 2rem;
+  border-radius: 28px;
+  background: oklch(0.96 0.018 248 / 0.95);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+footer p {
+  margin: 0;
+}
+
+.footer-links {
+  grid-template-columns: repeat(3, max-content);
+  justify-content: center;
+  margin: 1rem 0 1.5rem;
+}
+
+.footer-links a {
+  color: var(--text-soft);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
+/* ----------------------------------------------------------------
+   Animations
+   ---------------------------------------------------------------- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------
+   Accessibility
+   ---------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  .fade-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Selection
+   ---------------------------------------------------------------- */
+::selection {
+  background: oklch(0.85 0.08 265);
+  color: oklch(0.18 0.02 265);
+}
+
+/* ----------------------------------------------------------------
+   Responsive: Tablet
+   ---------------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .hero-grid,
+  .design-columns,
+  .quality-layout,
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-grid,
+  .semantic-grid,
+  .theme-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ----------------------------------------------------------------
+   Responsive: Mobile
+   ---------------------------------------------------------------- */
+@media (max-width: 760px) {
+  section {
+    width: min(var(--max), calc(100% - 1.2rem));
+    padding: 3.5rem 0;
+  }
+
+  .top-nav {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+  }
+
+  .top-nav.menu-open .nav-links {
+    display: flex;
+  }
+
+  .card-grid,
+  .semantic-grid,
+  .theme-grid,
+  .scale-list,
+  .quality-bands,
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    max-width: none;
+  }
+}
