@@ -6,42 +6,46 @@
 // ============================================================================
 
 // ---------------------------------------------------------------------------
-// OKLCH Color Palette
+// Color Palette (hex equivalents of OKLCH values for Sass legacy compat)
 // ---------------------------------------------------------------------------
+// Quarto's internal reveal.js SCSS uses lighten()/darken()/rgba() which
+// require legacy color formats. Sass variables use hex; CSS custom properties
+// (set in scss:rules) use the canonical OKLCH values.
+
 // Primary: Deep Indigo — authority, trust
-$primary:        oklch(0.45 0.18 265);
-$primary-light:  oklch(0.65 0.12 265);
-$primary-lighter: oklch(0.85 0.06 265);
-$primary-dark:   oklch(0.30 0.15 265);
+$primary:        #3730a3;  // oklch(0.45 0.18 265)
+$primary-light:  #7c79c4;  // oklch(0.65 0.12 265)
+$primary-lighter: #cecceb; // oklch(0.85 0.06 265)
+$primary-dark:   #1e1b6e;  // oklch(0.30 0.15 265)
 
 // Secondary: Warm Teal — clarity, balance
-$secondary:       oklch(0.55 0.12 195);
-$secondary-light: oklch(0.75 0.08 195);
+$secondary:       #1a8a8a; // oklch(0.55 0.12 195)
+$secondary-light: #8fc4c4; // oklch(0.75 0.08 195)
 
 // Accent: Marigold — attention, energy
-$accent:       oklch(0.72 0.16 85);
-$accent-light: oklch(0.88 0.10 85);
+$accent:       #c69a2d;    // oklch(0.72 0.16 85)
+$accent-light: #e8d49a;    // oklch(0.88 0.10 85)
 
 // Semantic colors
-$color-success:  oklch(0.60 0.15 145);
-$color-warning:  oklch(0.72 0.16 85);
-$color-danger:   oklch(0.55 0.18 25);
-$color-info:     oklch(0.55 0.12 240);
+$color-success:  #2d9050;  // oklch(0.60 0.15 145)
+$color-warning:  #c69a2d;  // oklch(0.72 0.16 85)
+$color-danger:   #b83a3a;  // oklch(0.55 0.18 25)
+$color-info:     #3a6ab8;  // oklch(0.55 0.12 240)
 
 // ---------------------------------------------------------------------------
-// Tinted Neutrals (never pure black/white — 0.015 chroma hint at hue 265)
+// Tinted Neutrals (never pure black/white — hex equivalents with indigo hint)
 // ---------------------------------------------------------------------------
-$neutral-950: oklch(0.12 0.015 265);   // near-black
-$neutral-900: oklch(0.18 0.015 265);
-$neutral-800: oklch(0.25 0.015 265);
-$neutral-700: oklch(0.35 0.012 265);
-$neutral-600: oklch(0.45 0.010 265);
-$neutral-500: oklch(0.55 0.008 265);
-$neutral-400: oklch(0.65 0.008 265);
-$neutral-300: oklch(0.75 0.008 265);
-$neutral-200: oklch(0.85 0.010 265);
-$neutral-100: oklch(0.92 0.012 265);
-$neutral-50:  oklch(0.96 0.012 265);   // near-white
+$neutral-950: #1a1625;   // oklch(0.12 0.015 265)
+$neutral-900: #2e2746;   // oklch(0.18 0.015 265)
+$neutral-800: #423a63;   // oklch(0.25 0.015 265)
+$neutral-700: #5c5478;   // oklch(0.35 0.012 265)
+$neutral-600: #776f8e;   // oklch(0.45 0.010 265)
+$neutral-500: #928ba4;   // oklch(0.55 0.008 265)
+$neutral-400: #ada7b9;   // oklch(0.65 0.008 265)
+$neutral-300: #c8c3cf;   // oklch(0.75 0.008 265)
+$neutral-200: #e0dce6;   // oklch(0.85 0.010 265)
+$neutral-100: #eceaf0;   // oklch(0.92 0.012 265)
+$neutral-50:  #f3f2f7;   // oklch(0.96 0.012 265)
 
 // ---------------------------------------------------------------------------
 // Typography — Distinctive Font Stack
