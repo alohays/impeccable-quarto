@@ -64,6 +64,12 @@ copy_to_docs() {
             [[ "$base" == "index.html" ]] && continue
             cp -R "$item" "$DOCS_DIR/"
         done
+
+        mkdir -p "$DOCS_DIR/examples"
+        for html in "$output_dir"/examples/*.html; do
+            [[ -f "$html" ]] || continue
+            cp "$html" "$DOCS_DIR/examples/"
+        done
     fi
 
     # Also copy any standalone HTML files from examples

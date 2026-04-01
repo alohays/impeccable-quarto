@@ -1,0 +1,230 @@
+---
+title: "The 5-Minute Guide to Better Slides"
+subtitle: "Why design systems beat design instincts"
+author: "impeccable-quarto"
+date: "2025-06-15"
+format:
+  revealjs:
+    theme: [default, ../themes/impeccable-lightning.scss]
+    slide-number: true
+    transition: none
+    width: 1920
+    height: 1080
+    center: false
+    embed-resources: true
+---
+
+## The Problem
+
+::: {.impact}
+::: {.impact-number}
+90%
+:::
+::: {.impact-label}
+of slides look exactly the same — default themes, bullet walls, zero personality
+:::
+:::
+
+::: {.notes}
+Open hard. Everyone in this room has sat through a forgettable slide deck this week.
+Default Reveal.js, default PowerPoint, default Google Slides — they all blur together.
+The problem isn't the tool. It's the absence of a system.
+Transition: "What if typography alone could fix half of this?"
+:::
+
+---
+
+## Typography Matters
+
+::: {.two-col}
+::: {}
+### The Type Scale
+
+A **1.25 Major Third** ratio creates clear visual hierarchy without guesswork.
+
+- 28px body — readable from the back row
+- 35px subheadings — clear separation
+- 44px headings — instant focus
+:::
+::: {}
+### Three Fonts, Three Jobs
+
+::: {.keybox}
+**Display** — Outfit / Plus Jakarta Sans
+
+**Body** — Source Sans 3
+
+**Code** — JetBrains Mono
+:::
+
+No font soup. No random sizes. Just a [**system**]{.hi}.
+:::
+:::
+
+::: {.notes}
+Typography is the single highest-leverage design decision.
+A modular scale means every size relates mathematically to the next.
+Three font families cover every use case: display for headings, body for text, mono for code.
+This alone eliminates the "font soup" anti-pattern that plagues most decks.
+Transition: "But what about color?"
+:::
+
+---
+
+## Color Science
+
+::: {.comparison}
+::: {.compare-left}
+### Hex Guesswork
+
+- `#3366CC` — looks blue... maybe?
+- `#FF6633` — is this accessible?
+- Equal numeric steps ≠ equal visual steps
+:::
+::: {.compare-right}
+### OKLCH Precision
+
+- `oklch(0.45 0.18 265)` — perceptually uniform
+- Lightness, chroma, hue — each axis independent
+- Predictable contrast, every time
+:::
+:::
+
+::: {.tipbox}
+**Bonus:** Tinted neutrals replace harsh pure black and white with warm, cohesive grays.
+:::
+
+::: {.notes}
+OKLCH is a perceptually uniform color space — equal numeric changes produce equal visual changes.
+Hex and RGB don't have this property, which is why "picking colors that look good" is so hard.
+Tinted neutrals carry a subtle hue from the primary palette, creating warmth instead of clinical harshness.
+Pure black and white are penalized in our scoring system.
+Transition: "Now let's talk about structure."
+:::
+
+---
+
+## Semantic Boxes
+
+Six containers that convey meaning, not just decoration.
+
+::: {.two-col}
+::: {}
+::: {.keybox}
+**Key Finding**
+The one thing your audience should remember.
+:::
+
+::: {.warningbox}
+**Caveat**
+Limitations, risks, or things to watch out for.
+:::
+:::
+::: {}
+::: {.tipbox}
+**Best Practice**
+Actionable advice your audience can use today.
+:::
+
+::: {.methodbox}
+**Methodology**
+How you got there — process and approach.
+:::
+:::
+:::
+
+::: {.notes}
+Semantic boxes replace ad-hoc colored rectangles with purpose-built containers.
+Each box type communicates intent: key findings, warnings, tips, methods, quotes, and info.
+The styling comes from the theme, not inline CSS. Change the theme and every box updates.
+This is the difference between a design system and decoration.
+Transition: "How do we know if slides are actually good?"
+:::
+
+---
+
+## Quality Gates
+
+Start at **100**. Lose points for every issue detected.
+
+| Gate | Score | What It Means |
+|---|---|---|
+| Failing | 0--59 | Critical problems |
+| Needs Work | 60--79 | Another round needed |
+| Presentable | 85--89 | Audience ready |
+| [**Impeccable**]{.hi-gold} | [**95--100**]{.hi-gold} | Publication quality |
+
+::: {.warningbox}
+**Top deductions:** missing speaker notes (-5), bullet walls (-5), content overflow (-10), pure black/white (-3)
+:::
+
+::: {.notes}
+Quality gates replace subjective "looks good" reviews with objective scoring.
+Every presentation starts at 100 and loses points for detected issues.
+The most common deductions are missing speaker notes, bullet walls, and content overflow.
+A score of 90+ means the deck has been systematically reviewed and passes all major checks.
+Transition: "So how do you actually start?"
+:::
+
+---
+
+## One Command Away
+
+```bash
+# Start with a template
+quarto render my-talk.qmd
+
+# Preview with live reload
+quarto preview my-talk.qmd
+
+# Score your deck
+python scripts/quality_score.py my-talk.qmd
+```
+
+::: {.keybox}
+**Getting Started**
+
+1. Pick a template from `templates/`
+2. Apply the impeccable theme
+3. Write content using semantic boxes
+4. Render, score, iterate
+:::
+
+::: {.notes}
+Three commands cover the entire workflow: render for final output, preview for iteration, and the quality scorer for automated review.
+Start with a template so you get the right YAML frontmatter, then focus on content.
+The design system handles visual decisions so you can focus on your message.
+Transition: "Let's wrap up."
+:::
+
+---
+
+## Better Slides Start Here {.center}
+
+::: {.impact}
+::: {.impact-statement}
+Stop designing by instinct.
+[Start designing by system.]{.hi}
+:::
+:::
+
+::: {.fragment}
+::: {.tipbox}
+**Try it now:** `themes/impeccable-lightning.scss` + any template from `templates/`
+:::
+:::
+
+::: {.fragment}
+::: {.quotebox}
+"Design is intelligence made visible."
+
+[Alina Wheeler]{.attribution}
+:::
+:::
+
+::: {.notes}
+Close with the core message: systems beat instincts.
+Point people to the theme file and templates directory for immediate adoption.
+The quote reinforces that good design is deliberate, not decorative.
+Thank the audience and invite questions if time allows.
+:::
