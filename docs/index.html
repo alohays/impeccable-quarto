@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>impeccable-quarto — Presentation Design Quality System</title>
+  <meta
+    name="description"
+    content="A Quarto RevealJS design quality system with curated themes, objective scoring, and adversarial review built around OKLCH colors and typography-first slides."
+  >
+  <meta property="og:title" content="impeccable-quarto — Presentation Design Quality System">
+  <meta
+    property="og:description"
+    content="Curated themes, objective scoring, and adversarial review for beautiful Quarto RevealJS presentations."
+  >
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Plus+Jakarta+Sans:wght@600;700;800&family=Source+Sans+3:wght@400;600&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: oklch(0.97 0.01 250);
+      --surface: oklch(0.995 0.008 250);
+      --surface-strong: oklch(0.94 0.015 250);
+      --surface-tint: oklch(0.91 0.03 255);
+      --text: oklch(0.24 0.02 255);
+      --text-soft: oklch(0.4 0.015 250);
+      --line: oklch(0.86 0.015 250);
+      --primary: oklch(0.45 0.18 265);
+      --secondary: oklch(0.55 0.12 195);
+      --accent: oklch(0.72 0.16 85);
+      --success: oklch(0.68 0.16 150);
+      --warning: oklch(0.8 0.17 78);
+      --danger: oklch(0.6 0.19 28);
+      --info: oklch(0.65 0.11 230);
+      --shadow: 0 24px 60px oklch(0.4 0.04 255 / 0.12);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, oklch(0.92 0.05 265 / 0.5), transparent 34%),
+        radial-gradient(circle at top right, oklch(0.95 0.05 92 / 0.45), transparent 28%),
+        linear-gradient(180deg, oklch(0.985 0.012 252), oklch(0.95 0.015 246));
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    code {
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .page-shell {
+      overflow: clip;
+    }
+
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem clamp(1rem, 3vw, 2rem);
+      backdrop-filter: blur(22px);
+      background: oklch(0.98 0.01 252 / 0.8);
+      border-bottom: 1px solid oklch(0.88 0.015 248 / 0.9);
+    }
+
+    .top-nav.scrolled {
+      box-shadow: 0 12px 36px oklch(0.35 0.03 252 / 0.08);
+    }
+
+    .brand {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+    }
+
+    .menu-toggle {
+      display: none;
+      border: 0;
+      border-radius: 999px;
+      background: var(--surface-tint);
+      color: var(--text);
+      padding: 0.75rem 0.95rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text-soft);
+      font-weight: 600;
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-links a.active,
+    .nav-links a:hover {
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    main {
+      display: block;
+    }
+
+    section {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 5rem 0;
+    }
+
+    .hero {
+      min-height: calc(100vh - 78px);
+      display: grid;
+      place-items: center;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .hero-panel,
+    .section-panel {
+      background: oklch(0.99 0.01 250 / 0.88);
+      border: 1px solid oklch(0.86 0.015 250 / 0.95);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel {
+      width: min(100%, 1100px);
+      padding: clamp(2rem, 5vw, 4rem);
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -25% auto;
+      width: 380px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, oklch(0.88 0.12 88 / 0.45), transparent 65%);
+      z-index: -1;
+    }
+
+    .eyebrow,
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: oklch(0.92 0.03 254);
+      color: var(--primary);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1,
+    h2,
+    h3 {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      letter-spacing: -0.04em;
+      margin: 0;
+    }
+
+    .hero h1 {
+      margin-top: 1rem;
+      font-size: clamp(2.8rem, 7vw, 5.25rem);
+      line-height: 0.95;
+      max-width: 12ch;
+    }
+
+    .typing-text {
+      color: var(--primary);
+      white-space: nowrap;
+    }
+
+    .cursor {
+      color: var(--accent);
+      margin-left: 0.08em;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .hero-subtitle {
+      max-width: 60ch;
+      margin: 1.5rem 0 0;
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      color: var(--text-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .button,
+    .text-link,
+    .theme-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: oklch(0.98 0.01 255);
+      padding: 0.95rem 1.4rem;
+      box-shadow: 0 16px 30px oklch(0.45 0.15 265 / 0.22);
+    }
+
+    .text-link {
+      padding: 0.95rem 1.4rem;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: oklch(0.99 0.008 250 / 0.85);
+    }
+
+    .button:hover,
+    .text-link:hover,
+    .theme-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.9fr;
+      gap: 2rem;
+      align-items: end;
+    }
+
+    .hero-metrics {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .metric-card {
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, oklch(0.985 0.01 252), oklch(0.955 0.018 252));
+    }
+
+    .metric-card strong {
+      display: block;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .section-panel {
+      padding: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-header p {
+      max-width: 48ch;
+      margin: 0.5rem 0 0;
+      color: var(--text-soft);
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1;
+      margin-top: 0.9rem;
+    }
+
+    .card-grid,
+    .palette-grid,
+    .semantic-grid,
+    .theme-grid,
+    .steps-grid,
+    .footer-links {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .card-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .anti-card,
+    .semantic-box,
+    .theme-card,
+    .step-card,
+    .faq-item,
+    .type-card,
+    .scale-step,
+    .quality-band {
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .anti-card {
+      padding: 1.35rem;
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .anti-card-header,
+    .theme-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .anti-icon,
+    .swatch {
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+    }
+
+    .anti-icon {
+      width: 3rem;
+      height: 3rem;
+      font-size: 1.4rem;
+      background: oklch(0.93 0.03 252);
+    }
+
+    .badge {
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .badge-critical {
+      background: oklch(0.93 0.05 28);
+      color: var(--danger);
+    }
+
+    .badge-major {
+      background: oklch(0.95 0.05 78);
+      color: oklch(0.48 0.12 65);
+    }
+
+    .badge-minor {
+      background: oklch(0.93 0.03 220);
+      color: var(--info);
+    }
+
+    .palette-grid {
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      margin-bottom: 2rem;
+    }
+
+    .palette-card {
+      padding: 1rem;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .swatch {
+      width: 100%;
+      aspect-ratio: 1.25;
+      margin-bottom: 0.8rem;
+      box-shadow: inset 0 0 0 1px oklch(0.24 0.02 255 / 0.08);
+    }
+
+    .design-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .type-card,
+    .scale-card {
+      padding: 1.5rem;
+    }
+
+    .type-card p,
+    .scale-card p {
+      color: var(--text-soft);
+      margin: 0.5rem 0 1rem;
+    }
+
+    .type-showcase {
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .type-sample-heading {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .type-sample-body {
+      font-size: 1.05rem;
+    }
+
+    .type-sample-code {
+      font-family: "JetBrains Mono", monospace;
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      background: oklch(0.95 0.012 248);
+      color: var(--info);
+    }
+
+    .scale-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.9rem;
+    }
+
+    .scale-step {
+      padding: 1rem;
+    }
+
+    .scale-step strong {
+      display: block;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .semantic-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1.5rem;
+    }
+
+    .semantic-box {
+      padding: 1.15rem;
+      min-height: 150px;
+    }
+
+    .semantic-box h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .keybox { background: oklch(0.95 0.03 265); }
+    .methodbox { background: oklch(0.96 0.025 205); }
+    .warningbox { background: oklch(0.97 0.04 80); }
+    .tipbox { background: oklch(0.96 0.03 145); }
+    .quotebox { background: oklch(0.96 0.02 310); }
+    .infobox { background: oklch(0.96 0.02 230); }
+
+    .theme-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .theme-card {
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+      min-height: 280px;
+    }
+
+    .theme-card.hovered {
+      border-color: oklch(0.75 0.05 250);
+      box-shadow: 0 18px 40px oklch(0.42 0.04 250 / 0.12);
+    }
+
+    .theme-accent {
+      height: 10px;
+      border-radius: 999px;
+    }
+
+    .theme-link {
+      padding: 0.8rem 1rem;
+      width: fit-content;
+      border: 1px solid var(--line);
+      background: oklch(0.985 0.008 250);
+      color: var(--primary);
+      margin-top: auto;
+    }
+
+    .quality-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .score-panel,
+    .table-panel {
+      padding: 1.5rem;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .counter-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin: 1.25rem 0;
+    }
+
+    .counter {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: clamp(4rem, 12vw, 6rem);
+      line-height: 0.9;
+      color: var(--primary);
+    }
+
+    .quality-bands {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 1.25rem;
+    }
+
+    .quality-band {
+      padding: 0.95rem;
+    }
+
+    .quality-band strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-family: "Plus Jakarta Sans", sans-serif;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 18px;
+    }
+
+    th,
+    td {
+      padding: 0.95rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-size: 0.95rem;
+      background: oklch(0.95 0.02 252);
+    }
+
+    .steps-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .step-card {
+      padding: 1.35rem;
+    }
+
+    .step-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .code-block {
+      margin-top: 1rem;
+      padding: 1rem 1rem 1rem 1.15rem;
+      border-radius: 18px;
+      background: oklch(0.2 0.02 255);
+      color: oklch(0.93 0.015 250);
+      overflow-x: auto;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .faq-item {
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 1.2rem 1.3rem;
+      text-align: left;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .faq-question::after {
+      content: "+";
+      color: var(--primary);
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .faq-item.active .faq-question::after {
+      content: "-";
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 1.3rem 1.2rem;
+      color: var(--text-soft);
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    footer {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto 3rem;
+      padding: 2rem;
+      border-radius: 28px;
+      background: oklch(0.96 0.018 248 / 0.95);
+      border: 1px solid var(--line);
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(3, max-content);
+      margin: 1rem 0 1.5rem;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .design-columns,
+      .quality-layout,
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-grid,
+      .semantic-grid,
+      .theme-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 760px) {
+      section {
+        width: min(var(--max), calc(100% - 1.2rem));
+        padding: 3.5rem 0;
+      }
+
+      .top-nav {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .nav-links {
+        width: 100%;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 0.5rem;
+      }
+
+      .top-nav.menu-open .nav-links {
+        display: flex;
+      }
+
+      .card-grid,
+      .semantic-grid,
+      .theme-grid,
+      .scale-list,
+      .quality-bands,
+      .footer-links {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <nav class="top-nav" aria-label="Primary">
+      <a class="brand" href="#top">impeccable-quarto</a>
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation">Menu</button>
+      <div class="nav-links">
+        <a href="#anti-patterns">Anti-Patterns</a>
+        <a href="#design-system">Design System</a>
+        <a href="#themes">Themes</a>
+        <a href="#quality">Quality</a>
+        <a href="#get-started">Get Started</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-panel fade-in" data-delay="100">
+          <div class="hero-grid">
+            <div>
+              <span class="eyebrow">Quarto RevealJS Quality System</span>
+              <h1 id="hero-title">
+                Presentations that are
+                <span class="typing-text"><span class="visually-hidden">Typography-First</span></span>
+              </h1>
+              <p class="hero-subtitle">
+                A Quarto RevealJS design quality system. Curated themes, objective scoring,
+                adversarial review — not left to LLM design bias defaults.
+              </p>
+              <div class="hero-actions">
+                <a class="button" href="#get-started">Start Building</a>
+                <a class="text-link" href="https://github.com/alohays/impeccable-quarto" target="_blank" rel="noreferrer">View on GitHub</a>
+              </div>
+            </div>
+            <div class="hero-metrics">
+              <div class="metric-card fade-in" data-delay="200">
+                <strong>95+ by design</strong>
+                <span>Quality gates expose weak decks before they reach the room.</span>
+              </div>
+              <div class="metric-card fade-in" data-delay="300">
+                <strong>OKLCH + tinted neutrals</strong>
+                <span>Intentional color systems with projection-safe contrast and restrained palettes.</span>
+              </div>
+              <div class="metric-card fade-in" data-delay="400">
+                <strong>Semantics over sludge</strong>
+                <span>Speaker notes, semantic boxes, and theme discipline replace generic slide defaults.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="anti-patterns" aria-labelledby="anti-patterns-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">01</span>
+              <h2 id="anti-patterns-title">The Problem with Default Slides</h2>
+            </div>
+            <p>Most decks fail for repeatable reasons. impeccable-quarto treats them as detectable anti-patterns, not vague matters of taste.</p>
+          </div>
+          <div class="card-grid">
+            <article class="anti-card fade-in" data-delay="100">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">🧱</div>
+                <span class="badge badge-critical">Critical</span>
+              </div>
+              <h3>Bullet Wall</h3>
+              <p>Dense stacked bullets flatten hierarchy and force the audience to read instead of listen.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="200">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">📦</div>
+                <span class="badge badge-critical">Critical</span>
+              </div>
+              <h3>Content Dump</h3>
+              <p>Whole paragraphs and raw notes land on one slide with no narrative filtering or visual structure.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="300">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">🎨</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Generic Theme</h3>
+              <p>Default templates create sameness, weak contrast choices, and no fit for the presentation context.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="400">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">⚫</div>
+                <span class="badge badge-major">Major</span>
+              </div>
+              <h3>Pure Black/White</h3>
+              <p>Untinted extremes feel harsh on projection and ignore the nuance available in modern color spaces.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="500">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">🔎</div>
+                <span class="badge badge-critical">Critical</span>
+              </div>
+              <h3>Tiny Text</h3>
+              <p>Slides break at room distance when type drops below practical readability thresholds.</p>
+            </article>
+            <article class="anti-card fade-in" data-delay="600">
+              <div class="anti-card-header">
+                <div class="anti-icon" aria-hidden="true">📝</div>
+                <span class="badge badge-minor">Minor</span>
+              </div>
+              <h3>Missing Notes</h3>
+              <p>Without speaker notes, key context stays trapped in the presenter’s head instead of the deck system.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="design-system" aria-labelledby="design-system-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">02</span>
+              <h2 id="design-system-title">A Complete Design System</h2>
+            </div>
+            <p>Theme tokens, typography hierarchy, and semantic slide primitives give every deck structure before content even arrives.</p>
+          </div>
+
+          <div class="palette-grid">
+            <div class="palette-card fade-in" data-delay="100">
+              <div class="swatch" style="background: oklch(0.45 0.18 265);"></div>
+              <strong>Primary</strong>
+              <div><code>oklch(0.45 0.18 265)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="160">
+              <div class="swatch" style="background: oklch(0.55 0.12 195);"></div>
+              <strong>Secondary</strong>
+              <div><code>oklch(0.55 0.12 195)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="220">
+              <div class="swatch" style="background: oklch(0.72 0.16 85);"></div>
+              <strong>Accent</strong>
+              <div><code>oklch(0.72 0.16 85)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="280">
+              <div class="swatch" style="background: oklch(0.68 0.16 150);"></div>
+              <strong>Success</strong>
+              <div><code>oklch(0.68 0.16 150)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="340">
+              <div class="swatch" style="background: oklch(0.8 0.17 78);"></div>
+              <strong>Warning</strong>
+              <div><code>oklch(0.8 0.17 78)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="400">
+              <div class="swatch" style="background: oklch(0.6 0.19 28);"></div>
+              <strong>Danger</strong>
+              <div><code>oklch(0.6 0.19 28)</code></div>
+            </div>
+            <div class="palette-card fade-in" data-delay="460">
+              <div class="swatch" style="background: oklch(0.65 0.11 230);"></div>
+              <strong>Info</strong>
+              <div><code>oklch(0.65 0.11 230)</code></div>
+            </div>
+          </div>
+
+          <div class="design-columns">
+            <article class="type-card fade-in" data-delay="140">
+              <h3>Typography Showcase</h3>
+              <p>Plus Jakarta Sans for headings, Source Sans 3 for body copy, and JetBrains Mono for command lines and code.</p>
+              <div class="type-showcase">
+                <div class="type-sample-heading">Typography-first hierarchy</div>
+                <div class="type-sample-body">Readable body text with enough line height to hold at projection distance.</div>
+                <div class="type-sample-code">quarto render examples/demo.qmd</div>
+              </div>
+            </article>
+            <article class="scale-card fade-in" data-delay="220">
+              <h3>Type Scale</h3>
+              <p>A disciplined scale keeps RevealJS slides legible and predictable from room to room.</p>
+              <div class="scale-list" aria-label="Type scale">
+                <div class="scale-step"><strong>18px</strong><span>Caption / fine print</span></div>
+                <div class="scale-step"><strong>22px</strong><span>Dense annotation</span></div>
+                <div class="scale-step"><strong>28px</strong><span>Minimum body size</span></div>
+                <div class="scale-step"><strong>35px</strong><span>Body emphasis</span></div>
+                <div class="scale-step"><strong>44px</strong><span>Subhead</span></div>
+                <div class="scale-step"><strong>55px</strong><span>Section title</span></div>
+                <div class="scale-step"><strong>68px</strong><span>Hero display</span></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="semantic-grid" aria-label="Semantic box preview">
+            <div class="semantic-box keybox fade-in" data-delay="120">
+              <h3>keybox</h3>
+              <p>Use for the single idea the audience should retain after the slide changes.</p>
+            </div>
+            <div class="semantic-box methodbox fade-in" data-delay="180">
+              <h3>methodbox</h3>
+              <p>Explain repeatable process steps without collapsing into a generic bullet list.</p>
+            </div>
+            <div class="semantic-box warningbox fade-in" data-delay="240">
+              <h3>warningbox</h3>
+              <p>Flag risky assumptions, review failures, or slide issues that break the quality gate.</p>
+            </div>
+            <div class="semantic-box tipbox fade-in" data-delay="300">
+              <h3>tipbox</h3>
+              <p>Quick practical guidance for authors who need a stronger deck with less iteration.</p>
+            </div>
+            <div class="semantic-box quotebox fade-in" data-delay="360">
+              <h3>quotebox</h3>
+              <p>Highlight an attributed line or takeaway without losing typographic control.</p>
+            </div>
+            <div class="semantic-box infobox fade-in" data-delay="420">
+              <h3>infobox</h3>
+              <p>Hold secondary context, supporting evidence, or metadata that should still read clearly.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="themes" aria-labelledby="themes-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">03</span>
+              <h2 id="themes-title">Five Curated Themes</h2>
+            </div>
+            <p>Each theme preserves the system rules while shifting tone for the room, the speaker, and the subject matter.</p>
+          </div>
+          <div class="theme-grid">
+            <article class="theme-card fade-in" data-delay="100">
+              <div class="theme-top">
+                <h3>Master</h3>
+                <span><code>impeccable.scss</code></span>
+              </div>
+              <p>The base system theme: balanced contrast, refined neutrals, and the full semantic component set.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.45 0.18 265), oklch(0.55 0.12 195));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="180">
+              <div class="theme-top">
+                <h3>Academic</h3>
+                <span><code>academic.scss</code></span>
+              </div>
+              <p>Calmer chroma, annotation-friendly surfaces, and strong support for dense evidence without visual fatigue.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.42 0.12 260), oklch(0.74 0.08 210));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="260">
+              <div class="theme-top">
+                <h3>Corporate</h3>
+                <span><code>corporate.scss</code></span>
+              </div>
+              <p>Sharper structure and restrained palette choices for executive reviews, roadmap decks, and board updates.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.38 0.08 240), oklch(0.62 0.09 200));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="340">
+              <div class="theme-top">
+                <h3>Creative</h3>
+                <span><code>creative.scss</code></span>
+              </div>
+              <p>Higher accent energy and bolder composition for portfolio talks, launches, and design storytelling.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.54 0.2 330), oklch(0.78 0.16 85));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+            <article class="theme-card fade-in" data-delay="420">
+              <div class="theme-top">
+                <h3>Lightning</h3>
+                <span><code>lightning.scss</code></span>
+              </div>
+              <p>Built for fast-paced demos with loud signposting, punchy transitions, and crisp timing cues.</p>
+              <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.82 0.18 80), oklch(0.6 0.15 230));"></div>
+              <a class="theme-link" href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">View example</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="quality" aria-labelledby="quality-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">04</span>
+              <h2 id="quality-title">Objectively Scored</h2>
+            </div>
+            <p>Instead of hand-wavy taste judgments, impeccable-quarto scores presentations against explicit quality gates and deduction rules.</p>
+          </div>
+          <div class="quality-layout">
+            <article class="score-panel fade-in" data-delay="160">
+              <span class="eyebrow">Target Quality Gate</span>
+              <div class="counter-wrap">
+                <div class="counter" data-target="95">95</div>
+                <div>/100</div>
+              </div>
+              <p>A 95 is not decorative. It means the deck clears review with only minor polish left on the table.</p>
+              <div class="quality-bands">
+                <div class="quality-band"><strong>Failing</strong><span>0-59</span></div>
+                <div class="quality-band"><strong>Needs Work</strong><span>60-79</span></div>
+                <div class="quality-band"><strong>Draft</strong><span>80-84</span></div>
+                <div class="quality-band"><strong>Presentable</strong><span>85-89</span></div>
+                <div class="quality-band"><strong>Excellent</strong><span>90-94</span></div>
+                <div class="quality-band"><strong>Impeccable</strong><span>95-100</span></div>
+              </div>
+            </article>
+            <article class="table-panel fade-in" data-delay="240">
+              <h3>Deduction Examples</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Issue</th>
+                    <th scope="col">Deduction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Compilation failure</td>
+                    <td>-100</td>
+                  </tr>
+                  <tr>
+                    <td>Missing speaker notes</td>
+                    <td>-5</td>
+                  </tr>
+                  <tr>
+                    <td>&gt;5 bullets</td>
+                    <td>-5</td>
+                  </tr>
+                  <tr>
+                    <td>Tiny text</td>
+                    <td>-5</td>
+                  </tr>
+                  <tr>
+                    <td>Pure black/white</td>
+                    <td>-3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="get-started" aria-labelledby="get-started-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">05</span>
+              <h2 id="get-started-title">Get Started</h2>
+            </div>
+            <p>Setup is intentionally lightweight. Clone the repo, render a deck, then preview and iterate against the scoring pipeline.</p>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card fade-in" data-delay="140">
+              <h3>Step 1: Clone the repo</h3>
+              <p>Pull down the source, themes, examples, and review rules in one pass.</p>
+              <div class="code-block"><code>git clone https://github.com/alohays/impeccable-quarto.git</code></div>
+            </article>
+            <article class="step-card fade-in" data-delay="220">
+              <h3>Step 2: Create a deck</h3>
+              <p>Render the demo deck to see the design system and scoring assumptions in action.</p>
+              <div class="code-block"><code>quarto render examples/demo.qmd</code></div>
+            </article>
+            <article class="step-card fade-in" data-delay="300">
+              <h3>Step 3: Preview</h3>
+              <p>Run a live preview while you adjust structure, notes, layout, and theme choices.</p>
+              <div class="code-block"><code>quarto preview your-deck.qmd</code></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" aria-labelledby="faq-title">
+        <div class="section-panel fade-in" data-delay="100">
+          <div class="section-header">
+            <div>
+              <span class="section-number">06</span>
+              <h2 id="faq-title">Frequently Asked Questions</h2>
+            </div>
+            <p>Short answers for the practical questions people ask before replacing default RevealJS slides with a stricter system.</p>
+          </div>
+          <div class="faq-list">
+            <div class="faq-item fade-in" data-delay="100">
+              <button class="faq-question" type="button">What is impeccable-quarto?</button>
+              <div class="faq-answer">
+                <p>A Quarto RevealJS design quality system that combines curated themes, semantic slide structure, and scored review criteria.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="180">
+              <button class="faq-question" type="button">Do I need to install anything?</button>
+              <div class="faq-answer">
+                <p>Just Quarto and the theme files. The landing page and examples assume a standard Quarto workflow rather than a custom app stack.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="260">
+              <button class="faq-question" type="button">How does scoring work?</button>
+              <div class="faq-answer">
+                <p>Start at 100, then apply deductions for concrete issues like compilation failure, tiny text, missing notes, or overloaded slides.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="340">
+              <button class="faq-question" type="button">Can I customize the themes?</button>
+              <div class="faq-answer">
+                <p>Yes. All themes use SCSS variables, so you can adapt color tokens, typography, and component styling without breaking the system rules.</p>
+              </div>
+            </div>
+            <div class="faq-item fade-in" data-delay="420">
+              <button class="faq-question" type="button">What makes this different from default Reveal.js?</button>
+              <div class="faq-answer">
+                <p>Typography-first design, OKLCH colors, tinted neutrals, semantic boxes, and explicit quality scoring instead of generic defaults.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="fade-in" data-delay="120">
+      <p><strong>Built with impeccable standards</strong></p>
+      <div class="footer-links">
+        <a href="https://github.com/alohays/impeccable-quarto" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/alohays/impeccable-quarto#readme" target="_blank" rel="noreferrer">Documentation</a>
+        <a href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">Themes</a>
+      </div>
+      <p>Copyright © 2026 impeccable-quarto.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
