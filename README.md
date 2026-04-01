@@ -3,6 +3,8 @@
 > **The design vocabulary you didn't know your slides needed.**
 > Any source. Any presentation. Impeccable Quarto slides.
 
+**[Live Demo](https://alohays.github.io/impeccable-quarto/)** | [GitHub](https://github.com/alohays/impeccable-quarto)
+
 ---
 
 ## What is impeccable-quarto?
@@ -68,7 +70,7 @@ Scores are computed by deduction from 100. Every deduction maps to a specific, f
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/your-org/impeccable-quarto.git
+git clone https://github.com/alohays/impeccable-quarto.git
 cd impeccable-quarto
 ```
 
