@@ -33,8 +33,23 @@ render_all() {
 
 copy_to_docs() {
     echo -e "${BOLD}Step 2: Copying output to docs/...${RESET}"
+
+    # Preserve handcrafted landing page files
+    local landing_files=("index.html" "style.css" "script.js")
+    local tmp_dir
+    tmp_dir="$(mktemp -d)"
+    for f in "${landing_files[@]}"; do
+        [[ -f "$DOCS_DIR/$f" ]] && cp "$DOCS_DIR/$f" "$tmp_dir/"
+    done
+
     rm -rf "$DOCS_DIR"
     mkdir -p "$DOCS_DIR"
+
+    # Restore landing page files
+    for f in "${landing_files[@]}"; do
+        [[ -f "$tmp_dir/$f" ]] && cp "$tmp_dir/$f" "$DOCS_DIR/"
+    done
+    rm -rf "$tmp_dir"
 
     local output_dir="$PROJECT_DIR/_output"
     if [[ ! -d "$output_dir" ]]; then
@@ -42,7 +57,13 @@ copy_to_docs() {
     fi
 
     if [[ -d "$output_dir" ]]; then
-        cp -R "$output_dir"/* "$DOCS_DIR/" 2>/dev/null || true
+        # Copy rendered presentations but don't overwrite the landing page
+        for item in "$output_dir"/*; do
+            local base
+            base="$(basename "$item")"
+            [[ "$base" == "index.html" ]] && continue
+            cp -R "$item" "$DOCS_DIR/"
+        done
     fi
 
     # Also copy any standalone HTML files from examples
@@ -58,6 +79,13 @@ create_index() {
     echo -e "${BOLD}Step 3: Creating index.html...${RESET}"
 
     local index="$DOCS_DIR/index.html"
+
+    # Skip if a handcrafted landing page already exists
+    if [[ -f "$index" ]] && grep -q 'impeccable-quarto.*Design Quality System' "$index" 2>/dev/null; then
+        echo -e "  ${GREEN}OK${RESET} Handcrafted landing page detected, skipping auto-generation"
+        return
+    fi
+
     cat > "$index" << 'HEADER'
 <!DOCTYPE html>
 <html lang="en">

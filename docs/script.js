@@ -113,6 +113,11 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
           btn.textContent = "Copy";
         }, 2000);
+      }).catch(() => {
+        btn.textContent = "Failed";
+        setTimeout(() => {
+          btn.textContent = "Copy";
+        }, 2000);
       });
     });
   });
@@ -173,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 8. Counter Animation for Scoring
   // ================================================================
   const counters = document.querySelectorAll(".counter");
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (counters.length) {
     const counterObserver = new IntersectionObserver(
@@ -185,6 +191,13 @@ document.addEventListener("DOMContentLoaded", () => {
           el.dataset.animated = "true";
 
           const target = parseInt(el.dataset.target, 10) || 0;
+
+          if (prefersReducedMotion) {
+            el.textContent = target;
+            counterObserver.unobserve(el);
+            return;
+          }
+
           const duration = 1500; // 1.5 seconds
           const startTime = performance.now();
 
@@ -256,62 +269,68 @@ document.addEventListener("DOMContentLoaded", () => {
       "Objectively Scored",
       "Semantically Structured",
     ];
-    let stringIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
 
-    // Ensure cursor is present
-    if (!typingEl.querySelector(".cursor")) {
-      const cursor = document.createElement("span");
-      cursor.className = "cursor";
-      cursor.textContent = "|";
-      typingEl.appendChild(cursor);
-    }
+    // Skip animation for users who prefer reduced motion
+    if (prefersReducedMotion) {
+      typingEl.textContent = strings[0];
+    } else {
+      let stringIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
 
-    function getTextNode() {
-      // Use the first text node, or create one before the cursor
-      const cursor = typingEl.querySelector(".cursor");
-      if (typingEl.firstChild && typingEl.firstChild.nodeType === Node.TEXT_NODE) {
-        return typingEl.firstChild;
+      // Ensure cursor is present
+      if (!typingEl.querySelector(".cursor")) {
+        const cursor = document.createElement("span");
+        cursor.className = "cursor";
+        cursor.textContent = "|";
+        typingEl.appendChild(cursor);
       }
-      const textNode = document.createTextNode("");
-      typingEl.insertBefore(textNode, cursor);
-      return textNode;
-    }
 
-    const textNode = getTextNode();
-
-    function typeStep() {
-      const current = strings[stringIndex];
-
-      if (!isDeleting) {
-        // Typing forward
-        charIndex++;
-        textNode.textContent = current.slice(0, charIndex);
-
-        if (charIndex >= current.length) {
-          // Finished typing — pause, then start deleting
-          isDeleting = true;
-          setTimeout(typeStep, 2000);
-          return;
+      function getTextNode() {
+        // Use the first text node, or create one before the cursor
+        const cursor = typingEl.querySelector(".cursor");
+        if (typingEl.firstChild && typingEl.firstChild.nodeType === Node.TEXT_NODE) {
+          return typingEl.firstChild;
         }
-        setTimeout(typeStep, 50);
-      } else {
-        // Deleting backward
-        charIndex--;
-        textNode.textContent = current.slice(0, charIndex);
-
-        if (charIndex <= 0) {
-          // Finished deleting — move to next string
-          isDeleting = false;
-          stringIndex = (stringIndex + 1) % strings.length;
-          setTimeout(typeStep, 300);
-          return;
-        }
-        setTimeout(typeStep, 30);
+        const textNode = document.createTextNode("");
+        typingEl.insertBefore(textNode, cursor);
+        return textNode;
       }
-    }
 
-    typeStep();
+      const textNode = getTextNode();
+
+      function typeStep() {
+        const current = strings[stringIndex];
+
+        if (!isDeleting) {
+          // Typing forward
+          charIndex++;
+          textNode.textContent = current.slice(0, charIndex);
+
+          if (charIndex >= current.length) {
+            // Finished typing — pause, then start deleting
+            isDeleting = true;
+            setTimeout(typeStep, 2000);
+            return;
+          }
+          setTimeout(typeStep, 50);
+        } else {
+          // Deleting backward
+          charIndex--;
+          textNode.textContent = current.slice(0, charIndex);
+
+          if (charIndex <= 0) {
+            // Finished deleting — move to next string
+            isDeleting = false;
+            stringIndex = (stringIndex + 1) % strings.length;
+            setTimeout(typeStep, 300);
+            return;
+          }
+          setTimeout(typeStep, 30);
+        }
+      }
+
+      typeStep();
+    }
   }
 });
