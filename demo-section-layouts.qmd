@@ -1,0 +1,151 @@
+<!-- SECTION: LAYOUTS START -->
+
+## Semantic Boxes {.center}
+
+Six purpose-built containers for structured content.
+
+::: {.three-col}
+::: {}
+::: {.keybox}
+**Key Finding**
+The primary takeaway your audience remembers.
+:::
+
+::: {.methodbox}
+**Methodology**
+Describe process, approach, or experimental design.
+:::
+:::
+::: {}
+::: {.warningbox}
+**Caveat**
+Flag limitations, risks, or known issues.
+:::
+
+::: {.tipbox}
+**Best Practice**
+Actionable recommendations for your audience.
+:::
+:::
+::: {}
+::: {.quotebox}
+"Design is not how it looks, but how it works."
+
+[Steve Jobs]{.attribution}
+:::
+
+::: {.infobox}
+**Note**
+Supplementary context or background detail.
+:::
+:::
+:::
+
+::: {.notes}
+Walk through each box type and its semantic purpose. Keybox is for primary takeaways — the thing you want the audience to remember. Methodbox describes process. Warningbox flags caveats. Tipbox offers actionable advice. Quotebox for attributed quotes. Infobox for supplementary context. Emphasize that semantic meaning drives styling — pick the box that matches your content's intent.
+:::
+
+---
+
+## Layout Classes {.center}
+
+Grid systems for structured content arrangement.
+
+::: {.two-col}
+::: {}
+### Two-Column Layout
+
+Split content into equal halves — ideal for side-by-side explanations or image-text pairs.
+
+`.two-col` with two child divs.
+:::
+::: {}
+### When to Use
+
+- Contrasting two concepts
+- Image alongside explanation
+- Code beside its output
+:::
+:::
+
+::: {.fragment}
+::: {.three-col}
+::: {}
+**1/3 Column**
+Compact items
+:::
+::: {}
+**2/3 Column**
+Medium detail
+:::
+::: {}
+**3/3 Column**
+Tertiary info
+:::
+:::
+:::
+
+::: {.notes}
+Demonstrate the two main grid classes. Two-col splits evenly with a 2.5em gap — great for compare/contrast or image-text pairs. Three-col works for triple concepts or feature lists. Mention that sidebar-left and sidebar-right variants exist for asymmetric layouts (1:2 and 2:1 ratios). The fragment at the bottom reveals the three-column example on click, showing progressive disclosure combined with layout.
+:::
+
+---
+
+## Before vs After {.center}
+
+Why a design system matters.
+
+::: {.comparison}
+::: {.compare-left}
+**Before — Generic Theme**
+
+- Default Reveal.js styling
+- No typographic hierarchy
+- Pure black and white text
+- Bullets without structure
+- No semantic containers
+:::
+::: {.compare-right}
+**After — Impeccable Theme**
+
+- OKLCH color palette with tinted neutrals
+- Major Third type scale at 28px base
+- Semantic boxes convey meaning
+- Layout classes for visual structure
+- Speaker notes on every slide
+:::
+:::
+
+::: {.notes}
+This slide is the emotional pivot of the demo. Pause on the left column — audiences have seen hundreds of generic decks. Then walk through the right column feature by feature. The comparison layout handles the visual split automatically. Stress that impeccable is not about decoration — it is about communication quality. Every choice on the right side exists to help the audience understand faster.
+:::
+
+---
+
+## Progressive Disclosure {.center}
+
+Reveal content step by step to guide attention.
+
+::: {.fragment}
+**Step 1** — Start with the core claim or context.
+:::
+
+::: {.fragment .slide-up}
+**Step 2** — Add supporting evidence or detail.
+:::
+
+::: {.fragment .scale-in}
+**Step 3** — Deliver the punchline or takeaway.
+:::
+
+::: {.fragment}
+::: {.tipbox}
+**Tip:** Use fragments sparingly — max 3–4 per slide to maintain pacing.
+:::
+:::
+
+::: {.notes}
+Click through each fragment one at a time to demonstrate the animation styles. Default fragment is a simple fade-in. Slide-up adds vertical motion for a sense of building. Scale-in draws attention to the final point. The tipbox fragment at the end reinforces restraint — too many fragments make a slide feel like a slideshow within a slideshow. Timing tip: pause 2–3 seconds between clicks to let the audience absorb each step.
+:::
+
+<!-- SECTION: LAYOUTS END -->
