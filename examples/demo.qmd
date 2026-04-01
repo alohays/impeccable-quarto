@@ -1,0 +1,141 @@
+---
+title: "The **Impeccable** Design System"
+subtitle: "Typography-First · OKLCH Color · Semantic Structure"
+author: "impeccable-quarto"
+date: "2025-01-15"
+format:
+  revealjs:
+    theme: [default, ../themes/impeccable.scss]
+    slide-number: true
+    transition: fade
+    width: 1920
+    height: 1080
+    center: false
+    embed-resources: true
+---
+
+## Design Philosophy {.center}
+
+::: {.two-col}
+::: {}
+::: {.keybox}
+**Typography First**
+
+Every design decision flows from the type system.
+Font choice, scale, and hierarchy set the visual tone
+before color or layout enter the conversation.
+:::
+:::
+::: {}
+::: {.keybox}
+**Objectively Scored**
+
+Presentations earn a score from 0–100.
+Anti-patterns are detected and penalized automatically —
+no more "looks good enough" reviews.
+:::
+:::
+:::
+
+::: {.notes}
+This slide introduces the two pillars of the impeccable design system.
+Typography-first means we pick fonts, set a modular scale, and define hierarchy before anything else.
+Objective scoring means every deck gets a numerical quality gate — from Failing (0–59) to Impeccable (95–100).
+Transition: "Let's start with how we handle color."
+:::
+
+---
+
+## OKLCH Color Palette
+
+All colors live in the perceptually uniform OKLCH space — no more hex guesswork.
+
+::: {.infobox}
+**Primary** · `oklch(0.45 0.18 265)` — Deep Indigo for main accents and links
+:::
+
+::: {.warningbox}
+**Accent** · `oklch(0.72 0.16 85)` — Marigold for highlights and attention
+:::
+
+::: {.tipbox}
+**Secondary** · `oklch(0.55 0.12 195)` — Warm Teal for supporting elements
+:::
+
+::: {.notes}
+OKLCH is a perceptually uniform color space — equal numeric steps produce equal visual steps.
+This eliminates the common problem where hex colors that "look close" in code appear jarringly different on screen.
+Our palette has three core roles: primary (indigo), secondary (teal), and accent (marigold).
+Semantic colors (success, warning, danger, info) extend these for content boxes.
+Transition: "But what about black and white?"
+:::
+
+---
+
+## Tinted Neutrals
+
+::: {.comparison}
+::: {.compare-left}
+**Avoid: Pure Extremes**
+
+- Pure `#000000` feels harsh and clinical
+- Pure `#FFFFFF` glares under projection
+- Zero warmth, zero personality
+:::
+::: {.compare-right}
+**Use: Tinted Neutrals**
+
+- Near-black: `oklch(0.12 0.015 265)`
+- Near-white: `oklch(0.96 0.012 265)`
+- Subtle indigo hue for cohesion
+:::
+:::
+
+::: {.notes}
+Tinted neutrals carry a subtle hue from the primary palette — in our case, indigo at hue 265.
+This creates visual warmth and ties the neutral scale to the overall color system.
+Pure black and white are penalized in quality scoring (MAJ-05: -3 per instance).
+The neutral scale has 10 steps from near-black to near-white, all with chroma between 0.008 and 0.015.
+Transition: "Now let's look at the type system that drives everything."
+:::
+
+---
+
+## Typography Stack
+
+::: {.two-col}
+::: {}
+### Display — Plus Jakarta Sans {style="font-family: 'Plus Jakarta Sans', sans-serif;"}
+
+Headings and titles use a geometric sans-serif
+with strong character and excellent weight range.
+
+### Body — Source Sans 3
+
+Body text uses an open, readable typeface
+optimized for both screen and projection.
+:::
+::: {}
+### Code — JetBrains Mono
+
+```python
+def score(deck: Path) -> int:
+    """Start at 100, deduct issues."""
+    return max(0, 100 - deductions)
+```
+
+### Type Scale — 1.25 Major Third
+
+28px base → 35px → 44px → 55px → 68px
+:::
+:::
+
+::: {.notes}
+The three-font stack covers every content need: Plus Jakarta Sans for display, Source Sans 3 for body, JetBrains Mono for code.
+The 1.25 Major Third scale ensures clear hierarchy — each step up is 25% larger.
+Our 28px base guarantees readability at projection distance, even from the back row.
+Anything below 20px is flagged as an anti-pattern (MAJ-03: -5 per instance).
+Transition: next section will cover semantic boxes and layout classes.
+:::
+
+<!-- SECTION: DESIGNER END -->
