@@ -13,6 +13,12 @@
     property="og:description"
     content="Curated themes, objective scoring, and adversarial review for beautiful Quarto RevealJS presentations."
   >
+  <meta property="og:url" content="https://alohays.github.io/impeccable-quarto/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="impeccable-quarto — Presentation Design Quality System">
+  <meta name="twitter:description" content="Curated themes, objective scoring, and adversarial review for beautiful Quarto RevealJS presentations.">
+  <link rel="canonical" href="https://alohays.github.io/impeccable-quarto/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -22,11 +28,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a href="#top" class="skip-link">Skip to main content</a>
   <div class="page-shell">
     <nav class="top-nav" aria-label="Primary">
       <a class="brand" href="#top">impeccable-quarto</a>
-      <button class="menu-toggle" type="button" aria-label="Toggle navigation">Menu</button>
-      <div class="nav-links">
+      <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-links">Menu</button>
+      <div class="nav-links" id="nav-links">
         <a href="#anti-patterns">Anti-Patterns</a>
         <a href="#design-system">Design System</a>
         <a href="#themes">Themes</a>
@@ -162,24 +169,24 @@
               <div><code>oklch(0.72 0.16 85)</code></div>
             </div>
             <div class="palette-card fade-in" data-delay="280">
-              <div class="swatch" style="background: oklch(0.68 0.16 150);"></div>
+              <div class="swatch" style="background: oklch(0.60 0.15 145);"></div>
               <strong>Success</strong>
-              <div><code>oklch(0.68 0.16 150)</code></div>
+              <div><code>oklch(0.60 0.15 145)</code></div>
             </div>
             <div class="palette-card fade-in" data-delay="340">
-              <div class="swatch" style="background: oklch(0.8 0.17 78);"></div>
+              <div class="swatch" style="background: oklch(0.72 0.16 85);"></div>
               <strong>Warning</strong>
-              <div><code>oklch(0.8 0.17 78)</code></div>
+              <div><code>oklch(0.72 0.16 85)</code></div>
             </div>
             <div class="palette-card fade-in" data-delay="400">
-              <div class="swatch" style="background: oklch(0.6 0.19 28);"></div>
+              <div class="swatch" style="background: oklch(0.55 0.18 25);"></div>
               <strong>Danger</strong>
-              <div><code>oklch(0.6 0.19 28)</code></div>
+              <div><code>oklch(0.55 0.18 25)</code></div>
             </div>
             <div class="palette-card fade-in" data-delay="460">
-              <div class="swatch" style="background: oklch(0.65 0.11 230);"></div>
+              <div class="swatch" style="background: oklch(0.55 0.12 240);"></div>
               <strong>Info</strong>
-              <div><code>oklch(0.65 0.11 230)</code></div>
+              <div><code>oklch(0.55 0.12 240)</code></div>
             </div>
           </div>
 
@@ -254,43 +261,43 @@
               </div>
               <p>The base system theme: balanced contrast, refined neutrals, and the full semantic component set.</p>
               <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.45 0.18 265), oklch(0.55 0.12 195));"></div>
-              <a class="theme-link" href="examples/demo.html" target="_blank">View presentation</a>
+              <a class="theme-link" href="examples/demo.html" target="_blank" rel="noreferrer" aria-label="View Master theme presentation">View presentation</a>
             </article>
             <article class="theme-card fade-in" data-delay="180">
               <div class="theme-top">
                 <h3>Academic</h3>
-                <span><code>academic.scss</code></span>
+                <span><code>impeccable-academic.scss</code></span>
               </div>
               <p>Calmer chroma, annotation-friendly surfaces, and strong support for dense evidence without visual fatigue.</p>
               <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.42 0.12 260), oklch(0.74 0.08 210));"></div>
-              <a class="theme-link" href="examples/academic-paper.html" target="_blank">View presentation</a>
+              <a class="theme-link" href="examples/academic-paper.html" target="_blank" rel="noreferrer" aria-label="View Academic theme presentation">View presentation</a>
             </article>
             <article class="theme-card fade-in" data-delay="260">
               <div class="theme-top">
                 <h3>Corporate</h3>
-                <span><code>corporate.scss</code></span>
+                <span><code>impeccable-corporate.scss</code></span>
               </div>
               <p>Sharper structure and restrained palette choices for executive reviews, roadmap decks, and board updates.</p>
               <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.38 0.08 240), oklch(0.62 0.09 200));"></div>
-              <a class="theme-link" href="examples/product-launch.html" target="_blank">View presentation</a>
+              <a class="theme-link" href="examples/product-launch.html" target="_blank" rel="noreferrer" aria-label="View Corporate theme presentation">View presentation</a>
             </article>
             <article class="theme-card fade-in" data-delay="340">
               <div class="theme-top">
                 <h3>Creative</h3>
-                <span><code>creative.scss</code></span>
+                <span><code>impeccable-creative.scss</code></span>
               </div>
               <p>Higher accent energy and bolder composition for portfolio talks, launches, and design storytelling.</p>
               <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.54 0.2 330), oklch(0.78 0.16 85));"></div>
-              <a class="theme-link" href="examples/tech-talk.html" target="_blank">View presentation</a>
+              <a class="theme-link" href="examples/tech-talk.html" target="_blank" rel="noreferrer" aria-label="View Creative theme presentation">View presentation</a>
             </article>
             <article class="theme-card fade-in" data-delay="420">
               <div class="theme-top">
                 <h3>Lightning</h3>
-                <span><code>lightning.scss</code></span>
+                <span><code>impeccable-lightning.scss</code></span>
               </div>
               <p>Built for fast-paced demos with loud signposting, punchy transitions, and crisp timing cues.</p>
               <div class="theme-accent" style="background: linear-gradient(90deg, oklch(0.82 0.18 80), oklch(0.6 0.15 230));"></div>
-              <a class="theme-link" href="examples/lightning-talk.html" target="_blank">View presentation</a>
+              <a class="theme-link" href="examples/lightning-talk.html" target="_blank" rel="noreferrer" aria-label="View Lightning theme presentation">View presentation</a>
             </article>
           </div>
         </div>
@@ -372,17 +379,17 @@
             <article class="step-card fade-in" data-delay="140">
               <h3>Step 1: Clone the repo</h3>
               <p>Pull down the source, themes, examples, and review rules in one pass.</p>
-              <div class="code-block"><code>git clone https://github.com/alohays/impeccable-quarto.git</code></div>
+              <pre class="code-block"><code>git clone https://github.com/alohays/impeccable-quarto.git</code></pre>
             </article>
             <article class="step-card fade-in" data-delay="220">
               <h3>Step 2: Create a deck</h3>
               <p>Render the demo deck to see the design system and scoring assumptions in action.</p>
-              <div class="code-block"><code>quarto render examples/demo.qmd</code></div>
+              <pre class="code-block"><code>quarto render examples/demo.qmd</code></pre>
             </article>
             <article class="step-card fade-in" data-delay="300">
               <h3>Step 3: Preview</h3>
               <p>Run a live preview while you adjust structure, notes, layout, and theme choices.</p>
-              <div class="code-block"><code>quarto preview your-deck.qmd</code></div>
+              <pre class="code-block"><code>quarto preview your-deck.qmd</code></pre>
             </article>
           </div>
         </div>
@@ -399,32 +406,32 @@
           </div>
           <div class="faq-list">
             <div class="faq-item fade-in" data-delay="100">
-              <button class="faq-question" type="button">What is impeccable-quarto?</button>
-              <div class="faq-answer">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-1">What is impeccable-quarto?</button>
+              <div class="faq-answer" id="faq-1">
                 <p>A Quarto RevealJS design quality system that combines curated themes, semantic slide structure, and scored review criteria.</p>
               </div>
             </div>
             <div class="faq-item fade-in" data-delay="180">
-              <button class="faq-question" type="button">Do I need to install anything?</button>
-              <div class="faq-answer">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-2">Do I need to install anything?</button>
+              <div class="faq-answer" id="faq-2">
                 <p>Just Quarto and the theme files. The landing page and examples assume a standard Quarto workflow rather than a custom app stack.</p>
               </div>
             </div>
             <div class="faq-item fade-in" data-delay="260">
-              <button class="faq-question" type="button">How does scoring work?</button>
-              <div class="faq-answer">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-3">How does scoring work?</button>
+              <div class="faq-answer" id="faq-3">
                 <p>Start at 100, then apply deductions for concrete issues like compilation failure, tiny text, missing notes, or overloaded slides.</p>
               </div>
             </div>
             <div class="faq-item fade-in" data-delay="340">
-              <button class="faq-question" type="button">Can I customize the themes?</button>
-              <div class="faq-answer">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-4">Can I customize the themes?</button>
+              <div class="faq-answer" id="faq-4">
                 <p>Yes. All themes use SCSS variables, so you can adapt color tokens, typography, and component styling without breaking the system rules.</p>
               </div>
             </div>
             <div class="faq-item fade-in" data-delay="420">
-              <button class="faq-question" type="button">What makes this different from default Reveal.js?</button>
-              <div class="faq-answer">
+              <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-5">What makes this different from default Reveal.js?</button>
+              <div class="faq-answer" id="faq-5">
                 <p>Typography-first design, OKLCH colors, tinted neutrals, semantic boxes, and explicit quality scoring instead of generic defaults.</p>
               </div>
             </div>
@@ -438,7 +445,7 @@
       <div class="footer-links">
         <a href="https://github.com/alohays/impeccable-quarto" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://github.com/alohays/impeccable-quarto#readme" target="_blank" rel="noreferrer">Documentation</a>
-        <a href="https://github.com/alohays/impeccable-quarto/tree/main/examples" target="_blank" rel="noreferrer">Themes</a>
+        <a href="https://github.com/alohays/impeccable-quarto/tree/main/themes" target="_blank" rel="noreferrer">Themes</a>
       </div>
       <p>Copyright © 2026 impeccable-quarto.</p>
     </footer>

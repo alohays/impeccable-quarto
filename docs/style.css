@@ -18,10 +18,10 @@
   --primary: oklch(0.45 0.18 265);
   --secondary: oklch(0.55 0.12 195);
   --accent: oklch(0.72 0.16 85);
-  --success: oklch(0.68 0.16 150);
-  --warning: oklch(0.8 0.17 78);
-  --danger: oklch(0.6 0.19 28);
-  --info: oklch(0.65 0.11 230);
+  --success: oklch(0.60 0.15 145);
+  --warning: oklch(0.72 0.16 85);
+  --danger: oklch(0.55 0.18 25);
+  --info: oklch(0.55 0.12 240);
   --shadow: 0 24px 60px oklch(0.4 0.04 255 / 0.12);
   --radius: 24px;
   --radius-sm: 16px;
@@ -69,6 +69,26 @@ code {
 
 .page-shell {
   overflow: clip;
+}
+
+/* ----------------------------------------------------------------
+   Skip Link
+   ---------------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: oklch(0.98 0.01 255);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  font-weight: 700;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 /* ----------------------------------------------------------------
@@ -199,9 +219,7 @@ section {
   text-transform: uppercase;
 }
 
-.hero h1,
-h2,
-h3 {
+h1, h2, h3 {
   font-family: "Plus Jakarta Sans", sans-serif;
   letter-spacing: -0.04em;
   margin: 0;
@@ -334,7 +352,7 @@ h3 {
 
 h2 {
   font-size: clamp(2rem, 4vw, 3.4rem);
-  line-height: 1;
+  line-height: 1; /* Display heading — intentionally tight for landing page */
   margin-top: 0.9rem;
 }
 
@@ -361,6 +379,7 @@ h2 {
 .step-card,
 .faq-item,
 .type-card,
+.scale-card,
 .scale-step,
 .quality-band {
   border-radius: 22px;
@@ -419,7 +438,7 @@ h2 {
 
 .badge-major {
   background: oklch(0.95 0.05 78);
-  color: oklch(0.48 0.12 65);
+  color: oklch(0.38 0.12 65);
 }
 
 .badge-minor {
@@ -490,7 +509,7 @@ h2 {
   padding: 0.9rem 1rem;
   border-radius: 16px;
   background: oklch(0.95 0.012 248);
-  color: var(--info);
+  color: oklch(0.40 0.12 230);
 }
 
 .scale-list {
@@ -596,6 +615,7 @@ h2 {
 .counter {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-size: clamp(4rem, 12vw, 6rem);
+  font-weight: 800;
   line-height: 0.9;
   color: var(--primary);
 }
@@ -619,7 +639,8 @@ h2 {
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   overflow: hidden;
   border-radius: 18px;
 }
@@ -689,6 +710,17 @@ td:last-child {
 
 .code-block:hover .copy-btn {
   opacity: 1;
+}
+
+.code-block:focus-within .copy-btn,
+.copy-btn:focus {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .copy-btn {
+    opacity: 1;
+  }
 }
 
 .copy-btn:hover {
@@ -812,6 +844,22 @@ footer p {
   border: 0;
 }
 
+/* Focus styles */
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.button:focus-visible {
+  box-shadow: 0 0 0 3px oklch(0.98 0.01 255), 0 0 0 6px var(--primary);
+  outline: none;
+}
+
+.faq-question:focus-visible {
+  color: var(--primary);
+  outline-offset: -3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -843,6 +891,29 @@ footer p {
    Responsive: Tablet
    ---------------------------------------------------------------- */
 @media (max-width: 1080px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    width: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+  }
+
+  .top-nav.menu-open .nav-links {
+    display: flex;
+  }
+
+  .nav-links a {
+    padding: 0.75rem 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
   .hero-grid,
   .design-columns,
   .quality-layout,
@@ -871,20 +942,8 @@ footer p {
     flex-wrap: wrap;
   }
 
-  .menu-toggle {
-    display: inline-flex;
-  }
-
-  .nav-links {
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 0.5rem;
-  }
-
-  .top-nav.menu-open .nav-links {
-    display: flex;
+  .typing-text {
+    white-space: normal;
   }
 
   .card-grid,
