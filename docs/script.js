@@ -63,8 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.scrollTo({ top, behavior: "smooth" });
 
+      // Move focus to target for accessibility
+      if (!target.hasAttribute("tabindex")) {
+        target.setAttribute("tabindex", "-1");
+      }
+      target.focus({ preventScroll: true });
+
       // Close mobile menu if open
-      if (topNav) topNav.classList.remove("menu-open");
+      if (topNav) {
+        topNav.classList.remove("menu-open");
+        if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+      }
     });
   });
 
@@ -82,11 +91,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Close all other items
       faqItems.forEach((other) => {
-        if (other !== item) other.classList.remove("active");
+        if (other !== item) {
+          other.classList.remove("active");
+          const otherQ = other.querySelector(".faq-question");
+          if (otherQ) otherQ.setAttribute("aria-expanded", "false");
+        }
       });
 
       // Toggle current item
       item.classList.toggle("active", !isActive);
+      question.setAttribute("aria-expanded", String(!isActive));
     });
   });
 
@@ -100,9 +114,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!codeEl) return;
 
     const btn = document.createElement("button");
+    btn.type = "button";
     btn.className = "copy-btn";
     btn.textContent = "Copy";
     btn.setAttribute("aria-label", "Copy code to clipboard");
+    btn.setAttribute("role", "status");
     block.style.position = "relative";
     block.appendChild(btn);
 
@@ -237,12 +253,15 @@ document.addEventListener("DOMContentLoaded", () => {
     menuToggle.addEventListener("click", (e) => {
       e.stopPropagation();
       topNav.classList.toggle("menu-open");
+      const isOpen = topNav.classList.contains("menu-open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
     });
 
     // Close menu on nav link click
     navLinks.forEach((link) => {
       link.addEventListener("click", () => {
         topNav.classList.remove("menu-open");
+        menuToggle.setAttribute("aria-expanded", "false");
       });
     });
 
@@ -253,6 +272,16 @@ document.addEventListener("DOMContentLoaded", () => {
         !topNav.contains(e.target)
       ) {
         topNav.classList.remove("menu-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    // Close menu on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && topNav.classList.contains("menu-open")) {
+        topNav.classList.remove("menu-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.focus();
       }
     });
   }
