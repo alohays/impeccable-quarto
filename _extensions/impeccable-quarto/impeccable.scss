@@ -683,7 +683,7 @@ section.section-header {
 
   pre {
     background: $neutral-950;
-    box-shadow: 0 4px 20px oklch(0 0 0 / 0.3);
+    box-shadow: 0 4px 20px oklch(0.12 0.015 265 / 0.3);
   }
 
   table thead th {
@@ -754,7 +754,7 @@ section.section-header {
 
 @media print {
   .reveal {
-    background: white !important;
+    background: #{$neutral-50} !important;
 
     .slides section {
       page-break-inside: avoid;
