@@ -29,10 +29,8 @@ if [ ! -f "$QUALITY_SCRIPT" ]; then
   exit 0
 fi
 
-# Get staged .qmd files
-STAGED_QMD=$(git diff --cached --name-only --diff-filter=ACM | grep '\.qmd$' || true)
-
-if [ -z "$STAGED_QMD" ]; then
+# Check whether any .qmd files are staged
+if ! git diff --cached --name-only --diff-filter=ACM | grep -q '\.qmd$'; then
   # No .qmd files staged — nothing to check
   exit 0
 fi
@@ -41,7 +39,7 @@ echo -e "${BOLD}Pre-commit quality gate${RESET} (threshold: ${THRESHOLD}/100)"
 echo "========================================"
 
 FAILED=0
-for FILE in $STAGED_QMD; do
+while IFS= read -r -d '' FILE; do
   if [ ! -f "$FILE" ]; then
     continue
   fi
@@ -54,7 +52,7 @@ for FILE in $STAGED_QMD; do
 
   if [ -z "$SCORE" ]; then
     # macOS grep fallback (no -P flag)
-    SCORE=$(echo "$OUTPUT" | sed -n 's/.*Score:.*\([0-9][0-9]*\)\/100.*/\1/p' | head -1)
+    SCORE=$(echo "$OUTPUT" | sed -n 's/.*Score:[^0-9]*\([0-9][0-9]*\)\/100.*/\1/p' | head -1)
   fi
 
   if [ -z "$SCORE" ]; then
@@ -69,7 +67,7 @@ for FILE in $STAGED_QMD; do
   else
     echo -e "${GREEN}PASS${RESET} $FILE — score ${SCORE}/100"
   fi
-done
+done < <(git diff --cached --name-only --diff-filter=ACM -z -- '*.qmd')
 
 echo "========================================"
 
