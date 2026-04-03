@@ -12,6 +12,8 @@ from __future__ import annotations
 
 import argparse
 import re
+import shutil
+import subprocess
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -294,11 +296,104 @@ def check_frontmatter(content: str, report: ScoreReport) -> None:
             report.deduct("frontmatter", 3, f"Missing frontmatter field: {field_name}")
 
 
-def score_file(path: Path, verbose: bool = False) -> ScoreReport:
+PURE_BW_RE = re.compile(
+    r"""(?:
+        \#(?:000000|000|fff|ffffff)  |
+        rgb\(\s*0\s*,\s*0\s*,\s*0\s*\)  |
+        rgb\(\s*255\s*,\s*255\s*,\s*255\s*\)
+    )""",
+    re.IGNORECASE | re.VERBOSE,
+)
+
+
+def check_compilation(path: Path, report: ScoreReport, skip_render: bool = False) -> bool:
+    """Run quarto render and check for compilation failures (CRIT-01)."""
+    if skip_render:
+        report.warn("Compilation check skipped (--no-render)")
+        return True
+
+    if not shutil.which("quarto"):
+        report.warn("quarto not found in PATH — compilation check skipped")
+        return True
+
+    try:
+        result = subprocess.run(
+            ["quarto", "render", str(path), "--to", "html"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if result.returncode != 0:
+            error_msg = result.stderr[:200] if result.stderr else "Unknown error"
+            report.deduct("CRIT-01", 100, f"Compilation failed: {error_msg}")
+            return False
+    except subprocess.TimeoutExpired:
+        report.deduct("CRIT-01", 100, "Compilation timed out (>120s)")
+        return False
+    except FileNotFoundError:
+        report.warn("quarto not found — compilation check skipped")
+
+    return True
+
+
+def check_pure_bw(content: str, report: ScoreReport) -> None:
+    """Detect pure black/white color values (MAJ-05)."""
+    # Strip code blocks and frontmatter before scanning
+    stripped = re.sub(r"```.*?```", "", content, flags=re.DOTALL)
+    stripped = re.sub(r"^---\n.*?\n---", "", stripped, flags=re.DOTALL)
+    matches = PURE_BW_RE.findall(stripped)
+    for match in matches[:5]:  # Cap at 5 reports
+        report.deduct("pure-bw", 3, f"Pure black/white color value: {match}")
+
+
+def check_word_count(content: str, report: ScoreReport) -> None:
+    """Check per-slide body text word count (MIN-02: max 40 words)."""
+    lines = content.split("\n")
+    for slide in report.slides:
+        start = slide.line_start - 1  # 0-indexed
+        next_starts = [s.line_start - 1 for s in report.slides if s.line_start > slide.line_start]
+        end = next_starts[0] if next_starts else len(lines)
+        slide_lines = lines[start:end]
+
+        body_words: list[str] = []
+        in_code = False
+        in_notes = False
+        for sl in slide_lines:
+            s = sl.strip()
+            if s.startswith("```"):
+                in_code = not in_code
+                continue
+            if in_code:
+                continue
+            if s == "::: {.notes}" or s == ":::{.notes}":
+                in_notes = True
+                continue
+            if in_notes and s == ":::":
+                in_notes = False
+                continue
+            if in_notes:
+                continue
+            if s.startswith("#") or s.startswith(":::") or s == "---" or not s:
+                continue
+            body_words.extend(s.split())
+
+        word_count = len(body_words)
+        if word_count > 40:
+            report.deduct(
+                "word-count",
+                2,
+                f"Slide {slide.number} '{slide.heading}': {word_count} words (max 40)",
+            )
+
+
+def score_file(path: Path, verbose: bool = False, skip_render: bool = False) -> ScoreReport:
     """Run all quality checks on a .qmd file."""
     content = path.read_text(encoding="utf-8")
     report = ScoreReport()
     report.slides = parse_slides(content)
+
+    # Compilation check first — if it fails, score is 0
+    check_compilation(path, report, skip_render=skip_render)
 
     check_frontmatter(content, report)
     check_slide_count(report)
@@ -307,6 +402,8 @@ def score_file(path: Path, verbose: bool = False) -> ScoreReport:
     check_heading_hierarchy(content, report)
     check_image_alt_text(content, report)
     check_anti_patterns(content, report)
+    check_pure_bw(content, report)
+    check_word_count(content, report)
 
     return report
 
@@ -314,21 +411,24 @@ def score_file(path: Path, verbose: bool = False) -> ScoreReport:
 def print_report(path: Path, report: ScoreReport, verbose: bool = False) -> None:
     """Print a colorized report to stdout."""
     score = report.total
-    if score >= 90:
+    if score >= 95:
         color = GREEN
-        grade = "A"
+        grade = "A+ Impeccable"
+    elif score >= 90:
+        color = GREEN
+        grade = "A Excellent"
+    elif score >= 85:
+        color = GREEN
+        grade = "B Presentable"
     elif score >= 80:
-        color = GREEN
-        grade = "B"
-    elif score >= 70:
         color = YELLOW
-        grade = "C"
+        grade = "B- Draft"
     elif score >= 60:
         color = YELLOW
-        grade = "D"
+        grade = "C Needs Work"
     else:
         color = RED
-        grade = "F"
+        grade = "F Failing"
 
     print()
     print(f"{BOLD}Quality Score: {path.name}{RESET}")
@@ -371,6 +471,11 @@ def main() -> None:
         action="store_true",
         help="Show detailed slide-by-slide breakdown",
     )
+    parser.add_argument(
+        "--no-render",
+        action="store_true",
+        help="Skip compilation check (quarto render) for faster scoring",
+    )
     args = parser.parse_args()
 
     path: Path = args.file
@@ -380,10 +485,10 @@ def main() -> None:
     if path.suffix != ".qmd":
         print(f"{YELLOW}Warning:{RESET} File does not have .qmd extension: {path}", file=sys.stderr)
 
-    report = score_file(path, verbose=args.verbose)
+    report = score_file(path, verbose=args.verbose, skip_render=args.no_render)
     print_report(path, report, verbose=args.verbose)
 
-    sys.exit(0 if report.total >= 70 else 1)
+    sys.exit(0 if report.total >= 80 else 1)
 
 
 if __name__ == "__main__":
