@@ -64,10 +64,12 @@ jobs:
           for qmd in examples/*.qmd; do
             if [ -f "$qmd" ]; then
               echo "::group::Scoring $qmd"
-              output=$(python scripts/quality_score.py "$qmd" --verbose 2>&1) || true
-              echo "$output"
+              raw_output=$(python scripts/quality_score.py "$qmd" --verbose 2>&1) || true
+              echo "$raw_output"
+              # Strip ANSI escape codes so grep patterns can match
+              output=$(echo "$raw_output" | sed 's/\x1b\[[0-9;]*m//g')
               score=$(echo "$output" | grep -oP 'Score:\s+\K\d+' | head -1)
-              grade=$(echo "$output" | grep -oP 'Score:.*\((\K[A-F])' | head -1)
+              grade=$(echo "$output" | grep -oP 'Score:.*\(\K[A-F]' | head -1)
               if [ -n "$score" ]; then
                 if [ "$score" -ge 80 ]; then
                   status="PASS"
