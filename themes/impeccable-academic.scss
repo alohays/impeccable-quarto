@@ -342,6 +342,16 @@ section.section-header {
   }
 }
 
+.reveal .infobox {
+  @include academic-box($color-info, oklch(0.96 0.03 240));
+  strong:first-child {
+    color: oklch(0.38 0.08 240);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
+  }
+}
+
 // ============================================================================
 // CITATION STYLES — Academic-specific
 // ============================================================================

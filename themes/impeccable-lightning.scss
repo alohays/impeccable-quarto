@@ -380,6 +380,16 @@ section.section-header {
   }
 }
 
+.reveal .infobox {
+  @include lightning-box($color-info, oklch(0.96 0.04 250));
+  strong:first-child {
+    color: oklch(0.42 0.12 250);
+    font-weight: 800;
+    display: block;
+    margin-bottom: 0.2em;
+  }
+}
+
 // ============================================================================
 // COLUMN LAYOUTS
 // ============================================================================
