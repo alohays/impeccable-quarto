@@ -70,8 +70,8 @@ jobs:
               echo "::group::Scoring $qmd"
               output=$(python scripts/quality_score.py "$qmd" --verbose 2>&1) || true
               echo "$output"
-              score=$(echo "$output" | grep -oP 'Score:\s+\K\d+' | head -1)
-              grade=$(echo "$output" | grep -oP 'Score:.*\((\K[A-F])' | head -1)
+              score=$(echo "$output" | grep -oE 'Score: [0-9]+' | grep -oE '[0-9]+' | head -1)
+              grade=$(echo "$output" | grep -oE '\([A-Z][^ ]* [A-Za-z]+\)' | head -1 | tr -d '()')
               if [ -z "$score" ]; then
                 echo "::error file=$qmd::Quality scoring did not produce a parsable score"
                 failed=$((failed + 1))

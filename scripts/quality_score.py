@@ -28,6 +28,10 @@ BOLD = "\033[1m"
 DIM = "\033[2m"
 RESET = "\033[0m"
 
+import os
+if not sys.stdout.isatty() or os.environ.get("NO_COLOR"):
+    RED = YELLOW = GREEN = CYAN = BOLD = DIM = RESET = ""
+
 MAX_BULLETS_PER_SLIDE = 5
 MIN_SLIDES = 5
 MAX_SLIDES = 40
