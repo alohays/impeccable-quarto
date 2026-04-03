@@ -1,12 +1,12 @@
 ---
 template: agent-report
 version: 1.0
-description: "Standard output format for all diagnostic and review agents"
+description: "Standard output format for review, audit, and verification agents"
 ---
 
 # Agent Report Template
 
-Use this template for every agent report in the review pipeline. Keep the structure stable so reports can be aggregated, diffed across rounds, and verified mechanically.
+Use this template for every review, audit, and verification report in the pipeline. Keep the structure stable so reports can be aggregated, diffed across rounds, and verified mechanically.
 
 ```markdown
 ## [Agent Name] Report: [Deck Name]
