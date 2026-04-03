@@ -169,6 +169,16 @@ $transitionSpeed: default;
   --box-bg-tip:     oklch(0.95 0.04 145);
   --box-bg-info:    oklch(0.95 0.03 240);
   --box-bg-quote:   var(--neutral-100);
+
+  // --- Motion tokens ---
+  --duration-instant: 100ms;
+  --duration-fast:    200ms;
+  --duration-normal:  350ms;
+  --duration-slow:    500ms;
+
+  --ease-out:    cubic-bezier(0.25, 1, 0.5, 1);      // Elements entering
+  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);       // Elements leaving
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);      // State toggles
 }
 
 // ============================================================================
@@ -228,7 +238,8 @@ $transitionSpeed: default;
 .reveal a {
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.15em;
-  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  transition: color var(--duration-fast) var(--ease-out),
+              text-decoration-color var(--duration-fast) var(--ease-out);
 }
 
 .reveal a:hover {
@@ -278,6 +289,7 @@ $transitionSpeed: default;
   padding: 0.15em 0.4em;
   border-radius: 4px;
   color: var(--color-primary-dark);
+  font-variant-ligatures: none;
 }
 
 .reveal pre {
@@ -579,7 +591,8 @@ section.section-header {
 // Smooth fade-in (override default)
 .reveal .slides section .fragment {
   opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity var(--duration-normal) var(--ease-out),
+              transform var(--duration-normal) var(--ease-out);
 
   &.visible {
     opacity: 1;
@@ -617,6 +630,12 @@ section.section-header {
   }
 }
 
+// Stagger support: set --i on each fragment for sequential delay
+// Usage: ::: {.fragment style="--i: 0"} ... ::: {.fragment style="--i: 1"}
+.reveal .slides section .fragment[style*="--i"] {
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
 // ============================================================================
 // TABLE STYLES
 // ============================================================================
@@ -626,6 +645,7 @@ section.section-header {
   width: 100%;
   font-size: 0.88em;
   margin: 1em 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .reveal table thead th {
@@ -648,8 +668,10 @@ section.section-header {
   background: $neutral-100;
 }
 
-.reveal table tbody tr:hover {
-  background: $primary-lighter;
+@media (hover: hover) {
+  .reveal table tbody tr:hover {
+    background: $primary-lighter;
+  }
 }
 
 // ============================================================================
@@ -702,6 +724,18 @@ section.section-header {
   font-size: 14px;
   color: $neutral-500;
   background: transparent;
+}
+
+// ============================================================================
+// FOCUS & ACCESSIBILITY
+// ============================================================================
+
+.reveal a:focus-visible,
+.reveal button:focus-visible,
+.reveal .controls button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 // ============================================================================
@@ -773,8 +807,15 @@ section.section-header {
     background: var(--neutral-800);
   }
 
-  table tbody tr:hover {
-    background: oklch(0.25 0.02 265);
+  @media (hover: hover) {
+    table tbody tr:hover {
+      background: oklch(0.25 0.02 265);
+    }
+  }
+
+  // Light text on dark backgrounds appears heavier — compensate
+  p, li {
+    font-weight: 350;
   }
 
   .keybox {
@@ -852,12 +893,25 @@ section.section-header {
 
 @media (prefers-reduced-motion: reduce) {
   .reveal .slides section .fragment {
-    transition: none;
-    opacity: 1;
-    transform: none;
+    // Replace spatial motion with a quick crossfade
+    transition: opacity var(--duration-fast) var(--ease-out);
+    transform: none !important;
+
+    &.visible {
+      opacity: 1;
+    }
+  }
+
+  .reveal .slides section .fragment[style*="--i"] {
+    transition-delay: 0ms;
   }
 
   .reveal .slide-transition {
     transition: none;
+  }
+
+  // Keep progress bar functional
+  .reveal .progress span {
+    transition: width var(--duration-fast) var(--ease-out);
   }
 }
