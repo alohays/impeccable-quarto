@@ -125,16 +125,16 @@ Checks: narrative arc, pacing balance, cognitive load (1 key idea/slide), transi
 
 ## Agent Enforcement
 
-| Agent | Access | Context |
-|-------|--------|---------|
-| slide-critic | Read-only | fork |
-| typography-reviewer | Read-only | fork |
-| layout-auditor | Read-only | fork |
-| pedagogy-reviewer | Read-only | fork |
-| slide-fixer | Read + Write | fork |
+| Agent | Access | Isolation |
+|-------|--------|-----------|
+| slide-critic | Read-only | skill-level (worktree) |
+| typography-reviewer | Read-only | skill-level (worktree) |
+| layout-auditor | Read-only | skill-level (worktree) |
+| pedagogy-reviewer | Read-only | skill-level (worktree) |
+| slide-fixer | Read + Write | skill-level (worktree) |
 | theme-designer | Read + Write | standard |
 | content-translator | Read + Write | standard |
-| verifier | Read + Build | fork |
+| verifier | Read + Build | skill-level (worktree) |
 
 ---
 

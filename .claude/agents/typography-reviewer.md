@@ -5,7 +5,8 @@ tools:
   - Read
   - Grep
   - Glob
-context: fork
+# Note: isolation (fork/worktree) is handled at the skill level, not the agent level.
+# This agent should NOT use Edit or Write tools.
 ---
 
 ## Role
