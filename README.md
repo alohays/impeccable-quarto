@@ -117,7 +117,7 @@ quarto preview my-talk.qmd
 
 ## Contributing
 
-Contributor setup, architecture notes, and script documentation live in [`DEVELOP.md`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/DEVELOP.md).
+Contributor setup, architecture notes, and script documentation live in [`DEVELOP.md`](DEVELOP.md).
 
 ### Creating Your First Deck
 

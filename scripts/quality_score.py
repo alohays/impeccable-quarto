@@ -11,6 +11,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import math
 import re
 import shutil
 import subprocess
@@ -33,6 +34,23 @@ MAX_SLIDES = 40
 ANTI_PATTERN_RE = re.compile(
     r"font-size\s*:|style\s*=\s*[\"'].*font-size",
     re.IGNORECASE,
+)
+SEMANTIC_BOX_RE = re.compile(
+    r"\.(?:keybox|methodbox|warningbox|tipbox|quotebox|infobox)\b",
+)
+GENERIC_TITLE_RE = re.compile(
+    r"^(presentation title|subtitle here|your name|author name|\[topic\]|click to edit)$",
+    re.IGNORECASE,
+)
+AI_COLOR_RE = re.compile(
+    r"(#(?:00bcd4|00acc1|00e5ff|7c4dff|651fff|8b5cf6|a855f7|c084fc)|"
+    r"rgb\(\s*0\s*,\s*(?:172|188|229)\s*,\s*(?:193|212|255)\s*\))",
+    re.IGNORECASE,
+)
+GRADIENT_TEXT_RE = re.compile(
+    r"background(?:-image)?\s*:\s*(?:-webkit-)?linear-gradient\([^)]*\).*?"
+    r"(?:background-clip\s*:\s*text|-webkit-background-clip\s*:\s*text)",
+    re.IGNORECASE | re.DOTALL,
 )
 
 
@@ -282,14 +300,138 @@ def check_anti_patterns(content: str, report: ScoreReport) -> None:
         )
 
 
+def extract_frontmatter(content: str) -> str:
+    match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
+    return match.group(1) if match else ""
+
+
+def parse_theme_values(frontmatter: str) -> list[str]:
+    themes: list[str] = []
+    for line in frontmatter.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("theme:"):
+            continue
+        value = stripped.split(":", 1)[1].strip()
+        if value.startswith("[") and value.endswith("]"):
+            candidates = value[1:-1].split(",")
+        else:
+            candidates = [value]
+        for candidate in candidates:
+            cleaned = candidate.strip().strip("'\"")
+            if cleaned:
+                themes.append(cleaned)
+    return themes
+
+
+def iter_slide_blocks(content: str, slides: list[SlideInfo]) -> list[tuple[SlideInfo, str]]:
+    lines = content.split("\n")
+    blocks: list[tuple[SlideInfo, str]] = []
+    for slide in slides:
+        start = slide.line_start - 1
+        next_starts = [s.line_start - 1 for s in slides if s.line_start > slide.line_start]
+        end = next_starts[0] if next_starts else len(lines)
+        blocks.append((slide, "\n".join(lines[start:end])))
+    return blocks
+
+
+def count_body_words(slide_text: str) -> int:
+    words: list[str] = []
+    in_code = False
+    in_notes = False
+    for raw_line in slide_text.splitlines():
+        stripped = raw_line.strip()
+        if stripped.startswith("```"):
+            in_code = not in_code
+            continue
+        if in_code:
+            continue
+        if stripped in {"::: {.notes}", ":::{.notes}"}:
+            in_notes = True
+            continue
+        if in_notes and stripped == ":::":
+            in_notes = False
+            continue
+        if in_notes or stripped.startswith("#") or stripped.startswith(":::") or stripped == "---" or not stripped:
+            continue
+        words.extend(stripped.split())
+    return len(words)
+
+
+def check_llm_bias_patterns(content: str, report: ScoreReport) -> None:
+    """Detect the LLM-bias rules added to the governance documents."""
+    frontmatter = extract_frontmatter(content)
+
+    themes = parse_theme_values(frontmatter)
+    if themes:
+        has_custom_override = any(
+            theme.endswith(".scss") or theme.endswith(".css") or "/" in theme
+            for theme in themes
+        )
+        if not has_custom_override:
+            report.deduct("MAJ-09", 10, f"Default/generic theme without custom override: {', '.join(themes)}")
+
+    title_match = re.search(r"^title\s*:\s*(.+)$", frontmatter, re.MULTILINE)
+    if title_match:
+        title_value = title_match.group(1).strip().strip("'\"")
+        if GENERIC_TITLE_RE.match(title_value):
+            report.deduct("MAJ-10", 5, f"Generic placeholder title: {title_value}")
+
+    slide_blocks = iter_slide_blocks(content, report.slides)
+    bullet_only_slides = 0
+    for slide, slide_text in slide_blocks:
+        if slide.bullet_count == 0:
+            continue
+        stripped = re.sub(r"```.*?```", "", slide_text, flags=re.DOTALL)
+        if (
+            "!["
+            not in stripped
+            and ":::" not in stripped
+            and "<table" not in stripped.lower()
+            and "<img" not in stripped.lower()
+        ):
+            bullet_only_slides += 1
+    if report.slides and bullet_only_slides / len(report.slides) >= 0.7:
+        report.deduct(
+            "MAJ-11",
+            5,
+            f"Monotonous structure: {bullet_only_slides}/{len(report.slides)} slides are heading + bullets only",
+        )
+
+    for _ in AI_COLOR_RE.finditer(content):
+        report.deduct("MIN-08", 2, "AI-style cyan/purple/neon palette value detected")
+
+    for _ in GRADIENT_TEXT_RE.finditer(content):
+        report.deduct("MIN-09", 2, "Gradient text styling detected")
+
+    semantic_depth = 0
+    for line in content.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith(":::"):
+            continue
+        classes = SEMANTIC_BOX_RE.findall(stripped)
+        if classes:
+            if semantic_depth > 0:
+                report.deduct("MIN-10", 2, f"Nested semantic box detected: {classes[0]}")
+            semantic_depth += 1
+        elif stripped == ":::" and semantic_depth > 0:
+            semantic_depth -= 1
+
+    word_counts = [count_body_words(slide_text) for _, slide_text in slide_blocks]
+    if len(word_counts) >= 2:
+        mean = sum(word_counts) / len(word_counts)
+        variance = sum((count - mean) ** 2 for count in word_counts) / len(word_counts)
+        stddev = math.sqrt(variance)
+        if mean > 0 and stddev > 3 * mean:
+            report.deduct("MIN-11", 2, f"Uniform depth violation: stddev {stddev:.1f} exceeds 3x mean {mean:.1f}")
+
+
 def check_frontmatter(content: str, report: ScoreReport) -> None:
     """Check that YAML frontmatter has required fields."""
-    match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
-    if not match:
+    fm = extract_frontmatter(content)
+    if not fm:
         report.deduct("frontmatter", 5, "Missing YAML frontmatter")
         return
 
-    fm = match.group(1)
     required = ["title", "format"]
     for field_name in required:
         if not re.search(rf"^{field_name}\s*:", fm, re.MULTILINE):
@@ -402,6 +544,7 @@ def score_file(path: Path, verbose: bool = False, skip_render: bool = False) -> 
     check_heading_hierarchy(content, report)
     check_image_alt_text(content, report)
     check_anti_patterns(content, report)
+    check_llm_bias_patterns(content, report)
     check_pure_bw(content, report)
     check_word_count(content, report)
 
