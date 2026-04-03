@@ -16,6 +16,11 @@ Before proceeding with any work:
 
 Do NOT proceed without confirming design context is active.
 
+## REFERENCE MATERIAL
+
+Before typography work, read `.context/references/impeccable-original-deep-patterns.md` section 1 (Typography).
+Key rules: vertical rhythm mathematics, dark mode font weight compensation (+0.05-0.1 line-height), OpenType features.
+
 # /typeset-slides — Typography Enhancement
 
 [MANDATORY PREPARATION]

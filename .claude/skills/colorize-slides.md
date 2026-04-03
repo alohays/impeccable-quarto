@@ -16,6 +16,11 @@ Before proceeding with any work:
 
 Do NOT proceed without confirming design context is active.
 
+## REFERENCE MATERIAL
+
+Before color work, read `.context/references/impeccable-original-deep-patterns.md` section 1 (Color).
+Key rules: chroma reduction at lightness extremes, 60-30-10 visual weight rule, gray-on-color danger.
+
 # /colorize-slides — Color Enhancement
 
 [MANDATORY PREPARATION]
