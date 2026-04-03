@@ -40,6 +40,10 @@ Every presentation starts at **100 points**. Issues cause deductions. The final 
 | MAJ-07 | Non-OKLCH color in theme override | -3 per instance |
 | MAJ-08 | More than 3 font families on a slide | -3 per slide |
 | MAJ-09 | Generic/default Reveal.js theme (no customization) | -10 |
+| MAJ-10 | Monotonous pacing (>70% same structure) | -5 |
+| MAJ-11 | Missing narrative arc (no beginning-middle-end) | -8 |
+| MAJ-12 | Depth inconsistency (>4:1 section ratio) | -3 per instance |
+| MAJ-13 | Data without interpretation | -3 per slide |
 
 ### Minor Deductions
 
@@ -52,6 +56,7 @@ Every presentation starts at **100 points**. Issues cause deductions. The final 
 | MIN-05 | Raster image used for diagram (should be SVG) | -1 per image |
 | MIN-06 | Inline CSS in `.qmd` file | -1 per instance |
 | MIN-07 | Missing transition text between sections | -1 per gap |
+| MIN-08 | Orphan section (1-slide section) | -1 per instance |
 
 ## Scoring Rules
 

@@ -131,3 +131,35 @@ These patterns are explicitly recognized as harmful to slide quality. Each patte
 - **Severity:** Critical
 - **Why it's bad:** Renders as "??" in the output. Unprofessional and confusing.
 - **Fix:** Verify all references. Use consistent label naming.
+
+## Deck-Level Anti-Patterns
+
+### AP-DK01: Monotonous Pacing
+- **Detection:** >70% of slides share the same structural template (e.g., heading + bullet list). No variation in slide types (text, image, comparison, data, quote, section break).
+- **Severity:** Major
+- **Why it's bad:** Uniform structure is hypnotic in the worst way. The audience's attention flatlines when every slide looks the same. Variety in structure signals "pay attention, something new is happening."
+- **Fix:** Alternate slide types: text slides, image slides, comparison layouts, data visualizations, quote slides, and section breaks. Aim for no more than 3 consecutive slides with the same structure.
+
+### AP-DK02: Missing Arc
+- **Detection:** The deck lacks a clear beginning (motivation/hook), middle (evidence/argument), and end (conclusion/takeaway). No section breaks or transition slides divide the content.
+- **Severity:** Major
+- **Why it's bad:** Without narrative structure, the presentation is a list of facts, not an argument. The audience can't tell where they are in the story or why they should care.
+- **Fix:** Structure as Context -> Problem -> Approach -> Results -> Takeaway. Add section header slides between major parts. The first content slide should establish *why this matters*; the last should state *what to do about it*.
+
+### AP-DK03: Depth Inconsistency
+- **Detection:** One section gets 8+ slides while a parallel section of equal importance gets 1-2 slides. Slide count ratio between the longest and shortest non-intro sections exceeds 4:1.
+- **Severity:** Major
+- **Why it's bad:** Signals the presenter ran out of time, preparation, or interest. The audience infers that shallow sections are unimportant, even if they're crucial.
+- **Fix:** Rebalance by splitting overly detailed sections into essentials (slides) and details (speaker notes), or expanding thin sections with supporting evidence, examples, or visuals.
+
+### AP-DK04: Orphan Section
+- **Detection:** A section with only 1 content slide (excluding the section header).
+- **Severity:** Minor
+- **Why it's bad:** A section with one slide doesn't justify being a section. It either needs more content or should be merged into an adjacent section.
+- **Fix:** Expand with supporting content, merge into an adjacent section, or remove the section header and integrate the slide into the flow.
+
+### AP-DK05: Data Without Story
+- **Detection:** A chart, table, or data visualization appears without interpretive text (no callout, no "what this means" box, no annotation). The slide title is generic (e.g., "Results", "Data").
+- **Severity:** Major
+- **Why it's bad:** Data doesn't speak for itself. Without interpretation, the audience must decode the chart alone under time pressure — most won't bother. The presenter's job is to tell the audience *what to see* in the data.
+- **Fix:** Add a clear interpretive statement: "Key finding: X increases by Y when Z." Use `.keybox` to highlight the takeaway. Add annotations to the chart if possible. Replace generic titles with insight-driven titles (e.g., "Response time drops 3x with caching" instead of "Performance Results").
