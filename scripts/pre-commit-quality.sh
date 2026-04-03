@@ -20,7 +20,8 @@ RESET="\033[0m"
 
 THRESHOLD=80
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-QUALITY_SCRIPT="$SCRIPT_DIR/quality_score.py"
+PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo "$SCRIPT_DIR/..")"
+QUALITY_SCRIPT="$PROJECT_ROOT/scripts/quality_score.py"
 
 # Check if quality_score.py exists
 if [ ! -f "$QUALITY_SCRIPT" ]; then
