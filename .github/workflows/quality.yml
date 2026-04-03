@@ -1,0 +1,99 @@
+name: Quality Gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "examples/**"
+      - "themes/**"
+      - "templates/**"
+      - "scripts/quality_score.py"
+  pull_request:
+    branches: [main]
+    paths:
+      - "examples/**"
+      - "themes/**"
+      - "templates/**"
+      - "scripts/quality_score.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  render:
+    name: Render & Score
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render all example presentations
+        run: |
+          failed=0
+          for qmd in examples/*.qmd; do
+            if [ -f "$qmd" ]; then
+              echo "::group::Rendering $qmd"
+              if quarto render "$qmd" 2>&1; then
+                echo "OK: $qmd"
+              else
+                echo "::error file=$qmd::Compilation failed for $qmd"
+                failed=$((failed + 1))
+              fi
+              echo "::endgroup::"
+            fi
+          done
+          if [ "$failed" -gt 0 ]; then
+            echo "::error::$failed file(s) failed to render"
+            exit 1
+          fi
+
+      - name: Run quality scoring
+        run: |
+          pip install --quiet pyyaml 2>/dev/null || true
+          failed=0
+          echo "## Quality Scores" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| File | Score | Grade | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|------|-------|-------|--------|" >> "$GITHUB_STEP_SUMMARY"
+          for qmd in examples/*.qmd; do
+            if [ -f "$qmd" ]; then
+              echo "::group::Scoring $qmd"
+              output=$(python scripts/quality_score.py "$qmd" --verbose 2>&1) || true
+              echo "$output"
+              score=$(echo "$output" | grep -oP 'Score:\s+\K\d+' | head -1)
+              grade=$(echo "$output" | grep -oP 'Score:.*\((\K[A-F])' | head -1)
+              if [ -n "$score" ]; then
+                if [ "$score" -ge 80 ]; then
+                  status="PASS"
+                else
+                  status="FAIL"
+                  failed=$((failed + 1))
+                fi
+                echo "| $(basename "$qmd") | $score/100 | $grade | $status |" >> "$GITHUB_STEP_SUMMARY"
+              fi
+              echo "::endgroup::"
+            fi
+          done
+          if [ "$failed" -gt 0 ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "> **$failed file(s) below quality threshold (80/100)**" >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::$failed file(s) scored below 80/100"
+          fi
+
+      - name: Validate theme SCSS
+        run: |
+          for scss in themes/*.scss; do
+            if [ -f "$scss" ]; then
+              echo "Validating $scss..."
+              if [ ! -s "$scss" ]; then
+                echo "::error file=$scss::Empty theme file"
+                exit 1
+              fi
+            fi
+          done

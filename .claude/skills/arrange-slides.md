@@ -8,6 +8,7 @@ argument-hint: "[file]"
 # /arrange-slides — Layout Enhancement
 
 [MANDATORY PREPARATION]
+- Load design context: Read `.claude/skills/slide-design.md` and follow Steps 1-3 to establish design context
 - Read `.claude/rules/design-standards.md` for layout standards
 - Read `.claude/rules/anti-patterns.md` for layout anti-patterns
 - Read the target `.qmd` file and associated SCSS theme

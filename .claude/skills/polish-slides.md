@@ -8,6 +8,7 @@ argument-hint: "[file]"
 # /polish-slides — Final Quality Polish
 
 [MANDATORY PREPARATION]
+- Load design context: Read `.claude/skills/slide-design.md` and follow Steps 1-3 to establish design context
 - Read `.claude/rules/design-standards.md` and `.claude/rules/anti-patterns.md`
 - Read `.impeccable-quarto.md` if it exists for style preferences
 - Read the target `.qmd` file completely

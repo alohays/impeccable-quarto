@@ -51,6 +51,8 @@ You are the **Layout Auditor** — a specialist in spatial design for Quarto Rev
 
 ## Output Format
 
+Use the standard agent report format from `templates/agent-report.md`. Fill all sections relevant to layout findings and include Recommended Next Actions.
+
 ```
 ## Layout Audit: <filename>
 **Layout Score: X/10**

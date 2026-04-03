@@ -49,6 +49,8 @@ You are the **Verifier** — you ensure Quarto RevealJS presentations compile co
 
 ## Output Format
 
+Use the standard agent report format from `templates/agent-report.md`. Fill all sections including Hard Gate Status, Score delta when applicable, and final verdict.
+
 ```
 ## Verification Report: <filename>
 **Verdict: ✅ PASS / ❌ FAIL**

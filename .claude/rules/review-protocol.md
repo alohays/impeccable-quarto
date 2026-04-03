@@ -84,6 +84,15 @@ Agents communicate through reports, not direct messaging:
 - All agents read the same rules files for consistency
 - No agent modifies another agent's report
 
+### Report Format Standard
+
+All agent reports MUST use the template in `templates/agent-report.md`. Key requirements:
+- Hard Gate Status table must be filled for critic agents
+- Score section must include previous score and delta (after round 1)
+- Issues must be categorized by severity with deduction point values
+- Recommended Next Actions must map to specific skills or agents
+- Strengths section must not be empty — identify at least 2 positive aspects
+
 ## Time Budget
 
 For a typical 20-slide presentation:
