@@ -123,6 +123,26 @@ def parse_slides(content: str) -> list[SlideInfo]:
 
         # Horizontal rule as slide separator
         if stripped == "---" and slide_started:
+            # Lookahead: if next non-empty line is a ## heading, the ---
+            # is just a visual separator before a new slide, not a slide itself.
+            next_is_heading = False
+            for j in range(i, len(lines)):  # i is 1-indexed, lines[i] is next line
+                next_line = lines[j].strip()
+                if next_line:
+                    next_is_heading = bool(re.match(r"^##\s+", next_line))
+                    break
+            if next_is_heading:
+                # Save current slide and let the ## heading start the next one
+                if slide_started:
+                    slides.append(SlideInfo(
+                        number=len(slides) + 1,
+                        heading=current_heading,
+                        bullet_count=current_bullets,
+                        has_speaker_notes=current_notes,
+                        line_start=current_start,
+                    ))
+                    slide_started = False
+                continue
             slides.append(SlideInfo(
                 number=len(slides) + 1,
                 heading=current_heading,
