@@ -1,6 +1,11 @@
 ---
 name: layout-auditor
 description: "Spatial design specialist: checks overflow, alignment, whitespace, density"
+tools:
+  - Read
+  - Grep
+  - Glob
+context: fork
 ---
 
 ## Role

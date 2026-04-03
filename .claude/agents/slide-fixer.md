@@ -1,6 +1,14 @@
 ---
 name: slide-fixer
 description: "Applies fixes from critic reports. Prioritizes Critical > Major > Minor."
+tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - Bash
+context: fork
 ---
 
 ## Role

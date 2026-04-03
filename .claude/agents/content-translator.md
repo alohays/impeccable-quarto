@@ -1,6 +1,13 @@
 ---
 name: content-translator
 description: "Converts source material to slide-ready content. Handles papers, documents, outlines, raw text."
+tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+context: fork
 ---
 
 ## Role

@@ -1,6 +1,12 @@
 ---
 name: verifier
 description: "Compilation and rendering check. Runs quarto render, validates output, checks for regressions."
+tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash
+context: fork
 ---
 
 ## Role
