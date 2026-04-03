@@ -65,8 +65,8 @@ Primary working directories:
 
 ## Modifying Quality Scoring
 
-- Rubric references live in [`.claude/rules/quality-gates.md`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/.claude/rules/quality-gates.md) and [`source/rules/quality-gates.md`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/source/rules/quality-gates.md).
-- The scoring implementation is [`scripts/quality_score.py`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/scripts/quality_score.py).
+- Rubric references live in [`.claude/rules/quality-gates.md`](.claude/rules/quality-gates.md).
+- The scoring implementation is [`scripts/quality_score.py`](scripts/quality_score.py).
 - Keep deductions traceable to a documented rule when you add or change checks.
 - Re-run the scorer against at least one example deck after any scoring change.
 
@@ -74,14 +74,14 @@ Primary working directories:
 
 Current Claude Code runtime assets live in:
 
-- [`.claude/skills/`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/.claude/skills)
-- [`.claude/agents/`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/.claude/agents)
-- [`.claude/rules/`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/.claude/rules)
+- [`.claude/skills/`](.claude/skills)
+- [`.claude/agents/`](.claude/agents)
+- [`.claude/rules/`](.claude/rules)
 
 When adding a skill or agent:
 
 1. Create or update the markdown file in `.claude/`.
-2. Update [`CLAUDE.md`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/CLAUDE.md) if the command surface or architecture description changed.
+2. Update [`CLAUDE.md`](CLAUDE.md) if the command surface or architecture description changed.
 3. If the plugin metadata exposes counts or highlighted commands, update `.claude-plugin/` as well.
 
 ## Quarto Extension Development
