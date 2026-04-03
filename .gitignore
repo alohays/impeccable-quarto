@@ -65,3 +65,7 @@ Desktop.ini
 
 /.quarto/
 **/*.quarto_ipynb
+
+# Quality reports — track plans and session logs
+# Agent reports are ephemeral but may be committed for reference
+# quality_reports/*.tmp
