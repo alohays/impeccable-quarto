@@ -1,6 +1,11 @@
 ---
 name: typography-reviewer
 description: "Font specialist: checks pairing, hierarchy, sizes, weights, spacing"
+tools:
+  - Read
+  - Grep
+  - Glob
+context: fork
 ---
 
 ## Role

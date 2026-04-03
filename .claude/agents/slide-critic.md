@@ -1,6 +1,11 @@
 ---
 name: slide-critic
 description: "Adversarial reviewer: finds issues, scores, produces actionable reports. Never edits files."
+tools:
+  - Read
+  - Grep
+  - Glob
+context: fork
 ---
 
 ## Role

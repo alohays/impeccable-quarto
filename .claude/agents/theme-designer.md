@@ -1,6 +1,13 @@
 ---
 name: theme-designer
 description: "Creates and adapts SCSS themes. Expert in OKLCH color, RevealJS theming, CSS custom properties."
+tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+context: fork
 ---
 
 ## Role
