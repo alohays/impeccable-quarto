@@ -75,7 +75,21 @@ git clone https://github.com/alohays/impeccable-quarto.git
 cd impeccable-quarto
 ```
 
-2. **Copy the skill system into your project** (optional — for use in other repos):
+2. **Install as a Quarto extension** (recommended):
+
+```bash
+quarto add alohays/impeccable-quarto
+```
+
+Then use the extension format in your deck frontmatter:
+
+```yaml
+format:
+  impeccable-quarto-revealjs:
+    slide-number: true
+```
+
+3. **Copy the skill system into your project** (optional — for use in other repos):
 
 ```bash
 # Copy the Claude Code integration
@@ -88,7 +102,7 @@ cp impeccable-quarto/themes/impeccable.scss your-project/themes/
 # theme: [default, themes/impeccable.scss]
 ```
 
-3. **Or work directly in this repo:**
+4. **Or work directly in this repo:**
 
 ```bash
 # Prepare the local development environment

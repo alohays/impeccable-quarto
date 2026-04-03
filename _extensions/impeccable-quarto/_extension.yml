@@ -1,0 +1,16 @@
+title: impeccable-quarto
+author: impeccable-quarto contributors
+version: 0.1.0
+quarto-required: ">=1.4.0"
+contributes:
+  formats:
+    revealjs:
+      theme: [default, impeccable.scss]
+      slide-number: true
+      transition: none
+      width: 1920
+      height: 1080
+      center: false
+      include-in-header:
+        text: |
+          <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=IBM+Plex+Mono:ital,wght@0,100..700;1,100..700&family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
