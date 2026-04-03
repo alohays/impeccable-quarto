@@ -110,6 +110,68 @@ $transitionSpeed: default;
 /*-- scss:rules --*/
 
 // ============================================================================
+// DESIGN TOKENS — CSS Custom Properties (OKLCH canonical values)
+// ============================================================================
+// Layer 1: Primitive tokens — raw OKLCH palette values.
+// Layer 2: Semantic tokens — what the UI actually references.
+// Sass variables ($primary, etc.) remain for Quarto/Reveal.js internals
+// that need hex. All authored styles should use var(--token-name).
+
+:root {
+  // --- Palette primitives (Layer 1) ---
+  --color-primary:         oklch(0.45 0.18 265);
+  --color-primary-light:   oklch(0.65 0.12 265);
+  --color-primary-lighter: oklch(0.85 0.06 265);
+  --color-primary-dark:    oklch(0.30 0.15 265);
+
+  --color-secondary:       oklch(0.55 0.12 195);
+  --color-secondary-light: oklch(0.75 0.08 195);
+
+  --color-accent:          oklch(0.72 0.16 85);
+  --color-accent-light:    oklch(0.88 0.10 85);
+
+  --color-success:         oklch(0.60 0.15 145);
+  --color-warning:         oklch(0.72 0.16 85);
+  --color-danger:          oklch(0.55 0.18 25);
+  --color-info:            oklch(0.55 0.12 240);
+
+  // --- Neutral scale (hue 265, tinted) ---
+  --neutral-950: oklch(0.12 0.015 265);
+  --neutral-900: oklch(0.18 0.015 265);
+  --neutral-800: oklch(0.25 0.015 265);
+  --neutral-700: oklch(0.35 0.012 265);
+  --neutral-600: oklch(0.45 0.010 265);
+  --neutral-500: oklch(0.55 0.008 265);
+  --neutral-400: oklch(0.65 0.008 265);
+  --neutral-300: oklch(0.75 0.008 265);
+  --neutral-200: oklch(0.85 0.010 265);
+  --neutral-100: oklch(0.92 0.012 265);
+  --neutral-50:  oklch(0.96 0.012 265);
+
+  // --- Semantic tokens (Layer 2) ---
+  --bg-surface:        var(--neutral-50);
+  --bg-surface-raised: var(--neutral-100);
+  --bg-surface-sunken: var(--neutral-200);
+  --text-heading:      var(--neutral-950);
+  --text-primary:      var(--neutral-200);
+  --text-body:         var(--neutral-800);
+  --text-secondary:    var(--neutral-700);
+  --text-muted:        var(--neutral-500);
+  --border-default:    var(--neutral-200);
+  --border-subtle:     var(--neutral-100);
+  --color-link:        var(--color-primary);
+  --color-link-hover:  var(--color-primary-light);
+
+  // --- Semantic box backgrounds (light mode) ---
+  --box-bg-key:     oklch(0.95 0.04 85);
+  --box-bg-method:  var(--color-primary-lighter);
+  --box-bg-warning: oklch(0.95 0.04 25);
+  --box-bg-tip:     oklch(0.95 0.04 145);
+  --box-bg-info:    oklch(0.95 0.03 240);
+  --box-bg-quote:   var(--neutral-100);
+}
+
+// ============================================================================
 // BASE STYLES
 // ============================================================================
 
@@ -151,16 +213,16 @@ $transitionSpeed: default;
 .reveal p,
 .reveal li {
   line-height: 1.55;
-  color: $neutral-800;
+  color: var(--text-body);
 }
 
 .reveal strong {
-  color: $neutral-950;
+  color: var(--text-heading);
   font-weight: 650;
 }
 
 .reveal em {
-  color: $neutral-700;
+  color: var(--text-secondary);
 }
 
 .reveal a {
@@ -176,12 +238,12 @@ $transitionSpeed: default;
 // Blockquotes
 .reveal blockquote {
   border-left: 4px solid $primary;
-  background: $neutral-100;
+  background: var(--bg-surface-raised);
   padding: 1em 1.5em;
   margin: 1.2em 0;
   border-radius: 0 8px 8px 0;
   font-style: italic;
-  color: $neutral-700;
+  color: var(--text-secondary);
   width: auto;
   box-shadow: none;
 }
@@ -212,10 +274,10 @@ $transitionSpeed: default;
 .reveal code {
   font-family: $font-family-code;
   font-size: $codeFontSize;
-  background: $neutral-100;
+  background: var(--bg-surface-raised);
   padding: 0.15em 0.4em;
   border-radius: 4px;
-  color: $primary-dark;
+  color: var(--color-primary-dark);
 }
 
 .reveal pre {
@@ -323,7 +385,7 @@ section.section-header {
 
 // Key finding / takeaway — gold border
 .reveal .keybox {
-  @include semantic-box($accent, oklch(0.95 0.04 85));
+  @include semantic-box($accent, var(--box-bg-key));
 
   strong:first-child,
   .box-title {
@@ -336,7 +398,7 @@ section.section-header {
 
 // Methodology / process — primary blue border
 .reveal .methodbox {
-  @include semantic-box($primary, $primary-lighter);
+  @include semantic-box($primary, var(--box-bg-method));
 
   strong:first-child,
   .box-title {
@@ -349,7 +411,7 @@ section.section-header {
 
 // Warning — red border
 .reveal .warningbox {
-  @include semantic-box($color-danger, oklch(0.95 0.04 25));
+  @include semantic-box($color-danger, var(--box-bg-warning));
 
   strong:first-child,
   .box-title {
@@ -362,7 +424,7 @@ section.section-header {
 
 // Tip / best practice — green border
 .reveal .tipbox {
-  @include semantic-box($color-success, oklch(0.95 0.04 145));
+  @include semantic-box($color-success, var(--box-bg-tip));
 
   strong:first-child,
   .box-title {
@@ -376,13 +438,13 @@ section.section-header {
 // Quote box — elegant italic
 .reveal .quotebox {
   border-left: 4px solid $neutral-400;
-  background: $neutral-100;
+  background: var(--box-bg-quote);
   padding: 1.2em 1.8em;
   margin: 1em 0;
   border-radius: 0 10px 10px 0;
   font-style: italic;
   font-size: 1.05em;
-  color: $neutral-700;
+  color: var(--text-secondary);
   line-height: 1.65;
   position: relative;
 
@@ -398,7 +460,7 @@ section.section-header {
 
 // Info box — blue/info
 .reveal .infobox {
-  @include semantic-box($color-info, oklch(0.95 0.03 240));
+  @include semantic-box($color-info, var(--box-bg-info));
 
   strong:first-child,
   .box-title {
@@ -578,8 +640,8 @@ section.section-header {
 
 .reveal table tbody td {
   padding: 0.6em 1em;
-  border-bottom: 1px solid $neutral-200;
-  color: $neutral-800;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-body);
 }
 
 .reveal table tbody tr:nth-child(even) {
@@ -643,60 +705,72 @@ section.section-header {
 }
 
 // ============================================================================
-// DARK MODE
+// DARK MODE — Token Remapping
 // ============================================================================
+// Only redefine the semantic layer. Primitive tokens stay the same.
 
 .reveal.dark-mode,
 [data-theme="dark"] .reveal {
-  background-color: $neutral-900;
+  // Surface & text
+  --bg-surface:        var(--neutral-900);
+  --bg-surface-raised: var(--neutral-800);
+  --bg-surface-sunken: var(--neutral-950);
+  --text-heading:      var(--neutral-50);
+  --text-primary:      var(--neutral-200);
+  --text-body:         var(--neutral-300);
+  --text-secondary:    var(--neutral-400);
+  --text-muted:        var(--neutral-500);
+  --border-default:    var(--neutral-700);
+  --border-subtle:     var(--neutral-800);
+  --color-link:        var(--color-primary-light);
+  --color-link-hover:  var(--color-primary);
+
+  // Semantic box backgrounds (dark mode)
+  --box-bg-key:     oklch(0.22 0.03 85);
+  --box-bg-method:  oklch(0.22 0.03 265);
+  --box-bg-warning: oklch(0.22 0.03 25);
+  --box-bg-tip:     oklch(0.22 0.03 145);
+  --box-bg-info:    oklch(0.22 0.03 240);
+  --box-bg-quote:   var(--neutral-800);
+
+  // Remaining element-specific overrides not capturable by tokens
+  background-color: var(--bg-surface);
 
   .slides {
-    color: $neutral-200;
+    color: var(--text-primary);
   }
 
   h1, h2, h3, h4 {
-    color: $neutral-50;
-  }
-
-  p, li {
-    color: $neutral-300;
+    color: var(--text-heading);
   }
 
   strong {
-    color: $neutral-100;
+    color: var(--neutral-100);
   }
 
   a {
-    color: $primary-light;
+    color: var(--color-link);
   }
 
   blockquote {
-    background: $neutral-800;
-    color: $neutral-300;
-    border-left-color: $primary-light;
+    border-left-color: var(--color-primary-light);
   }
 
   code {
-    background: $neutral-800;
-    color: $primary-light;
+    color: var(--color-primary-light);
   }
 
   pre {
-    background: $neutral-950;
+    background: var(--neutral-950);
     box-shadow: 0 4px 20px oklch(0 0 0 / 0.3);
   }
 
   table thead th {
-    background: $primary-dark;
-  }
-
-  table tbody td {
-    border-bottom-color: $neutral-700;
-    color: $neutral-300;
+    background: var(--color-primary-dark);
   }
 
   table tbody tr:nth-child(even) {
-    background: $neutral-800;
+    background: var(--neutral-800);
   }
 
   table tbody tr:hover {
@@ -704,29 +778,23 @@ section.section-header {
   }
 
   .keybox {
-    background: oklch(0.22 0.03 85);
     strong:first-child { color: $accent-light; }
   }
 
   .methodbox {
-    background: oklch(0.22 0.03 265);
     strong:first-child { color: $primary-light; }
   }
 
   .warningbox {
-    background: oklch(0.22 0.03 25);
     strong:first-child { color: oklch(0.70 0.12 25); }
   }
 
   .tipbox {
-    background: oklch(0.22 0.03 145);
     strong:first-child { color: oklch(0.70 0.12 145); }
   }
 
   .quotebox {
-    background: $neutral-800;
     border-left-color: $neutral-600;
-    color: $neutral-400;
   }
 
   .comparison .compare-left {
@@ -738,14 +806,14 @@ section.section-header {
   }
 
   .slide-number {
-    color: $neutral-500;
+    color: var(--text-muted);
   }
 
   .hi       { color: $primary-light; }
   .hi-gold  { color: $accent-light; }
   .hi-green { color: oklch(0.70 0.12 145); }
   .hi-red   { color: oklch(0.68 0.14 25); }
-  .subtle   { color: $neutral-500; }
+  .subtle   { color: var(--text-muted); }
 }
 
 // ============================================================================
