@@ -42,6 +42,9 @@ Every presentation starts at **100 points**. Issues cause deductions. The final 
 | MAJ-09 | Generic/default Reveal.js theme (no customization) | -10 |
 | MAJ-10 | Generic/placeholder title text | -5 |
 | MAJ-11 | Monotonous structure (>=70% identical layout) | -5 |
+| MAJ-12 | Missing narrative arc (no beginning-middle-end) | -8 |
+| MAJ-13 | Depth inconsistency (>4:1 section ratio) | -3 per instance |
+| MAJ-14 | Data without interpretation | -3 per slide |
 
 ### Minor Deductions
 
@@ -58,6 +61,7 @@ Every presentation starts at **100 points**. Issues cause deductions. The final 
 | MIN-09 | Gradient text in styles | -2 per instance |
 | MIN-10 | Nested semantic boxes | -2 per instance |
 | MIN-11 | Uniform depth violation (word count StdDev >3x mean) | -2 |
+| MIN-12 | Orphan section (1-slide section) | -1 per instance |
 
 ## Scoring Rules
 
