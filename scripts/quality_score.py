@@ -115,8 +115,8 @@ def parse_slides(content: str) -> list[SlideInfo]:
             current_heading = "(untitled)"
             current_bullets = 0
             current_notes = False
-            current_start = i
-            slide_started = True
+            current_start = 0
+            slide_started = False
             continue
 
         # New slide on ## heading
@@ -138,7 +138,13 @@ def parse_slides(content: str) -> list[SlideInfo]:
             continue
 
         if not slide_started:
-            continue
+            if not stripped or stripped.startswith(":::"):
+                continue
+            current_heading = "(untitled)"
+            current_bullets = 0
+            current_notes = False
+            current_start = i
+            slide_started = True
 
         # Count bullets
         if re.match(r"^\s*[-*+]\s", stripped):
@@ -162,33 +168,28 @@ def parse_slides(content: str) -> list[SlideInfo]:
 
 
 def check_bullet_density(report: ScoreReport) -> None:
-    """Penalize slides with too many bullet points."""
+    """Penalize slides with too many bullet points (MAJ-02)."""
     for slide in report.slides:
-        excess = slide.bullet_count - MAX_BULLETS_PER_SLIDE
-        if excess > 0:
-            penalty = min(excess * 2, 6)
+        if slide.bullet_count > MAX_BULLETS_PER_SLIDE:
             report.deduct(
-                "bullet-density",
-                penalty,
+                "MAJ-02",
+                5,
                 f"Slide {slide.number} '{slide.heading}': "
                 f"{slide.bullet_count} bullets (max {MAX_BULLETS_PER_SLIDE})",
             )
 
 
 def check_speaker_notes(report: ScoreReport) -> None:
-    """Penalize slides missing speaker notes."""
-    missing = [s for s in report.slides if not s.has_speaker_notes]
-    if not missing:
-        return
-    ratio = len(missing) / max(len(report.slides), 1)
-    if ratio > 0.5:
-        report.deduct("speaker-notes", 15, f"{len(missing)}/{len(report.slides)} slides lack speaker notes")
-    elif ratio > 0.2:
-        report.deduct("speaker-notes", 8, f"{len(missing)}/{len(report.slides)} slides lack speaker notes")
-    elif missing:
-        report.deduct("speaker-notes", 3, f"{len(missing)} slide(s) lack speaker notes")
-    for s in missing:
-        report.warn(f"  No speaker notes: slide {s.number} '{s.heading}' (line {s.line_start})")
+    """Penalize slides missing speaker notes (MAJ-01)."""
+    for slide in report.slides:
+        if slide.has_speaker_notes:
+            continue
+        report.deduct(
+            "MAJ-01",
+            5,
+            f"Slide {slide.number} '{slide.heading}' lacks speaker notes",
+        )
+        report.warn(f"  No speaker notes: slide {slide.number} '{slide.heading}' (line {slide.line_start})")
 
 
 def check_slide_count(report: ScoreReport) -> None:
@@ -201,12 +202,12 @@ def check_slide_count(report: ScoreReport) -> None:
 
 
 def check_heading_hierarchy(content: str, report: ScoreReport) -> None:
-    """Check that headings follow a consistent hierarchy."""
+    """Check that headings follow a consistent hierarchy (MAJ-06)."""
     lines = content.split("\n")
     in_frontmatter = False
     fm_count = 0
     in_code_block = False
-    heading_levels: list[int] = []
+    previous_level: int | None = None
 
     for line in lines:
         stripped = line.strip()
@@ -227,73 +228,65 @@ def check_heading_hierarchy(content: str, report: ScoreReport) -> None:
 
         match = re.match(r"^(#{1,6})\s+", stripped)
         if match:
-            heading_levels.append(len(match.group(1)))
+            level = len(match.group(1))
+            if previous_level is not None and level > previous_level + 1:
+                report.deduct(
+                    "MAJ-06",
+                    3,
+                    f"Heading level skip: h{previous_level} -> h{level}",
+                )
+            previous_level = level
 
-    for i in range(1, len(heading_levels)):
-        if heading_levels[i] > heading_levels[i - 1] + 1:
-            report.deduct(
-                "heading-hierarchy",
-                2,
-                f"Heading level skip: h{heading_levels[i - 1]} -> h{heading_levels[i]}",
-            )
-            break
+
+def check_frontmatter(content: str, report: ScoreReport) -> None:
+    """Check YAML frontmatter requirements (CRIT-04, MIN-03)."""
+    match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
+    if not match:
+        report.deduct("CRIT-04", 10, "Missing YAML frontmatter")
+        return
+
+    fm = match.group(1)
+    if not re.search(r"^date\s*:", fm, re.MULTILINE):
+        report.deduct("MIN-03", 1, "Missing frontmatter field: date")
 
 
 def check_image_alt_text(content: str, report: ScoreReport) -> None:
-    """Check that images have alt text."""
+    """Check that images have alt text (MAJ-04)."""
     images = re.findall(r"!\[(.*?)\]\(", content)
-    missing_alt = sum(1 for alt in images if not alt.strip())
-    if missing_alt:
+    for index, alt in enumerate(images, 1):
+        if alt.strip():
+            continue
         report.deduct(
-            "image-alt-text",
-            min(missing_alt * 3, 10),
-            f"{missing_alt} image(s) missing alt text",
+            "MAJ-04",
+            5,
+            f"Image {index} missing alt text",
         )
 
 
 def check_anti_patterns(content: str, report: ScoreReport) -> None:
     """Detect inline style overrides and other anti-patterns."""
     font_overrides = ANTI_PATTERN_RE.findall(content)
-    if font_overrides:
+    for _ in font_overrides:
         report.deduct(
-            "anti-pattern:font-override",
-            min(len(font_overrides) * 3, 10),
-            f"{len(font_overrides)} inline font-size override(s) found",
+            "MIN-06",
+            1,
+            "Inline font-size override found",
         )
 
     smaller_count = len(re.findall(r"\{\.smaller\}", content))
     smallest_count = len(re.findall(r"\{\.smallest\}", content))
     total_small = smaller_count + smallest_count
     if total_small > 5:
-        report.deduct(
-            "anti-pattern:size-classes",
-            min((total_small - 5) * 2, 8),
+        report.warn(
             f"Excessive size reduction classes: {total_small} uses of .smaller/.smallest",
         )
 
-    # Raw HTML tags outside code blocks
+    # Raw HTML tags outside code blocks are noisy but not part of the documented rubric.
+    # Keep warning-only so the score remains traceable to quality-gates.md.
     code_stripped = re.sub(r"```.*?```", "", content, flags=re.DOTALL)
     html_tags = re.findall(r"<(?:div|span|p|br|hr|table|tr|td|th)\b", code_stripped)
     if len(html_tags) > 3:
-        report.deduct(
-            "anti-pattern:raw-html",
-            min(len(html_tags) - 3, 8),
-            f"{len(html_tags)} raw HTML tags found (prefer Quarto div syntax)",
-        )
-
-
-def check_frontmatter(content: str, report: ScoreReport) -> None:
-    """Check that YAML frontmatter has required fields."""
-    match = re.match(r"^---\n(.*?)\n---", content, re.DOTALL)
-    if not match:
-        report.deduct("frontmatter", 5, "Missing YAML frontmatter")
-        return
-
-    fm = match.group(1)
-    required = ["title", "format"]
-    for field_name in required:
-        if not re.search(rf"^{field_name}\s*:", fm, re.MULTILINE):
-            report.deduct("frontmatter", 3, f"Missing frontmatter field: {field_name}")
+        report.warn(f"{len(html_tags)} raw HTML tags found (prefer Quarto div syntax)")
 
 
 PURE_BW_RE = re.compile(
@@ -342,8 +335,8 @@ def check_pure_bw(content: str, report: ScoreReport) -> None:
     stripped = re.sub(r"```.*?```", "", content, flags=re.DOTALL)
     stripped = re.sub(r"^---\n.*?\n---", "", stripped, flags=re.DOTALL)
     matches = PURE_BW_RE.findall(stripped)
-    for match in matches[:5]:  # Cap at 5 reports
-        report.deduct("pure-bw", 3, f"Pure black/white color value: {match}")
+    for match in matches[:5]:
+        report.deduct("MAJ-05", 3, f"Pure black/white color value: {match}")
 
 
 def check_word_count(content: str, report: ScoreReport) -> None:
@@ -380,7 +373,7 @@ def check_word_count(content: str, report: ScoreReport) -> None:
         word_count = len(body_words)
         if word_count > 40:
             report.deduct(
-                "word-count",
+                "MIN-02",
                 2,
                 f"Slide {slide.number} '{slide.heading}': {word_count} words (max 40)",
             )
@@ -461,11 +454,24 @@ def print_report(path: Path, report: ScoreReport, verbose: bool = False) -> None
         print()
 
 
+def score_and_print(path: Path, verbose: bool = False, skip_render: bool = False) -> int:
+    """Score one file, print the report, and return the process status code."""
+    if not path.exists():
+        print(f"{RED}Error:{RESET} File not found: {path}", file=sys.stderr)
+        return 1
+    if path.suffix != ".qmd":
+        print(f"{YELLOW}Warning:{RESET} File does not have .qmd extension: {path}", file=sys.stderr)
+
+    report = score_file(path, verbose=verbose, skip_render=skip_render)
+    print_report(path, report, verbose=verbose)
+    return 0 if report.total >= 80 else 1
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Score a Quarto presentation for design quality.",
     )
-    parser.add_argument("file", type=Path, help="Path to a .qmd file")
+    parser.add_argument("file", type=Path, nargs="+", help="Path(s) to .qmd file(s)")
     parser.add_argument(
         "-v", "--verbose",
         action="store_true",
@@ -478,17 +484,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    path: Path = args.file
-    if not path.exists():
-        print(f"{RED}Error:{RESET} File not found: {path}", file=sys.stderr)
-        sys.exit(1)
-    if path.suffix != ".qmd":
-        print(f"{YELLOW}Warning:{RESET} File does not have .qmd extension: {path}", file=sys.stderr)
+    exit_code = 0
+    for path in args.file:
+        exit_code = max(exit_code, score_and_print(path, verbose=args.verbose, skip_render=args.no_render))
 
-    report = score_file(path, verbose=args.verbose, skip_render=args.no_render)
-    print_report(path, report, verbose=args.verbose)
-
-    sys.exit(0 if report.total >= 80 else 1)
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":
