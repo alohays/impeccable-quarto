@@ -86,7 +86,7 @@ Agents communicate through reports, not direct messaging:
 
 ### Report Format Standard
 
-All agent reports MUST use the template in `templates/agent-report.md`. Key requirements:
+All review and verification reports MUST use the template in `templates/agent-report.md`. Key requirements:
 - Hard Gate Status table must be filled for critic agents
 - Score section must include previous score and delta (after round 1)
 - Issues must be categorized by severity with deduction point values

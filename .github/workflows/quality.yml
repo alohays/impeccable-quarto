@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
     paths:
+      - ".claude/**"
+      - ".github/workflows/**"
       - "examples/**"
       - "themes/**"
       - "templates/**"
@@ -11,6 +13,8 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - ".claude/**"
+      - ".github/workflows/**"
       - "examples/**"
       - "themes/**"
       - "templates/**"
@@ -70,13 +74,15 @@ jobs:
               output=$(echo "$raw_output" | sed 's/\x1b\[[0-9;]*m//g')
               score=$(echo "$output" | grep -oP 'Score:\s+\K\d+' | head -1)
               grade=$(echo "$output" | grep -oP 'Score:.*\(\K[A-F]' | head -1)
-              if [ -n "$score" ]; then
-                if [ "$score" -ge 80 ]; then
-                  status="PASS"
-                else
-                  status="FAIL"
-                  failed=$((failed + 1))
-                fi
+              if [ -z "$score" ]; then
+                echo "::error file=$qmd::Quality scoring did not produce a parsable score"
+                failed=$((failed + 1))
+              elif [ "$score" -ge 80 ]; then
+                status="PASS"
+                echo "| $(basename "$qmd") | $score/100 | $grade | $status |" >> "$GITHUB_STEP_SUMMARY"
+              else
+                status="FAIL"
+                failed=$((failed + 1))
                 echo "| $(basename "$qmd") | $score/100 | $grade | $status |" >> "$GITHUB_STEP_SUMMARY"
               fi
               echo "::endgroup::"
