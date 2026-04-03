@@ -16,6 +16,11 @@ Before proceeding with any work:
 
 Do NOT proceed without confirming design context is active.
 
+## REFERENCE MATERIAL
+
+Before animation work, read `.context/references/impeccable-original-deep-patterns.md` section 1 (Motion).
+Key rules: 100/300/500ms timing rule, exit = 75% of enter duration, 80ms perception threshold, only animate transform+opacity.
+
 # /animate-slides — Animation Enhancement
 
 [MANDATORY PREPARATION]

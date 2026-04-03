@@ -16,6 +16,11 @@ Before proceeding with any work:
 
 Do NOT proceed without confirming design context is active.
 
+## REFERENCE MATERIAL
+
+Before critique, read `.context/references/impeccable-original-deep-patterns.md` (full document).
+This contains domain-specific knowledge for typography, color, motion, and the intentionality principle.
+
 # /critique-slides — Design & UX Critique
 
 [MANDATORY PREPARATION]
