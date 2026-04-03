@@ -503,8 +503,9 @@ def check_compilation(path: Path, report: ScoreReport, skip_render: bool = False
 
 def check_pure_bw(content: str, report: ScoreReport) -> None:
     """Detect pure black/white color values (MAJ-05)."""
-    # Strip code blocks and frontmatter before scanning
+    # Strip code blocks, inline code, and frontmatter before scanning
     stripped = re.sub(r"```.*?```", "", content, flags=re.DOTALL)
+    stripped = re.sub(r"`[^`]+`", "", stripped)
     stripped = re.sub(r"^---\n.*?\n---", "", stripped, flags=re.DOTALL)
     matches = PURE_BW_RE.findall(stripped)
     for match in matches[:5]:  # Cap at 5 reports
