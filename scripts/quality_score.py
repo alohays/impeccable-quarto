@@ -383,7 +383,7 @@ def main() -> None:
     report = score_file(path, verbose=args.verbose)
     print_report(path, report, verbose=args.verbose)
 
-    sys.exit(0 if report.total >= 70 else 1)
+    sys.exit(0 if report.total >= 80 else 1)
 
 
 if __name__ == "__main__":
