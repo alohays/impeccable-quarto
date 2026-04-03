@@ -1,6 +1,11 @@
 #!/bin/bash
 # Block accidental edits to protected files
 # Exit 2 = block the tool call with error message
+
+if ! command -v jq >/dev/null 2>&1; then
+  exit 0
+fi
+
 INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name')
 FILE=""
@@ -16,7 +21,7 @@ fi
 # Protected files for impeccable-quarto
 PROTECTED_PATTERNS=(
   "themes/impeccable.scss"
-  "settings.json"
+  ".claude/settings.json"
 )
 
 for PATTERN in "${PROTECTED_PATTERNS[@]}"; do

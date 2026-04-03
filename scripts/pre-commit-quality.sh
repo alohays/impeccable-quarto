@@ -47,17 +47,14 @@ while IFS= read -r -d '' FILE; do
   # Run quality_score.py and capture exit code
   OUTPUT=$(python3 "$QUALITY_SCRIPT" "$FILE" 2>&1) || true
 
-  # Extract score from output (matches "Score: XX/100")
-  SCORE=$(echo "$OUTPUT" | grep -oP 'Score:.*?(\d+)/100' | grep -oP '\d+(?=/100)' || echo "")
+  # Strip ANSI color codes before extracting "Score: XX/100"
+  CLEAN_OUTPUT=$(printf '%s\n' "$OUTPUT" | sed -E $'s/\x1B\\[[0-9;]*[[:alpha:]]//g')
+  SCORE=$(printf '%s\n' "$CLEAN_OUTPUT" | sed -n 's/.*Score:[^0-9]*\([0-9][0-9]*\)\/100.*/\1/p' | head -1)
 
   if [ -z "$SCORE" ]; then
-    # macOS grep fallback (no -P flag)
-    SCORE=$(echo "$OUTPUT" | sed -n 's/.*Score:[^0-9]*\([0-9][0-9]*\)\/100.*/\1/p' | head -1)
-  fi
-
-  if [ -z "$SCORE" ]; then
-    echo -e "${YELLOW}Warning:${RESET} Could not parse score for $FILE"
+    echo -e "${RED}FAIL${RESET} $FILE — could not parse score output"
     echo "$OUTPUT"
+    FAILED=1
     continue
   fi
 
