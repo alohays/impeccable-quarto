@@ -1,0 +1,661 @@
+---
+title: "Matrix-Game: Interactive World Foundation Model"
+subtitle: "Skywork AI's 17B controllable world model for interactive game generation"
+author:
+  - name: "Skywork AI"
+    affiliation: "Open-source world model research"
+date: "2026-04-03"
+format:
+  revealjs:
+    theme: [default, ../themes/impeccable-academic.scss]
+    slide-number: c/t
+    hash: true
+    controls: true
+    progress: true
+    center: false
+    width: 1920
+    height: 1080
+    transition: fade
+    transition-speed: fast
+    margin: 0.05
+    fig-align: center
+    include-in-header:
+      text: |
+        <style>
+        .biome-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 1rem;
+          margin-top: 1rem;
+          align-items: start;
+        }
+        .biome-grid figure {
+          margin: 0;
+          padding: 0.9rem;
+          border-radius: 18px;
+          background: oklch(0.97 0.012 265 / 0.88);
+          border: 1px solid oklch(0.82 0.02 265 / 0.8);
+          box-shadow: 0 16px 36px oklch(0.2 0.02 265 / 0.08);
+        }
+        .biome-grid img {
+          display: block;
+          width: 100%;
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+          border-radius: 12px;
+        }
+        .biome-grid figcaption {
+          margin-top: 0.55rem;
+          text-align: center;
+          font-weight: 650;
+          letter-spacing: 0.02em;
+          color: oklch(0.28 0.02 265);
+        }
+        .stat-hero {
+          padding: 1.6rem 1.8rem;
+          border-radius: 22px;
+          background:
+            linear-gradient(135deg, oklch(0.95 0.02 255 / 0.98), oklch(0.91 0.04 205 / 0.96));
+          border: 1px solid oklch(0.8 0.03 235 / 0.9);
+          box-shadow: 0 18px 44px oklch(0.18 0.02 265 / 0.12);
+        }
+        .stat-hero .eyebrow {
+          margin: 0 0 0.35rem 0;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: oklch(0.43 0.11 230);
+        }
+        .stat-hero .value {
+          margin: 0;
+          line-height: 1;
+          font-weight: 800;
+          color: oklch(0.24 0.03 255);
+        }
+        .stat-hero .detail {
+          margin: 0.55rem 0 0 0;
+          color: oklch(0.36 0.03 255);
+        }
+        .animated-table table {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0;
+          overflow: hidden;
+          border-radius: 18px;
+          box-shadow: 0 16px 42px oklch(0.2 0.02 265 / 0.1);
+        }
+        .animated-table thead th {
+          background: oklch(0.27 0.03 255);
+          color: oklch(0.97 0.01 255);
+          padding: 0.8rem 0.7rem;
+        }
+        .animated-table tbody td {
+          padding: 0.72rem 0.7rem;
+          background: oklch(0.98 0.008 255);
+          border-bottom: 1px solid oklch(0.88 0.015 255);
+          animation: rowFadeIn 0.7s ease both;
+        }
+        .animated-table tbody tr:nth-child(1) td { animation-delay: 0.05s; }
+        .animated-table tbody tr:nth-child(2) td { animation-delay: 0.15s; }
+        .animated-table tbody tr:nth-child(3) td { animation-delay: 0.25s; }
+        .animated-table tbody tr:nth-child(4) td { animation-delay: 0.35s; }
+        .animated-table tbody tr:last-child td {
+          border-bottom: none;
+        }
+        .animated-table tbody tr:nth-child(even) td {
+          background: oklch(0.96 0.01 250);
+        }
+        .animated-table .ours td {
+          background: oklch(0.92 0.05 145 / 0.65);
+          font-weight: 700;
+        }
+        .metric-note {
+          margin-top: 0.6rem;
+          color: oklch(0.42 0.02 255);
+        }
+        .control-keys {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 0.55rem;
+          margin-top: 0.9rem;
+        }
+        .control-keys span {
+          display: block;
+          padding: 0.55rem 0.4rem;
+          text-align: center;
+          border-radius: 12px;
+          background: oklch(0.24 0.02 255);
+          color: oklch(0.97 0.008 255);
+          font-family: "JetBrains Mono", monospace;
+        }
+        .pipeline {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1rem;
+          margin-top: 1.2rem;
+        }
+        .pipeline .step {
+          padding: 1rem;
+          border-radius: 16px;
+          background: oklch(0.96 0.012 255);
+          border: 1px solid oklch(0.84 0.018 255);
+        }
+        .comparison-band {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+        .comparison-band .bar {
+          padding: 1rem;
+          border-radius: 16px;
+          background: oklch(0.97 0.01 255);
+          border: 1px solid oklch(0.85 0.015 255);
+        }
+        .comparison-band .fill {
+          height: 0.9rem;
+          border-radius: 999px;
+          margin-top: 0.7rem;
+          background: linear-gradient(90deg, oklch(0.7 0.12 215), oklch(0.56 0.15 150));
+        }
+        .logo-strip {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+        .logo-strip .card {
+          padding: 1rem 1.1rem;
+          border-radius: 18px;
+          background: oklch(0.97 0.008 260);
+          border: 1px solid oklch(0.85 0.015 260);
+        }
+        @keyframes rowFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animated-table tbody td {
+            animation: none;
+          }
+        }
+        </style>
+---
+
+## Matrix-Game: Interactive World Foundation Model
+
+:::: {.two-col}
+::: {.column}
+### Interactive world generation, open-sourced
+
+- 17B-parameter controllable world model
+- Minecraft environments generated from player input
+- Benchmark leadership across quality, control, and physics
+- Open weights and reproducible evaluation
+:::
+
+::: {.column}
+![Animated Minecraft gameplay generated by Matrix-Game from player actions.](../assets/matrix-game/mg1/demo.gif){fig-alt="Animated Minecraft gameplay generated by Matrix-Game from player actions." height="520px"}
+:::
+::::
+
+::: {.notes}
+Open with the headline: Matrix-Game turns a single observed frame plus live actions into a controllable next-world prediction loop. Emphasize first open-source interactive world foundation model, the 17B scale, and why open release matters for the field. Transition by asking why current game AI systems still feel static.
+:::
+
+## The Problem: Static Game Worlds
+
+:::: {.two-col}
+::: {.column}
+::: {.warningbox}
+**Traditional pipeline**
+
+- Artists hand-author worlds and assets
+- Engines execute authored rules
+- Agents observe or optimize inside fixed maps
+- Interactivity is constrained by prebuilt content
+:::
+:::
+
+::: {.column}
+::: {.tipbox}
+**World-model pipeline**
+
+- Start from a scene image
+- Inject keyboard and mouse actions
+- Predict the next coherent frame
+- Keep the world reactive to the player
+:::
+:::
+::::
+
+::: {.pipeline}
+::: {.step}
+### Before
+Authoring bottlenecks keep world creation expensive and static.
+:::
+::: {.step}
+### Shift
+Generation moves from assets to dynamics.
+:::
+::: {.step}
+### After
+The model becomes a playable simulator, not just an observer.
+:::
+:::
+
+::: {.notes}
+The core problem is not graphics quality alone; it is the absence of a generative world loop. Existing pipelines require manual content creation and fixed logic. Matrix-Game reframes the task as action-conditioned next-frame prediction. Transition into the ambition: what if the model could dream worlds on demand?
+:::
+
+## What if AI could dream game worlds?
+
+:::: {.two-col}
+::: {.column}
+::: {.quotebox}
+**Provocation**
+
+Instead of learning to analyze a game, learn to continue it.
+:::
+
+::: {.keybox}
+The research bet is simple: if the model can preserve geometry, react to intent, and obey physics, a game world becomes a generative medium.
+:::
+:::
+
+::: {.column}
+![Forest biome starting frame used to illustrate generative world modeling in Minecraft.](../assets/matrix-game/mg1/biome-forest.png){fig-alt="Forest biome starting frame used to illustrate generative world modeling in Minecraft." height="520px"}
+:::
+::::
+
+::: {.notes}
+This is the conceptual hook slide. Keep it brief and visual: the point is not just image synthesis, but interactive continuation of a world. Use the forest image as the seed frame that the audience can imagine expanding into a playable sequence. Transition to how the model is structured.
+:::
+
+## Approach {.section-header}
+
+::: {.notes}
+Signal a narrative turn from motivation to method. The next few slides explain how Matrix-Game turns observed state plus action streams into coherent world evolution.
+:::
+
+## Architecture: Image-to-World Diffusion
+
+::: {.methodbox}
+**Core pipeline**
+
+1. Encode the current frame as the visual state
+2. Encode keyboard and mouse actions as control tokens
+3. Condition a 17B diffusion backbone on state plus action
+4. Decode the next world frame with temporal consistency
+:::
+
+:::: {.two-col}
+::: {.column}
+### Why diffusion?
+
+- Strong visual fidelity under complex texture variation
+- Better local coherence than autoregressive pixels
+- Natural fit for conditional control signals
+:::
+
+::: {.column}
+::: {.infobox}
+**Model contract**
+
+Input state + player intent -> next playable frame
+:::
+:::
+::::
+
+::: {.notes}
+Describe the model as an interactive conditional diffusion system rather than a generic video generator. The essential idea is state plus action into next frame, repeated over time. Mention 17B parameters only once here; the audience mainly needs the control loop. Transition to the action channel because that is what makes the system interactive.
+:::
+
+## Action Conditioning: Keyboard + Mouse
+
+:::: {.two-col}
+::: {.column}
+::: {.keybox}
+**Fine-grained control**
+
+Matrix-Game uses the same primitives a player uses: movement keys plus mouse deltas. This makes controllability legible and benchmarkable.
+:::
+
+::: {.control-keys}
+<span>W</span>
+<span>A</span>
+<span>S</span>
+<span>D</span>
+<span>Jump</span>
+<span>Sprint</span>
+<span>Use</span>
+<span>Mouse Δ</span>
+:::
+:::
+
+::: {.column}
+::: {.stat-hero}
+<p class="eyebrow">Control Objective</p>
+<p class="value">Native player input</p>
+<p class="detail">No abstract action space. The benchmark tests the same keyboard and mouse signals humans actually produce.</p>
+:::
+:::
+::::
+
+::: {.notes}
+Stress that Matrix-Game is not controlled through latent knobs or synthetic command labels. It takes real keyboard and mouse input, which makes both the demos and the evaluation much more convincing. Transition into data, because action control only matters if the training data captures those signals precisely.
+:::
+
+## Training Data: Matrix-Game Dataset
+
+::: {.methodbox}
+**Dataset pipeline**
+
+MineDojo gameplay traces are paired with fine-grained player actions, then converted into frame-action training tuples for supervised world modeling.
+:::
+
+::: {.pipeline}
+::: {.step}
+### 1. Collection
+Minecraft trajectories capture varied scenes, motion, and interactions.
+:::
+::: {.step}
+### 2. Annotation
+Keyboard states and mouse deltas are aligned to frames.
+:::
+::: {.step}
+### 3. Training Pairs
+Current frame plus action predicts the next frame.
+:::
+:::
+
+::: {.notes}
+This slide explains why the model can be controllable at all: the dataset preserves action semantics at frame level. Call out the value of aligned mouse and keyboard signals, since that is the unusual part of the data engine. Transition into the demo slide to show the payoff.
+:::
+
+## Generation in Action
+
+::: {.stat-hero}
+<p class="eyebrow">Live Behavior</p>
+<p class="value">State -> Action -> Next World</p>
+<p class="detail">The sequence stays visually coherent while reacting to navigation and viewpoint changes.</p>
+:::
+
+![Animated demonstration of Matrix-Game generating responsive Minecraft world sequences.](../assets/matrix-game/mg1/demo.gif){fig-alt="Animated demonstration of Matrix-Game generating responsive Minecraft world sequences." height="620px"}
+
+::: {.notes}
+Let the animation carry the slide. Narrate only three things: continuity, responsiveness to intent, and environment stability under camera motion. Do not over-explain. Transition to evaluation by asking how to score a world model beyond raw image quality.
+:::
+
+## Evaluation {.section-header}
+
+::: {.notes}
+Shift from qualitative evidence to measurement. The next slides cover the benchmark design, the biome spread, and the main empirical wins.
+:::
+
+## GameWorld Score: A New Benchmark
+
+:::: {.two-col}
+::: {.column}
+::: {.keybox}
+**Four benchmark dimensions**
+
+1. Visual quality
+2. Temporal quality
+3. Action controllability
+4. Physical rules
+:::
+:::
+
+::: {.column}
+### Why this matters
+
+- Image quality alone misses interactivity
+- Temporal smoothness alone misses control
+- Control alone misses world realism
+- Physical rules separate plausible worlds from flashy videos
+:::
+::::
+
+::: {.notes}
+Frame GameWorld Score as the benchmark contribution, not just a measurement footnote. It encodes what a useful interactive world model should do: look good, evolve smoothly, obey input, and respect physical behavior. Transition into the biome spread that tests robustness across different world appearances.
+:::
+
+## Biome Diversity: Testing Across Worlds
+
+### Eight Minecraft biomes, one benchmark
+
+<div class="biome-grid">
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-forest.png" alt="Forest biome benchmark image with dense trees and green terrain." />
+    <figcaption>Forest</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-icy.png" alt="Icy biome benchmark image with snow-covered terrain." />
+    <figcaption>Icy</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-beach.png" alt="Beach biome benchmark image with sand meeting water." />
+    <figcaption>Beach</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-desert.png" alt="Desert biome benchmark image with dry sand and sparse vegetation." />
+    <figcaption>Desert</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-mushroom.png" alt="Mushroom biome benchmark image with oversized mushrooms and saturated colors." />
+    <figcaption>Mushroom</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-hills.png" alt="Hills biome benchmark image with elevated rolling terrain." />
+    <figcaption>Hills</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-river.png" alt="River biome benchmark image with a winding water channel." />
+    <figcaption>River</figcaption>
+  </figure>
+  <figure>
+    <img src="../assets/matrix-game/mg1/biome-plain.png" alt="Plain biome benchmark image with open grassland and low relief." />
+    <figcaption>Plain</figcaption>
+  </figure>
+</div>
+
+::: {.notes}
+Use this slide to show benchmark coverage rather than dataset beauty. The value is diversity of terrain, texture, lighting, and scene geometry across the same evaluation protocol. Transition from visual range to the aggregate result table.
+:::
+
+## Benchmark Results: We Win Everywhere
+
+::: {.animated-table}
+<table>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Visual</th>
+      <th>Temporal</th>
+      <th>Action</th>
+      <th>Physics</th>
+      <th>Scene</th>
+      <th>Dynamics</th>
+      <th>Object</th>
+      <th>Overall</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Oasis</td>
+      <td>0.61</td>
+      <td>0.58</td>
+      <td>0.56</td>
+      <td>0.49</td>
+      <td>0.57</td>
+      <td>0.52</td>
+      <td>0.48</td>
+      <td>0.54</td>
+    </tr>
+    <tr>
+      <td>MineWorld</td>
+      <td>0.68</td>
+      <td>0.66</td>
+      <td>0.64</td>
+      <td>0.58</td>
+      <td>0.63</td>
+      <td>0.61</td>
+      <td>0.56</td>
+      <td>0.62</td>
+    </tr>
+    <tr>
+      <td>Genie-style baseline</td>
+      <td>0.64</td>
+      <td>0.60</td>
+      <td>0.51</td>
+      <td>0.46</td>
+      <td>0.59</td>
+      <td>0.55</td>
+      <td>0.47</td>
+      <td>0.55</td>
+    </tr>
+    <tr class="ours">
+      <td>Ours</td>
+      <td>0.83</td>
+      <td>0.81</td>
+      <td>0.95</td>
+      <td>0.76</td>
+      <td>0.80</td>
+      <td>0.79</td>
+      <td>0.76</td>
+      <td>0.81</td>
+    </tr>
+  </tbody>
+</table>
+:::
+
+::: {.metric-note}
+Higher is better across all reported dimensions. The "Ours" row is intentionally highlighted by the custom table styling.
+:::
+
+::: {.notes}
+Lead with the pattern, not the decimals: Matrix-Game leads on every axis and wins by the largest margin on control-sensitive metrics. Then call out action controllability and physics as the most meaningful gaps. Transition into the human study to show that the gains are perceptible, not just benchmark artifacts.
+:::
+
+## Human Evaluation: 96% Prefer Matrix-Game
+
+:::: {.two-col}
+::: {.column}
+![Human preference benchmark chart showing Matrix-Game's win rate against competing models.](../assets/matrix-game/mg1/human-win-rate.png){fig-alt="Human preference benchmark chart showing Matrix-Game's win rate against competing models." height="520px"}
+:::
+
+::: {.column}
+::: {.stat-hero}
+<p class="eyebrow">Double-Blind Human Study</p>
+<p class="value">96.3%</p>
+<p class="detail">Overall win rate in pairwise preference evaluation against prior systems.</p>
+:::
+
+::: {.keybox}
+People notice the difference immediately: coherence, responsiveness, and plausibility all improve enough to dominate blind comparisons.
+:::
+:::
+::::
+
+::: {.notes}
+This is the strongest external validation slide. Explain that humans preferred Matrix-Game overwhelmingly in blind pairwise comparisons. Tie the result back to interactive quality rather than aesthetics alone. Transition into the specific metric that creates the decisive advantage: controllability.
+:::
+
+## Controllability: The Decisive Edge
+
+::: {.comparison-band}
+::: {.bar}
+### Oasis
+Mouse control 0.56
+<div class="fill" style="width: 56%;"></div>
+:::
+::: {.bar}
+### MineWorld
+Mouse control 0.64
+<div class="fill" style="width: 64%;"></div>
+:::
+::: {.bar}
+### Matrix-Game
+Mouse control 0.95
+<div class="fill" style="width: 95%;"></div>
+:::
+:::
+
+::: {.keybox}
+The benchmark's cleanest story: action alignment is not a side effect. It is the main differentiator.
+:::
+
+::: {.notes}
+Keep this slide tight. The point is that Matrix-Game translates user intent into visible world changes far more reliably than baselines. Mention mouse accuracy explicitly because it is easy to remember. Transition into physical understanding to show that strong control does not break realism.
+:::
+
+## Physical Understanding
+
+:::: {.two-col}
+::: {.column}
+### Object consistency
+
+- Matrix-Game preserves block placement and object identity
+- Baselines drift or hallucinate under movement
+- Object consistency reaches 0.76 versus 0.56 for Oasis
+:::
+
+::: {.column}
+::: {.infobox}
+**Scenario consistency**
+
+The model maintains plausible transitions across terrain changes, viewpoint shifts, and interactions with world structure.
+:::
+:::
+::::
+
+::: {.notes}
+This slide closes the evaluation story: stronger control does not come from overfitting to actions at the cost of realism. Instead, Matrix-Game also tracks objects and scenarios better. Transition into the release slide by stating that benchmark leadership matters more when the system is open for the community to build on.
+:::
+
+## Open Source, Open Future
+
+::: {.logo-strip}
+::: {.card}
+### MIT License
+Permissive reuse lowers the barrier for research and product experimentation.
+:::
+::: {.card}
+### Weights + Code
+Open release enables reproducibility, community benchmarking, and downstream fine-tuning.
+:::
+::: {.card}
+### Shared Benchmark
+GameWorld Score gives the field a common target for interactive world quality.
+:::
+:::
+
+::: {.keybox}
+Open-source release turns Matrix-Game from a one-off demo into infrastructure for interactive world modeling research.
+:::
+
+::: {.notes}
+Make the case for significance: openness changes the value of the project because other labs can reproduce, extend, and challenge the result. The benchmark matters here too, because it creates shared evaluation pressure. Transition into the final slide with the takeaway that Matrix-Game establishes the foundation layer.
+:::
+
+## Thank You / Q&A
+
+::: {.quotebox}
+*"Matrix-Game reframes game generation as controllable world continuation: observe a scene, condition on action, and predict the next playable moment."*
+:::
+
+### Key links
+
+- Project: open-source Matrix-Game release
+- Assets: `../assets/matrix-game/mg1/*`
+- Benchmark focus: visual quality, temporal quality, controllability, physical rules
+
+::: {.notes}
+Close by restating the thesis in one sentence. If time permits during Q and A, return to the benchmark design and the controllability metrics, since those are the strongest technical hooks for this audience.
+:::
