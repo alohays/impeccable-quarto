@@ -65,6 +65,11 @@ Current market share: **23%** → Target: **35%** by Q4 2026
 :::
 ::::
 
+::: {.notes}
+Set the strategic context. Explain the market dynamics that create
+urgency and why the window is time-limited.
+:::
+
 ---
 
 ## Key Metrics — Current State
@@ -110,6 +115,10 @@ you propose strategy changes.
 
 ## Strategic Priorities {.section-header}
 
+::: {.notes}
+Transition: "Given this context, here are the three pillars of our growth strategy."
+:::
+
 ---
 
 ## Three Pillars of Growth
@@ -152,6 +161,11 @@ Capture the enterprise segment with advanced features and dedicated support.
 :::
 ::::
 
+::: {.notes}
+Explain how the three pillars build on each other sequentially.
+Pillar 1 enables Pillar 2, which creates the foundation for Pillar 3.
+:::
+
 ---
 
 ## Financial Projections
@@ -192,6 +206,11 @@ NPV at 3-year horizon: **$28.4M**
 :::
 :::
 ::::
+
+::: {.notes}
+Walk through the revenue model assumptions. Be ready to defend
+the Q3 inflection point when platform revenue kicks in.
+:::
 
 ---
 
@@ -270,6 +289,11 @@ Three initiatives that can begin immediately with existing resources:
 :::
 ::::
 
+::: {.notes}
+Emphasize the phased approach — this reduces risk.
+Highlight the quick wins that build momentum immediately.
+:::
+
 ---
 
 ## Team & Resources
@@ -287,6 +311,11 @@ Three initiatives that can begin immediately with existing resources:
 Priority hires: 2 senior backend engineers (API expertise) and 1 Head of Partnerships. Remaining roles can phase in through Q2.
 
 Estimated time-to-fill: 6-8 weeks for senior roles, 4-6 weeks for mid-level.
+:::
+
+::: {.notes}
+Acknowledge that hiring is the primary execution risk.
+Discuss contingency plans if key hires take longer than expected.
 :::
 
 ---
@@ -312,6 +341,11 @@ Estimated time-to-fill: 6-8 weeks for senior roles, 4-6 weeks for mid-level.
 4. Conservative base case maintains current trajectory
 :::
 ::::
+
+::: {.notes}
+Pre-empt concerns by showing you've thought about what can go wrong.
+Each risk has a concrete mitigation — this builds confidence.
+:::
 
 ---
 
