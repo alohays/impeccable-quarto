@@ -29,10 +29,8 @@ if [ ! -f "$QUALITY_SCRIPT" ]; then
   exit 0
 fi
 
-# Get staged .qmd files
-STAGED_QMD=$(git diff --cached --name-only --diff-filter=ACM | grep '\.qmd$' || true)
-
-if [ -z "$STAGED_QMD" ]; then
+# Check whether any .qmd files are staged
+if ! git diff --cached --name-only --diff-filter=ACM | grep -q '\.qmd$'; then
   # No .qmd files staged — nothing to check
   exit 0
 fi
@@ -41,7 +39,7 @@ echo -e "${BOLD}Pre-commit quality gate${RESET} (threshold: ${THRESHOLD}/100)"
 echo "========================================"
 
 FAILED=0
-for FILE in $STAGED_QMD; do
+while IFS= read -r -d '' FILE; do
   if [ ! -f "$FILE" ]; then
     continue
   fi
@@ -49,17 +47,14 @@ for FILE in $STAGED_QMD; do
   # Run quality_score.py and capture exit code
   OUTPUT=$(python3 "$QUALITY_SCRIPT" "$FILE" 2>&1) || true
 
-  # Extract score from output (matches "Score: XX/100")
-  SCORE=$(echo "$OUTPUT" | grep -oP 'Score:.*?(\d+)/100' | grep -oP '\d+(?=/100)' || echo "")
+  # Strip ANSI color codes before extracting "Score: XX/100"
+  CLEAN_OUTPUT=$(printf '%s\n' "$OUTPUT" | sed -E $'s/\x1B\\[[0-9;]*[[:alpha:]]//g')
+  SCORE=$(printf '%s\n' "$CLEAN_OUTPUT" | sed -n 's/.*Score:[^0-9]*\([0-9][0-9]*\)\/100.*/\1/p' | head -1)
 
   if [ -z "$SCORE" ]; then
-    # macOS grep fallback (no -P flag)
-    SCORE=$(echo "$OUTPUT" | sed -n 's/.*Score:.*\([0-9][0-9]*\)\/100.*/\1/p' | head -1)
-  fi
-
-  if [ -z "$SCORE" ]; then
-    echo -e "${YELLOW}Warning:${RESET} Could not parse score for $FILE"
+    echo -e "${RED}FAIL${RESET} $FILE — could not parse score output"
     echo "$OUTPUT"
+    FAILED=1
     continue
   fi
 
@@ -69,7 +64,7 @@ for FILE in $STAGED_QMD; do
   else
     echo -e "${GREEN}PASS${RESET} $FILE — score ${SCORE}/100"
   fi
-done
+done < <(git diff --cached --name-only --diff-filter=ACM -z -- '*.qmd')
 
 echo "========================================"
 
