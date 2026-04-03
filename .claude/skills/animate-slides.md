@@ -8,6 +8,7 @@ argument-hint: "[file]"
 # /animate-slides — Animation Enhancement
 
 [MANDATORY PREPARATION]
+- Load design context: Read `.claude/skills/slide-design.md` and follow Steps 1-3 to establish design context
 - Read `.claude/rules/design-standards.md` for animation guidelines
 - Read `.claude/rules/anti-patterns.md` (especially "too many animations")
 - Read the target `.qmd` file completely

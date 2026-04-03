@@ -131,3 +131,50 @@ These patterns are explicitly recognized as harmful to slide quality. Each patte
 - **Severity:** Critical
 - **Why it's bad:** Renders as "??" in the output. Unprofessional and confusing.
 - **Fix:** Verify all references. Use consistent label naming.
+
+## LLM Design Bias Anti-Patterns
+
+These patterns are fingerprints of AI-generated presentations (2024-2025 era). They signal that the LLM produced default output without genuine design thought. The overarching test: "If you showed this deck to someone and said 'AI made this,' would they believe you immediately? If yes, that's the problem."
+
+### AP-LLM01: Generic Theme
+- **Detection:** Default Reveal.js theme (`theme: default`, `theme: moon`, `theme: solarized`, etc.) with no custom `.scss` override. Or `theme:` field missing entirely.
+- **Severity:** Major
+- **Why it's bad:** Every LLM-generated deck defaults to the same handful of Reveal.js themes. Using one signals zero design thought and makes the presentation indistinguishable from thousands of others.
+- **Fix:** Apply the impeccable theme (`themes/impeccable.scss`) or create a project-specific variant. Custom theme is the single highest-impact design decision.
+- **Related:** AP-D01
+
+### AP-LLM02: Monotonous Structure
+- **Detection:** >=70% of content slides follow the identical pattern: heading + bullet list. No variation in slide layouts (no semantic boxes, no columns, no comparison layouts, no full-bleed images).
+- **Severity:** Major
+- **Why it's bad:** LLMs default to heading + bullets for every slide because it's the safest structure. Real presentations vary layout to match content type — data gets charts, comparisons get side-by-side, key points get semantic boxes.
+- **Fix:** Audit each slide's content type and match layout: use `.two-col` for comparisons, `.keybox` for takeaways, `.methodbox` for processes, images for visual concepts. Aim for <=50% bullet-list slides.
+
+### AP-LLM03: AI Color Palette
+- **Detection:** High-chroma cyan (`#00BCD4`, `#00ACC1`), purple-to-blue gradients, neon accents on dark backgrounds, or any non-OKLCH color values that match the typical AI-generated aesthetic (cyan/purple/neon tones).
+- **Severity:** Minor
+- **Why it's bad:** The "AI color palette" — cyan-on-dark, purple-to-blue gradients, neon accents — is the single most recognizable visual fingerprint of AI-generated interfaces from 2024-2025. Using these colors screams "AI made this."
+- **Fix:** Use the OKLCH palette from the impeccable theme. Colors should be semantically meaningful, not decoratively "techy."
+
+### AP-LLM04: Gradient Text
+- **Detection:** CSS `background-clip: text` with gradient, or `background: linear-gradient(...)` / `background: -webkit-linear-gradient(...)` applied to text elements in `.qmd` inline styles or custom CSS.
+- **Severity:** Minor
+- **Why it's bad:** Gradient text on headings or metrics is a signature AI design choice. It looks "impressive" on first glance but adds no information and reduces readability. It's decoration masquerading as emphasis.
+- **Fix:** Use the theme's semantic emphasis: `.hi` classes for inline highlights, semantic boxes for structural emphasis, or OKLCH accent color for genuine emphasis.
+
+### AP-LLM05: Nested Semantic Boxes
+- **Detection:** A semantic box class (`.keybox`, `.methodbox`, `.warningbox`, `.tipbox`, `.quotebox`, `.infobox`) nested inside another semantic box.
+- **Severity:** Minor
+- **Why it's bad:** LLMs overuse semantic boxes and often nest them (a `.methodbox` inside a `.keybox`) to appear "structured." This creates visual noise, breaks the box hierarchy, and confuses the reader about what's key vs. supporting.
+- **Fix:** One box level per slide section. If you need to highlight something within a box, use inline emphasis (`.hi`, bold) not a nested box.
+
+### AP-LLM06: Uniform Depth
+- **Detection:** Inconsistent content depth across slides — some slides have 3 words, others have 200+ words. Standard deviation of word count across slides exceeds 3x the mean.
+- **Severity:** Minor
+- **Why it's bad:** LLMs often produce slides of wildly varying depth — a title slide with "Introduction" followed by a slide with 8 dense paragraphs. This signals the LLM is dumping content without editing for audience pacing.
+- **Fix:** Target consistent depth: 20-40 words per slide for body text. Move excess detail to speaker notes. Each slide should take roughly the same time to present (1-2 minutes).
+
+### AP-LLM07: Generic Titles
+- **Detection:** Title slide contains generic text: "Presentation Title", "Subtitle Here", "Your Name", "Author Name", "[Topic]", "Click to edit", or any placeholder-like text.
+- **Severity:** Major
+- **Why it's bad:** Generic placeholder titles are the most obvious sign of auto-generated content. Even draft decks should have specific, descriptive titles.
+- **Fix:** Replace with a specific, compelling title that communicates the deck's key message. The title is the audience's first impression — make it count.

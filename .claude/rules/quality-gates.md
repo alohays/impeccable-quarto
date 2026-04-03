@@ -40,6 +40,8 @@ Every presentation starts at **100 points**. Issues cause deductions. The final 
 | MAJ-07 | Non-OKLCH color in theme override | -3 per instance |
 | MAJ-08 | More than 3 font families on a slide | -3 per slide |
 | MAJ-09 | Generic/default Reveal.js theme (no customization) | -10 |
+| MAJ-10 | Generic/placeholder title text | -5 |
+| MAJ-11 | Monotonous structure (>=70% identical layout) | -5 |
 
 ### Minor Deductions
 
@@ -52,6 +54,10 @@ Every presentation starts at **100 points**. Issues cause deductions. The final 
 | MIN-05 | Raster image used for diagram (should be SVG) | -1 per image |
 | MIN-06 | Inline CSS in `.qmd` file | -1 per instance |
 | MIN-07 | Missing transition text between sections | -1 per gap |
+| MIN-08 | AI color palette (non-OKLCH cyan/purple/neon) | -2 per instance |
+| MIN-09 | Gradient text in styles | -2 per instance |
+| MIN-10 | Nested semantic boxes | -2 per instance |
+| MIN-11 | Uniform depth violation (word count StdDev >3x mean) | -2 |
 
 ## Scoring Rules
 

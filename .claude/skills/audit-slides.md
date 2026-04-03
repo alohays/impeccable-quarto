@@ -8,6 +8,7 @@ argument-hint: "[file]"
 # /audit-slides — Technical Quality Audit
 
 [MANDATORY PREPARATION]
+- Load design context: Read `.claude/skills/slide-design.md` and follow Steps 1-3 to establish design context
 - Read `.claude/rules/design-standards.md` and `.claude/rules/anti-patterns.md` for reference criteria
 - Read `.claude/rules/quality-gates.md` for the scoring/deduction table
 - Gather context: identify the target `.qmd` file and any associated theme/assets

@@ -8,6 +8,7 @@ argument-hint: "[file]"
 # /typeset-slides — Typography Enhancement
 
 [MANDATORY PREPARATION]
+- Load design context: Read `.claude/skills/slide-design.md` and follow Steps 1-3 to establish design context
 - Read `.claude/rules/design-standards.md` for typography rules
 - Read `.claude/rules/anti-patterns.md` for font-related anti-patterns
 - Read `.impeccable-quarto.md` if it exists for font preferences

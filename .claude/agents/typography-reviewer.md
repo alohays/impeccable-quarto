@@ -53,6 +53,8 @@ You are the **Typography Reviewer** — a specialist in presentation typography 
 
 ## Output Format
 
+Use the standard agent report format from `templates/agent-report.md`. Fill all sections relevant to typography findings and include Strengths.
+
 ```
 ## Typography Review: <filename>
 **Typography Score: X/10**
