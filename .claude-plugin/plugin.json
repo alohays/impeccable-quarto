@@ -1,0 +1,11 @@
+{
+  "name": "impeccable-quarto",
+  "description": "Design quality system for Quarto RevealJS presentations. 18 skills for creating, reviewing, and perfecting slide decks with OKLCH colors, typography-first design, and objective scoring.",
+  "version": "0.1.0",
+  "author": {
+    "name": "impeccable-quarto contributors"
+  },
+  "homepage": "https://alohays.github.io/impeccable-quarto/",
+  "repository": "https://github.com/alohays/impeccable-quarto",
+  "skills": "./.claude/skills"
+}

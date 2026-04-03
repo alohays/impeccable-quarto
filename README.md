@@ -63,6 +63,7 @@ Scores are computed by deduction from 100. Every deduction maps to a specific, f
 ### Prerequisites
 
 - [Quarto](https://quarto.org/docs/get-started/) v1.4 or later
+- Python 3.10 or later
 - [Claude Code](https://claude.com/claude-code) (for the AI-powered quality pipeline)
 
 ### Installation
@@ -74,7 +75,21 @@ git clone https://github.com/alohays/impeccable-quarto.git
 cd impeccable-quarto
 ```
 
-2. **Copy the skill system into your project** (optional — for use in other repos):
+2. **Install as a Quarto extension** (recommended):
+
+```bash
+quarto add alohays/impeccable-quarto
+```
+
+Then use the extension format in your deck frontmatter:
+
+```yaml
+format:
+  impeccable-quarto-revealjs:
+    slide-number: true
+```
+
+3. **Copy the skill system into your project** (optional — for use in other repos):
 
 ```bash
 # Copy the Claude Code integration
@@ -87,15 +102,22 @@ cp impeccable-quarto/themes/impeccable.scss your-project/themes/
 # theme: [default, themes/impeccable.scss]
 ```
 
-3. **Or work directly in this repo:**
+4. **Or work directly in this repo:**
 
 ```bash
+# Prepare the local development environment
+./scripts/setup.sh
+
 # Create a new presentation from a template
-cp templates/basic.qmd my-talk.qmd
+./scripts/new-deck.sh my-talk.qmd
 
 # Preview live
 quarto preview my-talk.qmd
 ```
+
+## Contributing
+
+Contributor setup, architecture notes, and script documentation live in [`DEVELOP.md`](/Users/iyunseong/.clawteam/workspaces/impl/codex-2/DEVELOP.md).
 
 ### Creating Your First Deck
 

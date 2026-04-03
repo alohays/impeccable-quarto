@@ -1,0 +1,24 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "impeccable-quarto",
+  "metadata": {
+    "description": "Design quality system for Quarto RevealJS slides. 18 skills including /create-deck, /review-slides, /critique-slides, /qa-loop, and domain-specific design commands."
+  },
+  "owner": {
+    "name": "impeccable-quarto contributors"
+  },
+  "plugins": [
+    {
+      "name": "impeccable-quarto",
+      "description": "18 skills for creating, reviewing, and perfecting Quarto RevealJS presentations. Includes OKLCH theming, typography-first design, adversarial review, and 100-point quality scoring.",
+      "version": "0.1.0",
+      "author": {
+        "name": "impeccable-quarto contributors"
+      },
+      "source": "./",
+      "category": "design",
+      "homepage": "https://alohays.github.io/impeccable-quarto/",
+      "tags": ["design", "presentations", "quarto", "revealjs", "slides", "quality", "oklch"]
+    }
+  ]
+}
