@@ -26,7 +26,7 @@ prompt() {
     fi
     read -r value
     value="${value:-$default}"
-    eval "$var_name='$value'"
+    printf -v "$var_name" '%s' "$value"
 }
 
 select_template() {
