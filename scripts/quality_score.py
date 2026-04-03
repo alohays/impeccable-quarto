@@ -430,18 +430,25 @@ def check_llm_bias_patterns(content: str, report: ScoreReport) -> None:
     for _ in GRADIENT_TEXT_RE.finditer(content):
         report.deduct("MIN-09", 2, "Gradient text styling detected")
 
-    semantic_depth = 0
+    div_stack = []  # tracks div types: "semantic" or "other"
     for line in content.splitlines():
         stripped = line.strip()
         if not stripped.startswith(":::"):
             continue
-        classes = SEMANTIC_BOX_RE.findall(stripped)
-        if classes:
-            if semantic_depth > 0:
-                report.deduct("MIN-10", 2, f"Nested semantic box detected: {classes[0]}")
-            semantic_depth += 1
-        elif stripped == ":::" and semantic_depth > 0:
-            semantic_depth -= 1
+
+        # Opening div (has content after :::)
+        if len(stripped) > 3 and stripped != ":::":
+            classes = SEMANTIC_BOX_RE.findall(stripped)
+            if classes:
+                if any(t == "semantic" for t in div_stack):
+                    report.deduct("MIN-10", 2, f"Nested semantic box detected: {classes[0]}")
+                div_stack.append("semantic")
+            else:
+                div_stack.append("other")
+        # Closing div (bare :::)
+        elif stripped == ":::":
+            if div_stack:
+                div_stack.pop()
 
     word_counts = [count_body_words(slide_text) for _, slide_text in slide_blocks]
     if len(word_counts) >= 2:
