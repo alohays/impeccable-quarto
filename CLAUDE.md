@@ -9,19 +9,30 @@ impeccable-quarto is a **Quarto RevealJS slide design quality system**. It provi
 ## Directory Structure
 
 ```
-.claude/          Claude Code integration (canonical)
-  agents/         Agent persona definitions (7)
-  skills/         Slash commands (18)
-  rules/          Governance rules, scoring rubrics, anti-patterns (6)
-  references/     Design reference documents (6)
-  settings.json   Permissions and hooks
+.claude/            Claude Code integration (canonical)
+  agents/           Agent persona definitions (7, with tools: and context: frontmatter)
+  skills/           Slash commands (21, including hub skill /slide-design)
+  rules/            Governance rules, scoring rubrics, anti-patterns (6)
+  references/       Design reference documents (6)
+  hooks/            Pre/Post tool-use hooks (verify-reminder, protect-files)
+  settings.json     Permissions and hooks
 
-themes/           SCSS themes for Quarto RevealJS
-  impeccable.scss Master theme (OKLCH · tinted neutrals · typography-first)
+themes/             SCSS themes for Quarto RevealJS
+  impeccable.scss   Master theme (OKLCH · two-layer CSS tokens · typography-first)
 
-templates/        Starter .qmd templates for common presentation types
-examples/         Complete example presentations with scores
-scripts/          Build, render, and utility scripts
+templates/          Starter .qmd templates and report formats
+  agent-report.md   Standardized agent report format
+  session-log.md    Session logging template
+  quality-report.md Quality report template
+examples/           Complete example presentations with scores
+scripts/            Build, render, and utility scripts
+quality_reports/    Plans, session logs, and agent reports
+  plans/            Implementation plans
+  session_logs/     Session log files
+
+_extensions/        Quarto extension packaging (quarto add support)
+.claude-plugin/     Claude Code plugin metadata
+.context/           Reference analysis and plans (gitignored)
 ```
 
 ## Key Workflows
@@ -250,3 +261,17 @@ If `.impeccable-quarto.md` exists in the project root, read it for:
 - Audience context
 - Language preferences
 - Domain-specific terminology
+
+## Recent Improvements (2026-04-03)
+
+The following improvements were implemented via a ClawTeam multi-agent pipeline (29 agents total) based on analysis of [impeccable-original](https://github.com/pbakaus/impeccable) and [paper2pr](https://github.com/alohays/paper2pr):
+
+| Phase | PR | What Changed |
+|-------|----|-------------|
+| 1. Foundation | [#3](https://github.com/alohays/impeccable-quarto/pull/3) | SSOT fix (.claude/ canonical), quality_score.py (threshold 80, CRIT-01 render check), agent isolation (tools:/context: frontmatter) |
+| 2. Governance | [#8](https://github.com/alohays/impeccable-quarto/pull/8) | Hooks (verify-reminder, protect-files), MEMORY.md, quality_reports/, pre-commit gate, session templates |
+| 3. Quality Infra | [#5](https://github.com/alohays/impeccable-quarto/pull/5) | GitHub Actions CI/CD, AI Slop Detection (7 LLM patterns), hub skill /slide-design, agent report standard |
+| 4. Theme & Skills | [#6](https://github.com/alohays/impeccable-quarto/pull/6) | Two-layer CSS tokens (OKLCH), motion tokens, a11y improvements, 3 new skills (/write-notes, /proofread-slides, /challenge-deck), 5 deck-level anti-patterns |
+| 5. Distribution | [#7](https://github.com/alohays/impeccable-quarto/pull/7) | Claude Code plugin (.claude-plugin/), Quarto extension (_extensions/), DEVELOP.md, setup.sh |
+
+Full analysis and plans: `.context/reviews/` and `.context/plans/` (gitignored, local only).

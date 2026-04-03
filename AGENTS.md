@@ -415,3 +415,40 @@ Agents are invoked through Claude Code's skill system:
 ```
 
 When using `/review-cycle`, the orchestrator manages all agent invocations, round tracking, and gate checks automatically.
+
+---
+
+## Agent Enforcement (Added 2026-04-03)
+
+All agents now have `tools:` and `context:` frontmatter enforcing separation of concerns:
+
+| Agent | Access | Context |
+|-------|--------|---------|
+| slide-critic | Read-only (Read, Glob, Grep, Bash read-only) | `context: fork` |
+| typography-reviewer | Read-only | `context: fork` |
+| layout-auditor | Read-only | `context: fork` |
+| pedagogy-reviewer | Read-only | `context: fork` |
+| slide-fixer | Read + Write (Edit, Write + above) | `context: fork` |
+| theme-designer | Read + Write | standard |
+| content-translator | Read + Write | standard |
+| verifier | Read + Bash (quarto render) | `context: fork` |
+
+This ensures adversarial integrity: critics cannot modify files, and each agent runs in its own context fork.
+
+---
+
+## Recent Infrastructure Improvements (2026-04-03)
+
+Based on analysis of [impeccable-original](https://github.com/pbakaus/impeccable) and [paper2pr](https://github.com/alohays/paper2pr), implemented via 29 ClawTeam agents:
+
+- **Hooks:** `verify-reminder.py` (render prompt after .qmd edits), `protect-files.sh` (confirmation for theme/settings)
+- **Quality scoring:** `quality_score.py` now checks compilation (CRIT-01), pure B/W (MAJ-05), word count (MIN-02), threshold 80
+- **CI/CD:** GitHub Actions renders examples and runs quality scoring on push/PR
+- **AI Slop Detection:** 7 LLM bias patterns (AP-LLM01–07) in anti-patterns registry
+- **Deck-level patterns:** 5 deck structure patterns (AP-DK01–05)
+- **Hub skill:** `/slide-design` shared foundation for all design skills
+- **New skills:** `/write-notes`, `/proofread-slides`, `/challenge-deck`
+- **Theme tokens:** Two-layer CSS custom properties (primitive + semantic OKLCH)
+- **Distribution:** Claude Code plugin (`.claude-plugin/`), Quarto extension (`_extensions/`)
+- **Session infra:** `MEMORY.md`, `quality_reports/`, pre-commit hook, session/report templates
+- **Report standard:** `templates/agent-report.md` — all agents use unified format
