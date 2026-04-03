@@ -373,6 +373,9 @@ def count_body_words(slide_text: str) -> int:
             continue
         if in_notes or stripped.startswith("#") or stripped.startswith(":::") or stripped == "---" or not stripped:
             continue
+        # Skip table rows, images, and Quarto attribute blocks
+        if re.match(r"^\s*\|", stripped) or stripped.startswith("!") or re.match(r"^\{[.#]", stripped):
+            continue
         words.extend(stripped.split())
     return len(words)
 
@@ -536,6 +539,9 @@ def check_word_count(content: str, report: ScoreReport) -> None:
             if in_notes:
                 continue
             if s.startswith("#") or s.startswith(":::") or s == "---" or not s:
+                continue
+            # Skip table rows, images, and Quarto attribute blocks
+            if re.match(r"^\s*\|", s) or s.startswith("!") or re.match(r"^\{[.#]", s):
                 continue
             body_words.extend(s.split())
 
