@@ -9,11 +9,12 @@ impeccable-quarto is a **Quarto RevealJS slide design quality system**. It provi
 ## Directory Structure
 
 ```
-source/           Single source of truth for all definitions
-  skills/         Skill definitions (canonical versions)
-  agents/         Agent persona definitions
-  rules/          Governance rules, scoring rubrics, anti-patterns
-  references/     Design reference documents
+.claude/          Claude Code integration (canonical)
+  agents/         Agent persona definitions (7)
+  skills/         Slash commands (18)
+  rules/          Governance rules, scoring rubrics, anti-patterns (6)
+  references/     Design reference documents (6)
+  settings.json   Permissions and hooks
 
 themes/           SCSS themes for Quarto RevealJS
   impeccable.scss Master theme (OKLCH · tinted neutrals · typography-first)
@@ -21,15 +22,7 @@ themes/           SCSS themes for Quarto RevealJS
 templates/        Starter .qmd templates for common presentation types
 examples/         Complete example presentations with scores
 scripts/          Build, render, and utility scripts
-
-.claude/          Claude Code integration (derived from source/)
-  skills/         Slash commands
-  agents/         Agent definitions
-  rules/          Compiled rules
-  settings.json   Permissions
 ```
-
-**When in doubt:** `source/` is canonical. `.claude/` is derived.
 
 ## Key Workflows
 
@@ -79,8 +72,6 @@ Rules:
 
 ## Quality Gates
 
-Presentations start at 100 and lose points for issues:
-
 | Gate | Score | Status |
 |---|---|---|
 | Failing | 0–59 | Critical issues present |
@@ -90,78 +81,18 @@ Presentations start at 100 and lose points for issues:
 | Excellent | 90–94 | High quality |
 | Impeccable | 95–100 | Publication quality |
 
-### Critical Deductions
-- Compilation failure: **-100** (automatic zero)
-- Broken image reference: **-15**
-- Content overflow: **-10** per slide
-- Missing YAML frontmatter: **-10**
-- Broken cross-reference: **-8**
-
-### Major Deductions
-- Missing speaker notes: **-5** per slide
-- More than 5 bullets: **-5** per slide
-- Font size below 20px: **-5**
-- Missing alt text: **-5** per image
-- Pure #000 or #FFF: **-3**
-- Heading hierarchy skip: **-3**
-- Non-OKLCH color: **-3**
-
-### Minor Deductions
-- Inconsistent slide separators: **-2**
-- Body text >40 words: **-2** per slide
-- Missing frontmatter date: **-1**
-- Image without dimensions: **-1**
-- Raster diagram (should be SVG): **-1**
+See `.claude/rules/quality-gates.md` for the complete scoring rubric and deduction table.
 
 ## Design Principles
 
-### ALWAYS
+- **OKLCH everywhere** — all colors in perceptually uniform OKLCH; no hex/RGB
+- **Tinted neutrals** — never pure `#000` or `#FFF`; neutrals carry subtle hue
+- **Typography-first** — Plus Jakarta Sans / Source Sans 3 / JetBrains Mono; 28px base; 1.25 scale
+- **One idea per slide** — ≤5 bullets, ≤40 words body text, speaker notes on every content slide
+- **Semantic structure** — use `.keybox`, `.methodbox`, `.warningbox`, `.tipbox`, `.quotebox`, `.infobox` and layout classes
 
-- Use **OKLCH** color values for all colors
-- Use **tinted neutrals** (never pure `#000000` or `#FFFFFF`)
-- Follow the **typography stack**: Plus Jakarta Sans (display), Source Sans 3 (body), JetBrains Mono (code)
-- Use **semantic boxes** (`.keybox`, `.methodbox`, `.warningbox`, `.tipbox`, `.quotebox`, `.infobox`)
-- Apply the **1.25 Major Third** type scale with 28px base
-- Keep **one idea per slide**
-- Add **speaker notes** to every content slide
-- Include **alt text** on every image
-- Use **layout classes** instead of inline styles
-- Set slide dimensions to **1920×1080**
-
-### NEVER
-
-- Use generic Reveal.js themes without customization
-- Use pure black `#000` or pure white `#FFF`
-- Use hex/RGB colors instead of OKLCH
-- Put more than 5 bullet points on a slide
-- Put more than 40 words of body text on a slide
-- Use font sizes below 20px
-- Skip heading levels (H1 → H3 without H2)
-- Use inline CSS in `.qmd` files
-- Overuse bold/all-caps for emphasis
-- Add purely decorative elements (gradients, borders, shadows without purpose)
-- Use raster images (PNG/JPG) for diagrams — use SVG
-- Leave images without `alt` text
-- Ship a presentation that doesn't compile
-
-## Anti-Patterns Quick Reference
-
-| Pattern | Detection | Severity |
-|---|---|---|
-| Bullet Wall | >5 bullets on a slide | Major |
-| Content Dump | >1 key idea per slide | Major |
-| Text Overflow | Content exceeds slide bounds | Critical |
-| Generic Theme | Default Reveal.js styling | Major |
-| Pure Black/White | `#000` or `#FFF` in source | Major |
-| Random Colors | Non-semantic color usage | Minor |
-| Font Soup | >3 font families per slide | Major |
-| All-Caps Abuse | Excessive uppercase | Minor |
-| Tiny Text | <20px font size | Major |
-| Heading Skip | Non-sequential heading levels | Major |
-| Missing Notes | Content slide without speaker notes | Major |
-| Missing Alt Text | Image without alt attribute | Major |
-| Inline Styles | CSS in .qmd instead of theme | Minor |
-| Raster Diagrams | PNG/JPG for diagrams | Minor |
+See `.claude/rules/design-standards.md` for complete standards.
+See `.claude/rules/anti-patterns.md` for the full anti-pattern registry.
 
 ## Build Commands
 
@@ -295,22 +226,6 @@ Right column content
 ::: {.compare-right}
 **After** — benefits of new approach
 :::
-:::
-```
-
-## Fragment (Progressive Disclosure)
-
-```markdown
-::: {.fragment}
-This appears first.
-:::
-
-::: {.fragment .slide-up}
-This slides up second.
-:::
-
-::: {.fragment .scale-in}
-This scales in third.
 :::
 ```
 
