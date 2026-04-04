@@ -97,6 +97,11 @@ See @smith2023 for a comprehensive review of the field.
 :::
 ::::
 
+::: {.notes}
+Briefly situate your work within the literature. Highlight what prior
+work achieved and where gaps remain. Transition to your contributions.
+:::
+
 ---
 
 ## Methodology {.section-header}
@@ -147,6 +152,11 @@ where $\Omega(\theta)$ is the regularization term controlling model complexity.
 We assume the data distribution is stationary during training. Non-stationary settings require the extension described in Appendix B.
 :::
 
+::: {.notes}
+Walk through the formal definition step by step. Explain each term
+in plain language before moving to the next equation.
+:::
+
 ---
 
 ## Experimental Setup
@@ -164,9 +174,18 @@ We assume the data distribution is stationary during training. Non-stationary se
 Code and data available at: [repository-url]
 :::
 
+::: {.notes}
+Briefly summarize the experimental setup. Emphasize any non-standard
+choices and why they were made. Mention reproducibility details.
+:::
+
 ---
 
 ## Results {.section-header}
+
+::: {.notes}
+Transition: "Now let's look at what the experiments tell us."
+:::
 
 ---
 
@@ -223,6 +242,11 @@ improvement is meaningful in this domain.
 :::
 ::::
 
+::: {.notes}
+Use this slide to directly contrast your approach with prior SOTA.
+Highlight not just accuracy but practical advantages.
+:::
+
 ---
 
 ## Discussion & Limitations
@@ -241,6 +265,11 @@ improvement is meaningful in this domain.
 - Performance on [edge case] degrades when [condition]
 - Requires [minimum data size] for reliable convergence
 - Not yet tested in [specific real-world scenario]
+:::
+
+::: {.notes}
+Be honest about limitations — it builds credibility.
+Mention future work directions that address each limitation.
 :::
 
 ---
@@ -274,3 +303,8 @@ Quarto will automatically format citations used with `@key` syntax.
 :::
 
 [Thank you — Questions?]{.larger}
+
+::: {.notes}
+Acknowledge collaborators and funding sources.
+Be ready for questions on methodology and limitations.
+:::

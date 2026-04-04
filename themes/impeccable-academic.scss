@@ -42,7 +42,7 @@ $font-family-display: "Cormorant Garamond", "Playfair Display", Georgia, serif;
 $font-family-body:    "Source Sans 3", "Source Sans Pro", sans-serif;
 $font-family-code:    "JetBrains Mono", "Fira Code", monospace;
 
-$base-size: 26px;
+$base-size: 28px;
 $scale-ratio: 1.25;
 
 // Reveal.js overrides
@@ -339,6 +339,16 @@ section.section-header {
     color: $neutral-500;
     margin-top: 0.6em;
     text-align: right;
+  }
+}
+
+.reveal .infobox {
+  @include academic-box($color-info, oklch(0.96 0.03 240));
+  strong:first-child {
+    color: oklch(0.38 0.08 240);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.3em;
   }
 }
 

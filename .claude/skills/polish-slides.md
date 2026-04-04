@@ -5,6 +5,17 @@ user-invocable: true
 argument-hint: "[file]"
 ---
 
+## MANDATORY PREPARATION
+
+Before proceeding with any work:
+
+1. **Read `/slide-design`** to load the active design context, theme reference, and AI Slop Test.
+2. **Check `.impeccable-quarto.md`** in the project root for project-specific overrides.
+   - If it does NOT exist: note that defaults will be used. Suggest `/teach-style` to the user.
+3. **Verify** a custom theme is specified in the target `.qmd` YAML frontmatter.
+
+Do NOT proceed without confirming design context is active.
+
 # /polish-slides — Final Quality Polish
 
 [MANDATORY PREPARATION]

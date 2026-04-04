@@ -8,8 +8,10 @@ tools:
   - Write
   - Edit
   - Bash
-context: fork
+# Note: isolation (fork/worktree) is handled at the skill level, not the agent level.
 ---
+
+**Recommended model:** inherit (uses calling session's model)
 
 ## Role
 

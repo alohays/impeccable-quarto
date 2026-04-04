@@ -1,0 +1,34 @@
+color:
+  palette:
+    primary: "#3730a3"
+    secondary: "#1a8a8a"
+    accent: "#c69a2d"
+    success: "#2d9050"
+    warning: "#c69a2d"
+    danger: "#b83a3a"
+    info: "#3a6ab8"
+    light: "#f3f2f7"
+    dark: "#1a1625"
+  foreground: "#2e2746"
+  background: "#f3f2f7"
+typography:
+  fonts:
+    - family: Plus Jakarta Sans
+      source: google
+      weight: 200..800
+    - family: Source Sans 3
+      source: google
+      weight: 200..900
+    - family: JetBrains Mono
+      source: google
+      weight: 100..800
+  headings:
+    family: Plus Jakarta Sans
+    weight: 700
+  base:
+    family: Source Sans 3
+    size: 28px
+    line-height: 1.55
+  monospace:
+    family: JetBrains Mono
+    size: 0.75em
