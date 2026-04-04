@@ -123,6 +123,26 @@ def parse_slides(content: str) -> list[SlideInfo]:
 
         # Horizontal rule as slide separator
         if stripped == "---" and slide_started:
+            # Lookahead: if next non-empty line is a ## heading, the ---
+            # is just a visual separator before a new slide, not a slide itself.
+            next_is_heading = False
+            for j in range(i, len(lines)):  # i is 1-indexed, lines[i] is next line
+                next_line = lines[j].strip()
+                if next_line:
+                    next_is_heading = bool(re.match(r"^##\s+", next_line))
+                    break
+            if next_is_heading:
+                # Save current slide and let the ## heading start the next one
+                if slide_started:
+                    slides.append(SlideInfo(
+                        number=len(slides) + 1,
+                        heading=current_heading,
+                        bullet_count=current_bullets,
+                        has_speaker_notes=current_notes,
+                        line_start=current_start,
+                    ))
+                    slide_started = False
+                continue
             slides.append(SlideInfo(
                 number=len(slides) + 1,
                 heading=current_heading,
@@ -353,6 +373,9 @@ def count_body_words(slide_text: str) -> int:
             continue
         if in_notes or stripped.startswith("#") or stripped.startswith(":::") or stripped == "---" or not stripped:
             continue
+        # Skip table rows, images, and Quarto attribute blocks
+        if re.match(r"^\s*\|", stripped) or stripped.startswith("!") or re.match(r"^\{[.#]", stripped):
+            continue
         words.extend(stripped.split())
     return len(words)
 
@@ -480,8 +503,9 @@ def check_compilation(path: Path, report: ScoreReport, skip_render: bool = False
 
 def check_pure_bw(content: str, report: ScoreReport) -> None:
     """Detect pure black/white color values (MAJ-05)."""
-    # Strip code blocks and frontmatter before scanning
+    # Strip code blocks, inline code, and frontmatter before scanning
     stripped = re.sub(r"```.*?```", "", content, flags=re.DOTALL)
+    stripped = re.sub(r"`[^`]+`", "", stripped)
     stripped = re.sub(r"^---\n.*?\n---", "", stripped, flags=re.DOTALL)
     matches = PURE_BW_RE.findall(stripped)
     for match in matches[:5]:  # Cap at 5 reports
@@ -516,6 +540,9 @@ def check_word_count(content: str, report: ScoreReport) -> None:
             if in_notes:
                 continue
             if s.startswith("#") or s.startswith(":::") or s == "---" or not s:
+                continue
+            # Skip table rows, images, and Quarto attribute blocks
+            if re.match(r"^\s*\|", s) or s.startswith("!") or re.match(r"^\{[.#]", s):
                 continue
             body_words.extend(s.split())
 
