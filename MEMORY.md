@@ -9,4 +9,4 @@ Each entry links to a detailed file in `.claude/projects/*/memory/`.
 
 ## Learnings
 
-<!-- Add entries as learnings accumulate during review sessions -->
+- [clawteam workflow](feedback_clawteam_workflow.md) — Use global clawteam CLI, mix codex+claude agents, monitor until complete
