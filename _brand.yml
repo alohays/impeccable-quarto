@@ -15,13 +15,36 @@ typography:
   fonts:
     - family: Plus Jakarta Sans
       source: google
-      weight: 200..800
+      weight:
+        - 200
+        - 300
+        - 400
+        - 500
+        - 600
+        - 700
+        - 800
     - family: Source Sans 3
       source: google
-      weight: 200..900
+      weight:
+        - 200
+        - 300
+        - 400
+        - 500
+        - 600
+        - 700
+        - 800
+        - 900
     - family: JetBrains Mono
       source: google
-      weight: 100..800
+      weight:
+        - 100
+        - 200
+        - 300
+        - 400
+        - 500
+        - 600
+        - 700
+        - 800
   headings:
     family: Plus Jakarta Sans
     weight: 700
