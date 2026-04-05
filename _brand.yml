@@ -11,47 +11,8 @@ color:
     dark: "#1a1625"
   foreground: "#2e2746"
   background: "#f3f2f7"
-typography:
-  fonts:
-    - family: Plus Jakarta Sans
-      source: google
-      weight:
-        - 200
-        - 300
-        - 400
-        - 500
-        - 600
-        - 700
-        - 800
-    - family: Source Sans 3
-      source: google
-      weight:
-        - 200
-        - 300
-        - 400
-        - 500
-        - 600
-        - 700
-        - 800
-        - 900
-    - family: JetBrains Mono
-      source: google
-      weight:
-        - 100
-        - 200
-        - 300
-        - 400
-        - 500
-        - 600
-        - 700
-        - 800
-  headings:
-    family: Plus Jakarta Sans
-    weight: 700
-  base:
-    family: Source Sans 3
-    size: 28px
-    line-height: 1.55
-  monospace:
-    family: JetBrains Mono
-    size: 0.75em
+
+# Typography is handled via SCSS themes and _quarto.yml include-in-header
+# because _brand.yml font loading conflicts with embed-resources: true
+# (Quarto tries to fetch the preconnect URLs as resources, causing 404s).
+# When Quarto fixes this interaction, move font config here.
