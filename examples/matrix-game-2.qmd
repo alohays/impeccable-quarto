@@ -15,7 +15,7 @@ format:
     embed-resources: false
 ---
 
-## {background-image="assets/matrix-game/mg2/cover.png" background-size="cover" background-position="center"}
+## {background-image="https://github.com/alohays/impeccable-quarto/releases/download/v0.1.0-assets/cover.png" background-size="cover" background-position="center"}
 
 ::: {.title-overlay}
 
@@ -162,7 +162,7 @@ Now let me show you what this produces. We trained specialized models for three 
 
 :::: {.three-col}
 ::: {.column}
-![GTA driving scene](assets/matrix-game/mg2/demo-gta.png){width="100%"}
+![GTA driving scene](https://github.com/alohays/impeccable-quarto/releases/download/v0.1.0-assets/demo-gta.png){width="100%"}
 
 **GTA V** — Open-world driving
 :::
@@ -188,7 +188,7 @@ Three very different visual domains, one architecture. GTA — open-world drivin
 
 :::: {.two-col}
 ::: {.column}
-![GTA scene detail](assets/matrix-game/mg2/demo-gta.png){width="100%"}
+![GTA scene detail](https://github.com/alohays/impeccable-quarto/releases/download/v0.1.0-assets/demo-gta.png){width="100%"}
 :::
 
 ::: {.column}
